@@ -1,9 +1,7 @@
 import React from "react";
 
-const Main = (props) => {
-  // eslint-disable-next-line react/prop-types
-  const {count} = props;
-
+// eslint-disable-next-line react/prop-types
+const Main = ({count}) => {
   return (
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
