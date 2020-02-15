@@ -13,13 +13,13 @@ Enzyme.configure({
 });
 
 it(`Should title be pressed`, () => {
-  const titleClickHandler = jest.fn();
+  const onTitleClick = jest.fn();
 
   const main = shallow(
       <Main
         count={Settings.COUNT}
         titles={Settings.TITLES}
-        onTitleClick={titleClickHandler}
+        onTitleClick={onTitleClick}
       />
   );
 
@@ -28,5 +28,6 @@ it(`Should title be pressed`, () => {
   titles.forEach((title) => {
     title.props().onClick();
   });
-  expect(titleClickHandler.mock.calls.length).toBe(1);
+
+  expect(onTitleClick.mock.calls.length).toBe();
 });

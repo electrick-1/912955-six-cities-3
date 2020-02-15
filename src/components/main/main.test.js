@@ -7,14 +7,12 @@ const Settings = {
   TITLES: [`One`, `Two`, `Three`, `Four`]
 };
 
-const titleClickHandler = () => {};
-
 it(`Render App`, () => {
   const tree = renderer
     .create(<Main
       count={Settings.COUNT}
       titles={Settings.TITLES}
-      onTitleClick={titleClickHandler}
+      onTitleClick={() => {}}
     />)
     .toJSON();
 
