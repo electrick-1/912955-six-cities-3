@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Main = ({count, title}) => {
+const Main = ({count, titles, onTitleClick}) => {
   return (
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
@@ -62,7 +62,7 @@ const Main = ({count, title}) => {
               </ul>
             </form>
             <div className="cities__places-list places__list tabs__content">
-              {title.map((name, index) => {
+              {titles.map((name, index) => {
                 return (
                   <article className="cities__place-card place-card" key={index}>
                     <div className="cities__image-wrapper place-card__image-wrapper">
@@ -89,7 +89,10 @@ const Main = ({count, title}) => {
                           <span className="visually-hidden">Rating</span>
                         </div>
                       </div>
-                      <h2 className="place-card__name">
+                      <h2
+                        onClick={onTitleClick}
+                        className="place-card__name"
+                      >
                         <a href="#">{name}</a>
                       </h2>
                       <p className="place-card__type">Private room</p>
@@ -110,7 +113,8 @@ const Main = ({count, title}) => {
 
 Main.propTypes = {
   count: PropTypes.number.isRequired,
-  title: PropTypes.arrayOf(PropTypes.string).isRequired
+  titles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onTitleClick: PropTypes.func.isRequired
 };
 
 export default Main;

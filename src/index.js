@@ -10,7 +10,7 @@ const Settings = {
 ReactDOM.render(
     <App
       count={Settings.COUNT}
-      title={Settings.TITLES}
+      titles={Settings.TITLES}
     />,
     document.querySelector(`#root`)
 );

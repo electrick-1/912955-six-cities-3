@@ -2,15 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import Main from "../main/main.jsx";
 
-const App = ({count, title}) => {
+const titleClickHandler = () => {};
+
+const App = ({count, titles}) => {
   return (
-    <Main count={count} title={title}/>
+    <Main
+      count={count}
+      titles={titles}
+      onTitleClick={titleClickHandler}
+    />
   );
 };
 
 App.propTypes = {
   count: PropTypes.number.isRequired,
-  title: PropTypes.arrayOf(PropTypes.string).isRequired
+  titles: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default App;
