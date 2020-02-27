@@ -1,20 +1,16 @@
 import React from "react";
 import Enzyme, {shallow} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import Main from "./main.jsx";
+import PlaceCard from "./place-card.jsx";
 
-const Settings = {
-  COUNT: 123
-};
-
-const offers = [{
+const offer = {
   id: 1,
   title: `Beautiful & luxurious apartment at great location`,
   price: 120,
   isPremium: true,
   type: `Apartment`,
   photo: `img/apartment-01.jpg`
-}];
+};
 
 Enzyme.configure({
   adapter: new Adapter()
@@ -22,20 +18,23 @@ Enzyme.configure({
 
 it(`Should title be pressed`, () => {
   const onTitleClick = jest.fn();
+  const onHoverHandler = jest.fn();
 
-  const main = shallow(
-      <Main
-        count={Settings.COUNT}
-        offers={offers}
+  const placeCard = shallow(
+      <PlaceCard
+        offer={offer}
+        key={offer.id}
         onTitleClick={() => {}}
+        onHoverHandler={() => {}}
       />
   );
 
-  const titles = main.find(`h2.place-card__name`);
+  const title = placeCard.find(`h2.place-card__name`);
 
-  titles.forEach((title) => {
-    title.props().onClick();
-  });
+  title.props().onClick();
 
-  expect(onTitleClick.mock.calls.length).toBe(0);
+  placeCard.props().onHover();
+
+  expect(onTitleClick.mock.calls.length).toBe(1);
+  expect(onHoverHandler.mock.calls.length).toBe(1);
 });
