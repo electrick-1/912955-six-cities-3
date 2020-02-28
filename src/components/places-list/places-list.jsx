@@ -17,7 +17,7 @@ class PlacesList extends PureComponent {
             offer={offer}
             key={offer.id}
             onTitleClick={onTitleClick}
-            onHoverHandler={() => {}}
+            onMouseEnter={() => {}}
           />
         )}
       </div>

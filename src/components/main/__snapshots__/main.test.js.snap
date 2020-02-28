@@ -171,7 +171,7 @@ exports[`Render Main 1`] = `
         >
           <article
             className="cities__place-card place-card"
-            onHover={[Function]}
+            onMouseEnter={[Function]}
           >
             <div
               className="place-card__mark"

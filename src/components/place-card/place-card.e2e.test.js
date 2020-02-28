@@ -18,14 +18,14 @@ Enzyme.configure({
 
 it(`Should title be pressed`, () => {
   const onTitleClick = jest.fn();
-  const onHoverHandler = jest.fn();
+  const onMouseEnter = jest.fn();
 
   const placeCard = shallow(
       <PlaceCard
         offer={offer}
         key={offer.id}
-        onTitleClick={() => {}}
-        onHoverHandler={() => {}}
+        onTitleClick={onTitleClick}
+        onMouseEnter={onMouseEnter}
       />
   );
 
@@ -33,8 +33,8 @@ it(`Should title be pressed`, () => {
 
   title.props().onClick();
 
-  placeCard.props().onHover();
+  placeCard.props().onMouseEnter();
 
   expect(onTitleClick.mock.calls.length).toBe(1);
-  expect(onHoverHandler.mock.calls.length).toBe(1);
+  expect(onMouseEnter.mock.calls.length).toBe(1);
 });

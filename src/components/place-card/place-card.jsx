@@ -4,11 +4,13 @@ import PropTypes from "prop-types";
 class PlaceCard extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.hoverHandler = this.hoverHandler.bind(this);
   }
 
   hoverHandler() {
     const offer = this.props.offer;
-    this.props.onHoverHandler(offer);
+    this.props.onMouseEnter(offer);
   }
 
   render() {
@@ -20,7 +22,7 @@ class PlaceCard extends PureComponent {
       <article
         className="cities__place-card place-card"
         key={offer.id}
-        onHover={this.hoverHandler}
+        onMouseEnter={this.hoverHandler}
       >
         <div className={isPremiumClass}>
           <span>Premium</span>
@@ -68,7 +70,7 @@ PlaceCard.propTypes = {
     type: PropTypes.string.isRequired,
     photo: PropTypes.string.isRequired
   }),
-  onHoverHandler: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired,
   onTitleClick: PropTypes.func.isRequired
 };
 
