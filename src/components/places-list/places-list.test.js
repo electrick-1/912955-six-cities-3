@@ -1,10 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import App from "./app.jsx";
-
-const Settings = {
-  COUNT: 123
-};
+import PlacesList from "./places-list.jsx";
 
 const offers = [{
   id: 1,
@@ -15,11 +11,11 @@ const offers = [{
   photo: `img/apartment-01.jpg`
 }];
 
-it(`Render App`, () => {
+it(`Render PlaceCard`, () => {
   const tree = renderer
-    .create(<App
-      count={Settings.COUNT}
+    .create(<PlacesList
       offers={offers}
+      onTitleClick={() => {}}
     />)
     .toJSON();
 

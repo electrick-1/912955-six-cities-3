@@ -3,15 +3,23 @@ import renderer from "react-test-renderer";
 import Main from "./main.jsx";
 
 const Settings = {
-  COUNT: 123,
-  TITLES: [`One`, `Two`, `Three`, `Four`]
+  COUNT: 123
 };
 
-it(`Render App`, () => {
+const offers = [{
+  id: 1,
+  title: `Beautiful & luxurious apartment at great location`,
+  price: 120,
+  isPremium: true,
+  type: `Apartment`,
+  photo: `img/apartment-01.jpg`
+}];
+
+it(`Render Main`, () => {
   const tree = renderer
     .create(<Main
       count={Settings.COUNT}
-      titles={Settings.TITLES}
+      offers={offers}
       onTitleClick={() => {}}
     />)
     .toJSON();

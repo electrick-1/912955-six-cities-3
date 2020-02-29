@@ -4,9 +4,17 @@ import Adapter from "enzyme-adapter-react-16";
 import Main from "./main.jsx";
 
 const Settings = {
-  COUNT: 123,
-  TITLES: [`One`, `Two`, `Three`, `Four`]
+  COUNT: 123
 };
+
+const offers = [{
+  id: 1,
+  title: `Beautiful & luxurious apartment at great location`,
+  price: 120,
+  isPremium: true,
+  type: `Apartment`,
+  photo: `img/apartment-01.jpg`
+}];
 
 Enzyme.configure({
   adapter: new Adapter()
@@ -18,8 +26,8 @@ it(`Should title be pressed`, () => {
   const main = shallow(
       <Main
         count={Settings.COUNT}
-        titles={Settings.TITLES}
-        onTitleClick={onTitleClick}
+        offers={offers}
+        onTitleClick={() => {}}
       />
   );
 
@@ -29,5 +37,5 @@ it(`Should title be pressed`, () => {
     title.props().onClick();
   });
 
-  expect(onTitleClick.mock.calls.length).toBe(4);
+  expect(onTitleClick.mock.calls.length).toBe(0);
 });
