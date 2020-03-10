@@ -17,6 +17,7 @@ class Property extends PureComponent {
       quantityAdults,
       options
     } = this.props.offer;
+
     const isPremiumClass = isPremium ? `property__mark` : `property__mark visually-hidden`;
 
     return (

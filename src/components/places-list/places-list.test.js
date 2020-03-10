@@ -11,7 +11,7 @@ const offers = [{
   photo: `img/apartment-01.jpg`
 }];
 
-it(`Render PlaceCard`, () => {
+it(`Render PlaceList`, () => {
   const tree = renderer
     .create(<PlacesList
       offers={offers}

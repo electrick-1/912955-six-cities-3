@@ -26,7 +26,7 @@ const offer = {
   ]
 };
 
-it(`Render PlaceCard`, () => {
+it(`Render Property`, () => {
   const tree = renderer
     .create(<Property
       offer={offer}
