@@ -15,7 +15,13 @@ class PlaceCard extends PureComponent {
 
   render() {
     const {offer, onTitleClick} = this.props;
-    const {title, price, isPremium, type, photo} = offer;
+    const {
+      title,
+      price,
+      isPremium,
+      type,
+      photo
+    } = offer;
     const isPremiumClass = isPremium ? `place-card__mark` : `place-card__mark visually-hidden`;
 
     return (
