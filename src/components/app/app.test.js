@@ -12,7 +12,8 @@ const offers = [{
   price: 120,
   isPremium: true,
   type: `Apartment`,
-  photo: `img/apartment-01.jpg`
+  photo: `img/apartment-01.jpg`,
+  cords: [52.3809553943508, 4.939309666406198]
 }];
 
 it(`Render App`, () => {
@@ -20,7 +21,9 @@ it(`Render App`, () => {
     .create(<App
       count={Settings.COUNT}
       offers={offers}
-    />)
+    />, {
+      createNodeMock: () => document.createElement(`div`)
+    })
     .toJSON();
 
   expect(tree).toMatchSnapshot();

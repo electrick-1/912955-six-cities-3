@@ -1,10 +1,11 @@
-import React, {PureComponent} from "react";
+import React, {PureComponent, createRef} from "react";
 import PropTypes from "prop-types";
 import leaflet from "leaflet";
 
 class Map extends PureComponent {
   constructor(props) {
     super(props);
+    this.map = createRef();
   }
 
   componentDidMount() {
@@ -15,8 +16,9 @@ class Map extends PureComponent {
       iconSize: [27, 39]
     });
     const zoom = 12;
-    const map = leaflet.map(`map`, {
+    const map = leaflet.map(this.map.current, {
       center: city,
+      zoom,
       zoomControl: false,
       marker: true
     });
@@ -34,16 +36,20 @@ class Map extends PureComponent {
         .addTo(map);
     });
   }
+
+  componentWillUnmount() {
+    this.map.current = null;
+  }
+
   render() {
     return (
-      <div id="map" style={{height: 100 + `%`}}></div>
+      <div id="map" style={{height: 100 + `%`}} ref={this.map}></div>
     );
   }
 }
 
 
 Map.propTypes = {
-  leaflet: PropTypes.object,
   offers: PropTypes.array
 };
 
