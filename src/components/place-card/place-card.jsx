@@ -15,7 +15,6 @@ class PlaceCard extends PureComponent {
   }
 
   _onTitleClick() {
-    console.log(this.props)
     const {offer, onTitleClick} = this.props;
     onTitleClick(offer);
   }
