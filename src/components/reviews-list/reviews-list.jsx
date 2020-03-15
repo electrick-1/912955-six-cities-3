@@ -8,7 +8,7 @@ class ReviewsList extends PureComponent {
   }
 
   render() {
-    const {comments} = this.props.offer;
+    const {comments} = this.props.activeOffer;
     return (
       <ul className="reviews__list">
         {comments.map((comment, i) =>
@@ -23,7 +23,7 @@ class ReviewsList extends PureComponent {
 }
 
 ReviewsList.propTypes = {
-  offer: PropTypes.shape({
+  activeOffer: PropTypes.shape({
     comments: PropTypes.array,
     id: PropTypes.number.isRequired
   })

@@ -37,7 +37,7 @@ class App extends PureComponent {
         <Main
           count={count}
           offers={offers}
-          offer={activeCard}
+          activeOffer={activeCard}
           cardClass={CardClass.CITIES}
           onTitleClick={this._titleClickHandler}
         />
@@ -46,9 +46,10 @@ class App extends PureComponent {
 
     return (
       <Property
-        offer={activeCard}
+        activeOffer={activeCard}
         offers={offers}
         cardClass={CardClass.NEAR_PLACES}
+        onTitleClick={this._titleClickHandler}
       />
     );
   }
@@ -63,9 +64,10 @@ class App extends PureComponent {
           </Route>
           <Route exact path="/dev-offer">
             <Property
-              offer={offers[0]}
+              activeOffer={offers[0]}
               offers={offers}
               cardClass={CardClass.NEAR_PLACES}
+              onTitleClick={this._titleClickHandler}
             />
           </Route>
         </Switch>

@@ -9,10 +9,14 @@ class Map extends PureComponent {
   }
 
   componentDidMount() {
-    const {offers} = this.props;
+    const {offers, activeOffer} = this.props;
     const city = [52.38333, 4.9];
     const icon = leaflet.icon({
       iconUrl: `img/pin.svg`,
+      iconSize: [27, 39]
+    });
+    const activeIcon = leaflet.icon({
+      iconUrl: `img/pin-active.svg`,
       iconSize: [27, 39]
     });
     const zoom = 12;
@@ -31,7 +35,11 @@ class Map extends PureComponent {
       .addTo(map);
 
     offers.map((offer) => {
-      if (offer.id !== this.props.offer.id) {
+      if (offer.id === activeOffer.id) {
+        leaflet
+        .marker(activeOffer.cords, {icon: activeIcon})
+        .addTo(map);
+      } else {
         leaflet
         .marker(offer.cords, {icon})
         .addTo(map);
@@ -53,8 +61,9 @@ class Map extends PureComponent {
 
 Map.propTypes = {
   offers: PropTypes.array,
-  offer: PropTypes.shape({
-    id: PropTypes.number
+  activeOffer: PropTypes.shape({
+    id: PropTypes.number,
+    cords: PropTypes.array
   })
 };
 

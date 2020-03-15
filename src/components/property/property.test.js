@@ -38,7 +38,7 @@ it(`Render Property`, () => {
   const tree = renderer
     .create(
         <Property
-          offer={offers[0]}
+          activeOffer={offers[0]}
           offers={offers}
           cardClass={`cities`}
         />, {

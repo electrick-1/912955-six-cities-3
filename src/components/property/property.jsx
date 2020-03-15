@@ -10,7 +10,7 @@ class Property extends PureComponent {
   }
 
   render() {
-    const {offers, onTitleClick} = this.props;
+    const {offers, onTitleClick, cardClass} = this.props;
     const {
       title,
       price,
@@ -21,8 +21,7 @@ class Property extends PureComponent {
       quantityAdults,
       options,
       comments
-    } = this.props.offer;
-    const {cardClass} = this.props;
+    } = this.props.activeOffer;
 
     const isPremiumClass = isPremium ? `property__mark` : `property__mark visually-hidden`;
 
@@ -144,7 +143,7 @@ class Property extends PureComponent {
                 </div>
                 <section className="property__reviews reviews">
                   <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
-                  <ReviewsList offer={this.props.offer} />
+                  <ReviewsList activeOffer={this.props.activeOffer} />
                   <form className="reviews__form form" action="#" method="post">
                     <label className="reviews__label form__label" htmlFor="review">Your review</label>
                     <div className="reviews__rating-form form__rating">
@@ -197,7 +196,7 @@ class Property extends PureComponent {
             <section className="property__map map">
               <Map
                 offers={offers}
-                offer={this.props.offer}
+                activeOffer={this.props.activeOffer}
               />
             </section>
           </section>
@@ -206,7 +205,7 @@ class Property extends PureComponent {
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
                 {offers.map((offer) => {
-                  if (offer.id !== this.props.offer.id) {
+                  if (offer.id !== this.props.activeOffer.id) {
                     return (
                       <PlaceCard
                         offer={offer}
@@ -230,7 +229,7 @@ class Property extends PureComponent {
 
 Property.propTypes = {
   offers: PropTypes.array,
-  offer: PropTypes.shape({
+  activeOffer: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,

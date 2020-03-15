@@ -9,9 +9,7 @@ class Main extends PureComponent {
   }
 
   render() {
-    const {count, offers, onTitleClick} = this.props;
-    const {offer} = this.props;
-    const {cardClass} = this.props;
+    const {count, offers, onTitleClick, activeOffer, cardClass} = this.props;
 
     return (
       <div className="page page--gray page--main">
@@ -106,7 +104,7 @@ class Main extends PureComponent {
                 <section className="cities__map map">
                   <Map
                     offers={offers}
-                    offer={offer}
+                    activeOffer={activeOffer}
                   />
                 </section>
               </div>
@@ -122,7 +120,7 @@ Main.propTypes = {
   count: PropTypes.number.isRequired,
   offers: PropTypes.array,
   onTitleClick: PropTypes.func.isRequired,
-  offer: PropTypes.object,
+  activeOffer: PropTypes.object,
   cardClass: PropTypes.string
 };
 

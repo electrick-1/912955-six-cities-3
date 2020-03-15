@@ -44,7 +44,7 @@ it(`Render Main`, () => {
         <Main
           count={Settings.COUNT}
           offers={offers}
-          offer={offers[0]}
+          activeOffer={offers[0]}
           cardClass={`cities`}
           onTitleClick={() => {}}
         />, {

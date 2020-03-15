@@ -37,7 +37,7 @@ const offer = {
 it(`Render RewiewList`, () => {
   const tree = renderer
     .create(<ReviewsList
-      offer={offer}
+      activeOffer={offer}
     />)
     .toJSON();
 
