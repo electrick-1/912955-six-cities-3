@@ -11,10 +11,10 @@ class ReviewsList extends PureComponent {
     const {comments} = this.props.offer;
     return (
       <ul className="reviews__list">
-        {comments.map((comment) =>
+        {comments.map((comment, i) =>
           <ReviewsItem
-            key={comment.id}
-            comments={comment}
+            key={`comment-${i}`}
+            comment={comment}
           />
         )}
       </ul>

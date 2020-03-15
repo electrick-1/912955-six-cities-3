@@ -4,6 +4,7 @@ export const offers = [
     title: `Beautiful & luxurious apartment at great location`,
     price: 120,
     isPremium: true,
+    bookmark: false,
     type: `Apartment`,
     photo: `img/apartment-01.jpg`,
     raiting: 4.8,
@@ -23,7 +24,6 @@ export const offers = [
     ],
     cords: [52.3909553943508, 4.85309666406198],
     comments: [{
-      id: 1,
       avatar: `img/avatar-max.jpg`,
       name: `Max`,
       text: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.`,
@@ -36,6 +36,7 @@ export const offers = [
     title: `Wood and stone place`,
     price: 80,
     isPremium: false,
+    bookmark: true,
     type: `Private room`,
     photo: `img/room.jpg`,
     raiting: 4.5,
@@ -55,7 +56,6 @@ export const offers = [
     ],
     cords: [52.369553943508, 4.85309666406198],
     comments: [{
-      id: 1,
       avatar: `img/avatar-max.jpg`,
       name: `Max`,
       text: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.`,
@@ -68,6 +68,7 @@ export const offers = [
     title: `Canal View Prinsengracht`,
     price: 132,
     isPremium: false,
+    bookmark: false,
     type: `Apartment`,
     photo: `img/apartment-02.jpg`,
     raiting: 4.9,
@@ -87,7 +88,6 @@ export const offers = [
     ],
     cords: [52.3909553943508, 4.929309666406198],
     comments: [{
-      id: 1,
       avatar: `img/avatar-max.jpg`,
       name: `Max`,
       text: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.`,
@@ -100,6 +100,7 @@ export const offers = [
     title: `Nice, cozy, warm big bed apartment`,
     price: 180,
     isPremium: true,
+    bookmark: false,
     type: `Apartment`,
     photo: `img/apartment-03.jpg`,
     raiting: 5.0,
@@ -119,7 +120,6 @@ export const offers = [
     ],
     cords: [52.3809553943508, 4.939309666406198],
     comments: [{
-      id: 1,
       avatar: `img/avatar-max.jpg`,
       name: `Max`,
       text: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.`,

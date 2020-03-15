@@ -7,7 +7,7 @@ class ReviewsItem extends PureComponent {
   }
 
   render() {
-    const {avatar, name, text, date} = this.props.comments;
+    const {avatar, name, text, date} = this.props.comment;
 
     return (
       <li className="reviews__item">
@@ -37,7 +37,7 @@ class ReviewsItem extends PureComponent {
 }
 
 ReviewsItem.propTypes = {
-  comments: PropTypes.object
+  comment: PropTypes.object
 };
 
 export default ReviewsItem;

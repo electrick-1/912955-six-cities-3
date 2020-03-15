@@ -19,6 +19,7 @@ it(`Render Map`, () => {
     .create(
         <Map
           offers={offers}
+          offer={offers[0]}
         />, {
           createNodeMock: () => document.createElement(`div`)
         }

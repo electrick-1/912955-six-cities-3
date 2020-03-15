@@ -31,9 +31,11 @@ class Map extends PureComponent {
       .addTo(map);
 
     offers.map((offer) => {
-      leaflet
+      if (offer.id !== this.props.offer.id) {
+        leaflet
         .marker(offer.cords, {icon})
         .addTo(map);
+      }
     });
   }
 
@@ -50,7 +52,10 @@ class Map extends PureComponent {
 
 
 Map.propTypes = {
-  offers: PropTypes.array
+  offers: PropTypes.array,
+  offer: PropTypes.shape({
+    id: PropTypes.number
+  })
 };
 
 export default Map;
