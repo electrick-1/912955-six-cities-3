@@ -9,6 +9,7 @@ class PlacesList extends PureComponent {
 
   render() {
     const {offers, onTitleClick} = this.props;
+    const {cardClass} = this.props;
 
     return (
       <div className="cities__places-list places__list tabs__content">
@@ -16,6 +17,7 @@ class PlacesList extends PureComponent {
           <PlaceCard
             offer={offer}
             key={offer.id}
+            cardClass={cardClass}
             onTitleClick={onTitleClick}
             onMouseEnter={() => {}}
           />
@@ -29,6 +31,7 @@ PlacesList.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
   })),
+  cardClass: PropTypes.string,
   onTitleClick: PropTypes.func.isRequired
 };
 

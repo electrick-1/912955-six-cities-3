@@ -4,6 +4,11 @@ import {Switch, Route, BrowserRouter} from "react-router-dom";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
 
+const CardClass = {
+  CITIES: `cities`,
+  NEAR_PLACES: `near-places`
+};
+
 class App extends PureComponent {
   constructor(props) {
     super(props);
@@ -32,13 +37,20 @@ class App extends PureComponent {
         <Main
           count={count}
           offers={offers}
+          activeOffer={activeCard}
+          cardClass={CardClass.CITIES}
           onTitleClick={this._titleClickHandler}
         />
       );
     }
 
     return (
-      <Property offer={activeCard} />
+      <Property
+        activeOffer={activeCard}
+        offers={offers}
+        cardClass={CardClass.NEAR_PLACES}
+        onTitleClick={this._titleClickHandler}
+      />
     );
   }
 
@@ -51,7 +63,12 @@ class App extends PureComponent {
             {this._renderApp()}
           </Route>
           <Route exact path="/dev-offer">
-            <Property offer={offers[0]} />
+            <Property
+              activeOffer={offers[0]}
+              offers={offers}
+              cardClass={CardClass.NEAR_PLACES}
+              onTitleClick={this._titleClickHandler}
+            />
           </Route>
         </Switch>
       </BrowserRouter>

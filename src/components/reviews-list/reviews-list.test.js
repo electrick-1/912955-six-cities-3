@@ -1,12 +1,8 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import Main from "./main.jsx";
+import ReviewsList from "./reviews-list.jsx";
 
-const Settings = {
-  COUNT: 123
-};
-
-const offers = [{
+const offer = {
   id: 1,
   title: `Beautiful & luxurious apartment at great location`,
   price: 120,
@@ -36,21 +32,14 @@ const offers = [{
     text: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.`,
     date: `2019-04-24`
   }]
-}];
+};
 
-it(`Render Main`, () => {
+it(`Render RewiewList`, () => {
   const tree = renderer
-    .create(
-        <Main
-          count={Settings.COUNT}
-          offers={offers}
-          activeOffer={offers[0]}
-          cardClass={`cities`}
-          onTitleClick={() => {}}
-        />, {
-          createNodeMock: () => document.createElement(`div`)
-        }
-    ).toJSON();
+    .create(<ReviewsList
+      activeOffer={offer}
+    />)
+    .toJSON();
 
   expect(tree).toMatchSnapshot();
 });

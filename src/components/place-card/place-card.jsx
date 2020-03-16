@@ -25,21 +25,34 @@ class PlaceCard extends PureComponent {
       title,
       price,
       isPremium,
+      bookmark,
       type,
       photo
     } = offer;
-    const isPremiumClass = isPremium ? `place-card__mark` : `place-card__mark visually-hidden`;
+    const {cardClass} = this.props;
+
+    const isPremiumClass = isPremium && cardClass === `cities`
+      ? `place-card__mark`
+      : `place-card__mark visually-hidden`;
+
+    const bookmarkClass = bookmark
+      ? `place-card__bookmark-button place-card__bookmark-button--active button`
+      : `place-card__bookmark-button button`;
+
+    const isCardClass = cardClass === `cities`
+      ? `cities__place-card place-card`
+      : `near-places__card place-card`;
 
     return (
       <article
-        className="cities__place-card place-card"
+        className={isCardClass}
         key={offer.id}
         onMouseEnter={this._hoverHandler}
       >
         <div className={isPremiumClass}>
           <span>Premium</span>
         </div>
-        <div className="cities__image-wrapper place-card__image-wrapper">
+        <div className={cardClass + `__image-wrapper place-card__image-wrapper`}>
           <a href="#">
             <img className="place-card__image" src={photo} width="260" height="200" alt="Place image" />
           </a>
@@ -50,7 +63,7 @@ class PlaceCard extends PureComponent {
               <b className="place-card__price-value">€{price}</b>
               <span className="place-card__price-text">/&nbsp;night</span>
             </div>
-            <button className="place-card__bookmark-button button" type="button">
+            <button className={bookmarkClass} type="button">
               <svg className="place-card__bookmark-icon" width="18" height="19">
                 <use xlinkHref="#icon-bookmark"></use>
               </svg>
@@ -79,9 +92,11 @@ PlaceCard.propTypes = {
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     isPremium: PropTypes.bool.isRequired,
+    bookmark: PropTypes.bool,
     type: PropTypes.string.isRequired,
     photo: PropTypes.string.isRequired
   }),
+  cardClass: PropTypes.string.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
   onTitleClick: PropTypes.func
 };
