@@ -12,17 +12,21 @@ const offers = [{
   price: 120,
   isPremium: true,
   type: `Apartment`,
-  photo: `img/apartment-01.jpg`
+  photo: `img/apartment-01.jpg`,
+  cords: [52.3909553943508, 4.85309666406198]
 }];
 
 it(`Render Main`, () => {
   const tree = renderer
-    .create(<Main
-      count={Settings.COUNT}
-      offers={offers}
-      onTitleClick={() => {}}
-    />)
-    .toJSON();
+    .create(
+        <Main
+          count={Settings.COUNT}
+          offers={offers}
+          onTitleClick={() => {}}
+        />, {
+          createNodeMock: () => document.createElement(`div`)
+        }
+    ).toJSON();
 
   expect(tree).toMatchSnapshot();
 });

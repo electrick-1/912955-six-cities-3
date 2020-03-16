@@ -5,16 +5,22 @@ class PlaceCard extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.hoverHandler = this.hoverHandler.bind(this);
+    this._hoverHandler = this._hoverHandler.bind(this);
+    this._onTitleClick = this._onTitleClick.bind(this);
   }
 
-  hoverHandler() {
+  _hoverHandler() {
     const offer = this.props.offer;
     this.props.onMouseEnter(offer);
   }
 
-  render() {
+  _onTitleClick() {
     const {offer, onTitleClick} = this.props;
+    onTitleClick(offer);
+  }
+
+  render() {
+    const {offer} = this.props;
     const {
       title,
       price,
@@ -28,7 +34,7 @@ class PlaceCard extends PureComponent {
       <article
         className="cities__place-card place-card"
         key={offer.id}
-        onMouseEnter={this.hoverHandler}
+        onMouseEnter={this._hoverHandler}
       >
         <div className={isPremiumClass}>
           <span>Premium</span>
@@ -57,7 +63,7 @@ class PlaceCard extends PureComponent {
               <span className="visually-hidden">Rating</span>
             </div>
           </div>
-          <h2 className="place-card__name" onClick={onTitleClick}>
+          <h2 className="place-card__name" onClick={this._onTitleClick}>
             <a href="#">{title}</a>
           </h2>
           <p className="place-card__type">{type}</p>
@@ -77,7 +83,7 @@ PlaceCard.propTypes = {
     photo: PropTypes.string.isRequired
   }),
   onMouseEnter: PropTypes.func.isRequired,
-  onTitleClick: PropTypes.func.isRequired
+  onTitleClick: PropTypes.func
 };
 
 export default PlaceCard;

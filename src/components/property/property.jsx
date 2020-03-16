@@ -17,6 +17,7 @@ class Property extends PureComponent {
       quantityAdults,
       options
     } = this.props.offer;
+
     const isPremiumClass = isPremium ? `property__mark` : `property__mark visually-hidden`;
 
     return (
@@ -326,9 +327,9 @@ Property.propTypes = {
     price: PropTypes.number.isRequired,
     isPremium: PropTypes.bool.isRequired,
     type: PropTypes.string.isRequired,
-    raiting: PropTypes.number.isRequired,
-    quantityBedrooms: PropTypes.number.isRequired,
-    quantityAdults: PropTypes.number.isRequired,
+    raiting: PropTypes.number,
+    quantityBedrooms: PropTypes.number,
+    quantityAdults: PropTypes.number,
     options: PropTypes.array
   })
 };
