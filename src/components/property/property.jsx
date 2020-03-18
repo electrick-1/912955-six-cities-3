@@ -15,15 +15,20 @@ class Property extends PureComponent {
       title,
       price,
       isPremium,
+      isFavorite,
       type,
       raiting,
-      quantityBedrooms,
-      quantityAdults,
-      options,
+      bedrooms,
+      maxAdults,
+      goods,
       comments
     } = this.props.activeOffer;
 
     const isPremiumClass = isPremium ? `property__mark` : `property__mark visually-hidden`;
+
+    const isFavoriteClass = isFavorite
+      ? `property__bookmark-button property__bookmark-button--active button`
+      : `property__bookmark-button button`;
 
     return (
       <div className="page">
@@ -83,7 +88,7 @@ class Property extends PureComponent {
                   <h1 className="property__name">
                     {title}
                   </h1>
-                  <button className="property__bookmark-button button" type="button">
+                  <button className={isFavoriteClass} type="button">
                     <svg className="property__bookmark-icon" width="31" height="33">
                       <use xlinkHref="#icon-bookmark"></use>
                     </svg>
@@ -102,10 +107,10 @@ class Property extends PureComponent {
                     {type}
                   </li>
                   <li className="property__feature property__feature--bedrooms">
-                    {quantityBedrooms} Bedrooms
+                    {bedrooms} Bedrooms
                   </li>
                   <li className="property__feature property__feature--adults">
-                    Max {quantityAdults} adults
+                    Max {maxAdults} adults
                   </li>
                 </ul>
                 <div className="property__price">
@@ -115,7 +120,7 @@ class Property extends PureComponent {
                 <div className="property__inside">
                   <h2 className="property__inside-title">What&apos;s inside</h2>
                   <ul className="property__inside-list">
-                    {options.map((option, i) => {
+                    {goods.map((option, i) => {
                       return (<li className="property__inside-item" key={`option-${i}`}>
                         {option}
                       </li>);
@@ -234,11 +239,12 @@ Property.propTypes = {
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     isPremium: PropTypes.bool.isRequired,
+    isFavorite: PropTypes.bool,
     type: PropTypes.string.isRequired,
     raiting: PropTypes.number,
-    quantityBedrooms: PropTypes.number,
-    quantityAdults: PropTypes.number,
-    options: PropTypes.array,
+    bedrooms: PropTypes.number,
+    maxAdults: PropTypes.number,
+    goods: PropTypes.array,
     comments: PropTypes.array
   }),
   cardClass: PropTypes.string,

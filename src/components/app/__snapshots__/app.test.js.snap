@@ -75,9 +75,12 @@ exports[`Render App 1`] = `
         >
           <li
             className="locations__item"
+            onClick={[Function]}
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link
+                    tabs__item
+                    "
               href="#"
             >
               <span>
@@ -87,9 +90,12 @@ exports[`Render App 1`] = `
           </li>
           <li
             className="locations__item"
+            onClick={[Function]}
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link
+                    tabs__item
+                    "
               href="#"
             >
               <span>
@@ -99,9 +105,12 @@ exports[`Render App 1`] = `
           </li>
           <li
             className="locations__item"
+            onClick={[Function]}
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link
+                    tabs__item
+                    "
               href="#"
             >
               <span>
@@ -111,9 +120,13 @@ exports[`Render App 1`] = `
           </li>
           <li
             className="locations__item"
+            onClick={[Function]}
           >
             <a
-              className="locations__item-link tabs__item tabs__item--active"
+              className="locations__item-link
+                    tabs__item
+                    tabs__item--active"
+              href="#"
             >
               <span>
                 Amsterdam
@@ -122,9 +135,12 @@ exports[`Render App 1`] = `
           </li>
           <li
             className="locations__item"
+            onClick={[Function]}
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link
+                    tabs__item
+                    "
               href="#"
             >
               <span>
@@ -134,9 +150,12 @@ exports[`Render App 1`] = `
           </li>
           <li
             className="locations__item"
+            onClick={[Function]}
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link
+                    tabs__item
+                    "
               href="#"
             >
               <span>
@@ -164,8 +183,9 @@ exports[`Render App 1`] = `
           <b
             className="places__found"
           >
-            123
-             places to stay in Amsterdam
+            1
+             places to stay in 
+            Amsterdam
           </b>
           <form
             action="#"
@@ -318,7 +338,7 @@ exports[`Render App 1`] = `
                   <a
                     href="#"
                   >
-                    Beautiful & luxurious apartment at great location
+                    Beautiful & luxurious studio at great location
                   </a>
                 </h2>
                 <p
