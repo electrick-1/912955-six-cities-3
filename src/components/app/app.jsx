@@ -1,6 +1,8 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {ActionCreator} from "../../reducer.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
 
@@ -10,52 +12,41 @@ const CardClass = {
 };
 
 class App extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this._titleClickHandler = this._titleClickHandler.bind(this);
-
-    this.state = {
-      step: -1,
-      activeCard: {}
-    };
-  }
-
-  _titleClickHandler(offer) {
-    this.setState((prevState) => ({
-      step: prevState.step + 1,
-      activeCard: offer
-    }));
-  }
-
   _renderApp() {
-    const {count, offers} = this.props;
-    const {step, activeCard} = this.state;
+    const {
+      offers,
+      step,
+      activeOffer,
+      currentCity,
+      titleClickHandler
+    } = this.props;
+
+    const offersInCity = offers.filter((offer) => offer.city.name === currentCity);
 
     if (step === -1 || step >= offers.length) {
       return (
         <Main
-          count={count}
-          offers={offers}
-          activeOffer={activeCard}
+          offers={offersInCity}
+          activeOffer={activeOffer}
           cardClass={CardClass.CITIES}
-          onTitleClick={this._titleClickHandler}
+          currentCity={currentCity}
+          onTitleClick={titleClickHandler}
         />
       );
     }
 
     return (
       <Property
-        activeOffer={activeCard}
+        activeOffer={activeOffer}
         offers={offers}
         cardClass={CardClass.NEAR_PLACES}
-        onTitleClick={this._titleClickHandler}
+        onTitleClick={titleClickHandler}
       />
     );
   }
 
   render() {
-    const {offers} = this.props;
+    const {offers, titleClickHandler} = this.props;
     return (
       <BrowserRouter>
         <Switch>
@@ -67,7 +58,7 @@ class App extends PureComponent {
               activeOffer={offers[0]}
               offers={offers}
               cardClass={CardClass.NEAR_PLACES}
-              onTitleClick={this._titleClickHandler}
+              onTitleClick={titleClickHandler}
             />
           </Route>
         </Switch>
@@ -77,8 +68,28 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  count: PropTypes.number.isRequired,
-  offers: PropTypes.array
+  offers: PropTypes.array,
+  step: PropTypes.number.isRequired,
+  activeOffer: PropTypes.object,
+  currentCity: PropTypes.string.isRequired,
+  titleClickHandler: PropTypes.func
 };
 
-export default App;
+const mapStateToProps = (state) => ({
+  step: state.step,
+  offers: state.offers,
+  currentCity: state.currentCity,
+  activeOffer: state.activeOffer
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  titleClickHandler(offer) {
+    dispatch(ActionCreator.changeOffer(offer));
+  },
+  cityClickHandler(city) {
+    dispatch(ActionCreator.changeCity(city));
+  }
+});
+
+export {App};
+export default connect(mapStateToProps, mapDispatchToProps)(App);
