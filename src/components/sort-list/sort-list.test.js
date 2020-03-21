@@ -1,9 +1,12 @@
 import React from "react";
-import Enzyme, {shallow} from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import Main from "./main.jsx";
+import renderer from "react-test-renderer";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
+import SortList from "./sort-list.jsx";
 
-const offers = [{
+const mockStore = configureStore([]);
+
+const offer = {
   bedrooms: 3,
   city: {
     location: {
@@ -50,31 +53,22 @@ const offers = [{
       }
     }
   ]
-}];
+};
 
-Enzyme.configure({
-  adapter: new Adapter()
-});
-
-it(`Should title be pressed`, () => {
-  const onTitleClick = jest.fn();
-
-  const main = shallow(
-      <Main
-        offers={offers}
-        activeOffer={offers[0]}
-        cardClass={`cities`}
-        currentCity={`Amsterdam`}
-        onTitleClick={() => {}}
-        onMouseEnter={() => {}}
-      />
-  );
-
-  const titles = main.find(`h2.place-card__name`);
-
-  titles.forEach((title) => {
-    title.props().onClick();
+it(`Render SortList`, () => {
+  const store = mockStore({
+    offer,
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
+    sortListIsOpen: false
   });
 
-  expect(onTitleClick.mock.calls.length).toBe(0);
+  const tree = renderer
+    .create(
+        <Provider store={store}>
+          <SortList/>
+        </Provider>
+    ).toJSON();
+
+  expect(tree).toMatchSnapshot();
 });

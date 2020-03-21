@@ -60,7 +60,9 @@ it(`Render App`, () => {
     offers,
     activeOffer: offers[0],
     currentCity: `Amsterdam`,
-    step: -1
+    step: -1,
+    currentSortType: `Popular`,
+    sortListIsOpen: false
   });
 
   const tree = renderer

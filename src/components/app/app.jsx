@@ -18,19 +18,20 @@ class App extends PureComponent {
       step,
       activeOffer,
       currentCity,
-      titleClickHandler
+      titleClickHandler,
+      onMouseEnter
     } = this.props;
 
-    const offersInCity = offers.filter((offer) => offer.city.name === currentCity);
 
-    if (step === -1 || step >= offers.length) {
+    if (step === -1) {
       return (
         <Main
-          offers={offersInCity}
+          offers={offers}
           activeOffer={activeOffer}
           cardClass={CardClass.CITIES}
           currentCity={currentCity}
           onTitleClick={titleClickHandler}
+          onMouseEnter={onMouseEnter}
         />
       );
     }
@@ -55,7 +56,7 @@ class App extends PureComponent {
           </Route>
           <Route exact path="/dev-offer">
             <Property
-              activeOffer={offers[0]}
+              activeOffer={offers[0] || []}
               offers={offers}
               cardClass={CardClass.NEAR_PLACES}
               onTitleClick={titleClickHandler}
@@ -72,12 +73,14 @@ App.propTypes = {
   step: PropTypes.number.isRequired,
   activeOffer: PropTypes.object,
   currentCity: PropTypes.string.isRequired,
-  titleClickHandler: PropTypes.func
+  titleClickHandler: PropTypes.func,
+  onMouseEnter: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({
   step: state.step,
   offers: state.offers,
+  currentSortType: state.currentSortType,
   currentCity: state.currentCity,
   activeOffer: state.activeOffer
 });
@@ -85,6 +88,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   titleClickHandler(offer) {
     dispatch(ActionCreator.changeOffer(offer));
+  },
+  onMouseEnter(offer) {
+    dispatch(ActionCreator.hoverOffer(offer));
   },
   cityClickHandler(city) {
     dispatch(ActionCreator.changeCity(city));

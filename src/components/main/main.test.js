@@ -59,7 +59,9 @@ it(`Render Main`, () => {
   const store = mockStore({
     offers,
     activeOffer: {},
-    currentCity: `Amsterdam`
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
+    sortListIsOpen: false
   });
 
   const tree = renderer
@@ -71,6 +73,7 @@ it(`Render Main`, () => {
             cardClass={`cities`}
             currentCity={`Amsterdam`}
             onTitleClick={() => {}}
+            onMouseEnter={() => {}}
           />
         </Provider>, {
           createNodeMock: () => document.createElement(`div`)

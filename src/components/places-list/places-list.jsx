@@ -8,7 +8,7 @@ class PlacesList extends PureComponent {
   }
 
   render() {
-    const {offers, onTitleClick} = this.props;
+    const {offers, onTitleClick, onMouseEnter} = this.props;
     const {cardClass} = this.props;
 
     return (
@@ -19,7 +19,7 @@ class PlacesList extends PureComponent {
             key={offer.id}
             cardClass={cardClass}
             onTitleClick={onTitleClick}
-            onMouseEnter={() => {}}
+            onMouseEnter={onMouseEnter}
           />
         )}
       </div>
@@ -32,7 +32,8 @@ PlacesList.propTypes = {
     id: PropTypes.number.isRequired,
   })),
   cardClass: PropTypes.string,
-  onTitleClick: PropTypes.func.isRequired
+  onTitleClick: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired
 };
 
 export default PlacesList;

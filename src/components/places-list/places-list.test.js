@@ -57,6 +57,7 @@ it(`Render PlaceList`, () => {
       offers={offers}
       onTitleClick={() => {}}
       cardClass={`cities`}
+      onMouseEnter={() => {}}
     />)
     .toJSON();
 

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import PlacesList from "../places-list/places-list.jsx";
 import Map from "../map/map.jsx";
 import CitiesList from "../cities-list/cities-list.jsx";
+import SortList from "../sort-list/sort-list.jsx";
 
 class Main extends PureComponent {
   constructor(props) {
@@ -10,7 +11,7 @@ class Main extends PureComponent {
   }
 
   render() {
-    const {offers, onTitleClick, activeOffer, cardClass, currentCity} = this.props;
+    const {offers, onTitleClick, onMouseEnter, activeOffer, cardClass, currentCity} = this.props;
 
     return (
       <div className="page page--gray page--main">
@@ -45,25 +46,12 @@ class Main extends PureComponent {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{offers.length} places to stay in {currentCity}</b>
-                <form className="places__sorting" action="#" method="get">
-                  <span className="places__sorting-caption">Sort by</span>
-                  <span className="places__sorting-type" tabIndex="0">
-                    Popular
-                    <svg className="places__sorting-arrow" width="7" height="4">
-                      <use xlinkHref="#icon-arrow-select"></use>
-                    </svg>
-                  </span>
-                  <ul className="places__options places__options--custom places__options--opened">
-                    <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                    <li className="places__option" tabIndex="0">Price: low to high</li>
-                    <li className="places__option" tabIndex="0">Price: high to low</li>
-                    <li className="places__option" tabIndex="0">Top rated first</li>
-                  </ul>
-                </form>
+                <SortList />
                 <PlacesList
                   offers={offers}
                   onTitleClick={onTitleClick}
                   cardClass={cardClass}
+                  onMouseEnter={onMouseEnter}
                 />
               </section>
               <div className="cities__right-section">
@@ -85,6 +73,7 @@ class Main extends PureComponent {
 Main.propTypes = {
   offers: PropTypes.array,
   onTitleClick: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired,
   activeOffer: PropTypes.object,
   cardClass: PropTypes.string,
   currentCity: PropTypes.string.isRequired
