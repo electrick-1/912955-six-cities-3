@@ -2,8 +2,7 @@ import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {ActionCreator} from "../../reducer.js";
-
-const cities = [`Paris`, `Cologne`, `Brussels`, `Amsterdam`, `Hamburg`, `Dusseldorf`];
+import {cities} from "../../const.js";
 
 class CitiesList extends PureComponent {
   constructor(props) {

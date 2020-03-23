@@ -194,6 +194,7 @@ exports[`Render App 1`] = `
           >
             <span
               className="places__sorting-caption"
+              onClick={[Function]}
             >
               Sort by
             </span>
@@ -324,7 +325,7 @@ exports[`Render App 1`] = `
                     <span
                       style={
                         Object {
-                          "width": "80%",
+                          "width": "96%",
                         }
                       }
                     />

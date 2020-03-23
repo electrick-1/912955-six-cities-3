@@ -8,6 +8,7 @@ exports[`Render SortList 1`] = `
 >
   <span
     className="places__sorting-caption"
+    onClick={[Function]}
   >
     Sort by
   </span>

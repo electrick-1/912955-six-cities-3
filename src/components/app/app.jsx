@@ -5,11 +5,7 @@ import {connect} from "react-redux";
 import {ActionCreator} from "../../reducer.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
-
-const CardClass = {
-  CITIES: `cities`,
-  NEAR_PLACES: `near-places`
-};
+import {CardClass} from "../../const.js";
 
 class App extends PureComponent {
   _renderApp() {
@@ -21,7 +17,6 @@ class App extends PureComponent {
       titleClickHandler,
       onMouseEnter
     } = this.props;
-
 
     if (step === -1) {
       return (

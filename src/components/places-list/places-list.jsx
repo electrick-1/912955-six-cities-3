@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import PlaceCard from "../place-card/place-card.jsx";
 
 class PlacesList extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {offers, onTitleClick, onMouseEnter} = this.props;
     const {cardClass} = this.props;

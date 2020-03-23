@@ -50,10 +50,15 @@ const offers = [{
 }];
 
 it(`Reducer without additional parameters should return initial state`, () => {
-  expect(reducer(void 0, {})).toEqual({
+  expect(reducer({
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
-    sortListIsOpen: false,
+    offers,
+    step: -1,
+    activeOffer: {}
+  }, {})).toEqual({
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
     offers,
     step: -1,
     activeOffer: {}
@@ -64,7 +69,6 @@ it(`Reducer should change city a given value`, () => {
   expect(reducer({
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
-    sortListIsOpen: false,
     offers,
     step: -1,
     activeOffer: {}
@@ -74,8 +78,7 @@ it(`Reducer should change city a given value`, () => {
   })).toEqual({
     currentCity: `Roma`,
     currentSortType: `Popular`,
-    sortListIsOpen: false,
-    offers,
+    offers: [],
     step: -1,
     activeOffer: {}
   });
@@ -85,7 +88,6 @@ it(`Reducer should change offer a given value`, () => {
   expect(reducer({
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
-    sortListIsOpen: false,
     offers,
     step: -1,
     activeOffer: {}
@@ -95,28 +97,44 @@ it(`Reducer should change offer a given value`, () => {
   })).toEqual({
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
-    sortListIsOpen: false,
     offers,
     step: 0,
     activeOffer: offers[0]
   });
 });
 
-it(`Reducer should change sort a given value`, () => {
+it(`Reducer should hover offer a given value`, () => {
   expect(reducer({
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
-    sortListIsOpen: true,
+    offers,
+    step: -1,
+    activeOffer: {}
+  }, {
+    type: ActionType.HOVER_OFFER,
+    payload: offers[0],
+  })).toEqual({
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
+    offers,
+    step: -1,
+    activeOffer: offers[0]
+  });
+});
+
+it(`Reducer should hover offer a given value`, () => {
+  expect(reducer({
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
     offers,
     step: -1,
     activeOffer: {}
   }, {
     type: ActionType.CHANGE_SORT,
-    payload: `Top rated first`,
+    payload: `Price: low to high`,
   })).toEqual({
     currentCity: `Amsterdam`,
-    currentSortType: `Top rated first`,
-    sortListIsOpen: false,
+    currentSortType: `Price: low to high`,
     offers,
     step: -1,
     activeOffer: {}

@@ -5,10 +5,6 @@ import PlaceCard from "../place-card/place-card.jsx";
 import Map from "../map/map.jsx";
 
 class Property extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {offers, onTitleClick, cardClass} = this.props;
     const {
@@ -97,7 +93,7 @@ class Property extends PureComponent {
                 </div>
                 <div className="property__rating rating">
                   <div className="property__stars rating__stars">
-                    <span style={{width: 80 + `%`}}></span>
+                    <span style={{width: raiting * 100 / 5 + `%`}}></span>
                     <span className="visually-hidden">Rating</span>
                   </div>
                   <span className="property__rating-value rating__value">{raiting}</span>

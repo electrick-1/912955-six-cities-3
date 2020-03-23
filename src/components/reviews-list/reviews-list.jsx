@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import ReviewsItem from "../reviews-item/reviews-item.jsx";
 
 class ReviewsList extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {comments} = this.props.activeOffer;
     return (

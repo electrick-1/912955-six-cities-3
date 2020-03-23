@@ -6,10 +6,6 @@ import CitiesList from "../cities-list/cities-list.jsx";
 import SortList from "../sort-list/sort-list.jsx";
 
 class Main extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {offers, onTitleClick, onMouseEnter, activeOffer, cardClass, currentCity} = this.props;
 
@@ -46,7 +42,7 @@ class Main extends PureComponent {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{offers.length} places to stay in {currentCity}</b>
-                <SortList />
+                <SortList offers={offers}/>
                 <PlacesList
                   offers={offers}
                   onTitleClick={onTitleClick}

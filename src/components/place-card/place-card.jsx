@@ -27,6 +27,7 @@ class PlaceCard extends PureComponent {
       isPremium,
       isFavorite,
       type,
+      rating,
       previewImage
     } = offer;
 
@@ -71,7 +72,7 @@ class PlaceCard extends PureComponent {
           </div>
           <div className="place-card__rating rating">
             <div className="place-card__stars rating__stars">
-              <span style={{width: 80 + `%`}}></span>
+              <span style={{width: rating * 100 / 5 + `%`}}></span>
               <span className="visually-hidden">Rating</span>
             </div>
           </div>
@@ -93,6 +94,7 @@ PlaceCard.propTypes = {
     isPremium: PropTypes.bool.isRequired,
     isFavorite: PropTypes.bool,
     type: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
     previewImage: PropTypes.string.isRequired
   }),
   cardClass: PropTypes.string.isRequired,
