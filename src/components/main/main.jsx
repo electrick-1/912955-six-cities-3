@@ -7,7 +7,14 @@ import SortList from "../sort-list/sort-list.jsx";
 
 class Main extends PureComponent {
   render() {
-    const {offers, onTitleClick, onMouseEnter, activeOffer, cardClass, currentCity} = this.props;
+    const {
+      onTitleClick,
+      onMouseEnter,
+      activeOffer,
+      cardClass,
+      currentCity,
+      sortedOffers
+    } = this.props;
 
     return (
       <div className="page page--gray page--main">
@@ -41,19 +48,19 @@ class Main extends PureComponent {
             <div className="cities__places-container container">
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{offers.length} places to stay in {currentCity}</b>
-                <SortList offers={offers}/>
+                <b className="places__found">{sortedOffers.length} places to stay in {currentCity}</b>
+                <SortList />
                 <PlacesList
-                  offers={offers}
-                  onTitleClick={onTitleClick}
+                  sortedOffers={sortedOffers}
                   cardClass={cardClass}
+                  onTitleClick={onTitleClick}
                   onMouseEnter={onMouseEnter}
                 />
               </section>
               <div className="cities__right-section">
                 <section className="cities__map map">
                   <Map
-                    offers={offers}
+                    sortedOffers={sortedOffers}
                     activeOffer={activeOffer}
                   />
                 </section>
@@ -67,10 +74,10 @@ class Main extends PureComponent {
 }
 
 Main.propTypes = {
-  offers: PropTypes.array,
   onTitleClick: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
   activeOffer: PropTypes.object,
+  sortedOffers: PropTypes.array,
   cardClass: PropTypes.string,
   currentCity: PropTypes.string.isRequired
 };

@@ -4,12 +4,16 @@ import PlaceCard from "../place-card/place-card.jsx";
 
 class PlacesList extends PureComponent {
   render() {
-    const {offers, onTitleClick, onMouseEnter} = this.props;
-    const {cardClass} = this.props;
+    const {
+      sortedOffers,
+      cardClass,
+      onTitleClick,
+      onMouseEnter
+    } = this.props;
 
     return (
       <div className="cities__places-list places__list tabs__content">
-        {offers.map((offer) =>
+        {sortedOffers.map((offer) =>
           <PlaceCard
             offer={offer}
             key={offer.id}
@@ -28,6 +32,9 @@ PlacesList.propTypes = {
     id: PropTypes.number.isRequired,
   })),
   cardClass: PropTypes.string,
+  sortedOffers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  })),
   onTitleClick: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired
 };

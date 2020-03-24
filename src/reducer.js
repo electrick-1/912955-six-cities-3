@@ -11,7 +11,8 @@ const initialState = {
   currentSortType: `Popular`,
   offers: offersInCity(`Amsterdam`),
   step: -1,
-  activeOffer: {}
+  activeOffer: {},
+  sortedOffers: offersInCity(`Amsterdam`),
 };
 
 const ActionType = {
@@ -37,9 +38,9 @@ const ActionCreator = {
     payload: offer
   }),
 
-  changeSortType: (sortedOffers) => ({
+  changeSortType: ({type, newOffers}) => ({
     type: ActionType.CHANGE_SORT,
-    payload: sortedOffers
+    payload: {type, newOffers}
   }),
 };
 
@@ -62,7 +63,8 @@ const reducer = (state = initialState, action) => {
       });
     case ActionType.CHANGE_SORT:
       return extend(state, {
-        currentSortType: action.payload
+        currentSortType: action.payload.type,
+        sortedOffers: action.payload.newOffers
       });
   }
   return state;

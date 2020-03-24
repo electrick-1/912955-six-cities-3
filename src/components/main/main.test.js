@@ -6,7 +6,7 @@ import Main from "./main.jsx";
 
 const mockStore = configureStore([]);
 
-const offers = [{
+const sortedOffers = [{
   bedrooms: 3,
   city: {
     location: {
@@ -57,7 +57,7 @@ const offers = [{
 
 it(`Render Main`, () => {
   const store = mockStore({
-    offers,
+    sortedOffers,
     activeOffer: {},
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
@@ -68,8 +68,8 @@ it(`Render Main`, () => {
     .create(
         <Provider store={store}>
           <Main
-            offers={offers}
-            activeOffer={offers[0]}
+            sortedOffers={sortedOffers}
+            activeOffer={sortedOffers[0]}
             cardClass={`cities`}
             currentCity={`Amsterdam`}
             onTitleClick={() => {}}

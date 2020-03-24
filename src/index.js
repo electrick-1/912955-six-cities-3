@@ -14,7 +14,7 @@ const store = createStore(
 ReactDOM.render(
     <Provider store={store}>
       <App
-        offers={offers}
+        sortedOffers={offers}
       />
     </Provider>,
     document.querySelector(`#root`)

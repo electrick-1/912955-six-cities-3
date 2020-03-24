@@ -12,7 +12,7 @@ const withActiveItem = (Component) => {
       this.state = {
         sortListIsOpen: false,
         currentSortType: `Popular`,
-        offers: []
+        sortedOffers: []
       };
 
       this.sortClickHandler = this.sortClickHandler.bind(this);
@@ -40,6 +40,7 @@ const withActiveItem = (Component) => {
         case SORT_TYPES.RATED:
           sortedOffers = offers.sort((a, b) => b.rating - a.rating);
           break;
+        case SORT_TYPES.POPULAR:
         default:
           sortedOffers = offers;
           break;
@@ -48,10 +49,10 @@ const withActiveItem = (Component) => {
       this.setState((prevState) => ({
         currentSortType: evt,
         sortListIsOpen: !prevState.sortListIsOpen,
-        offers: sortedOffers
+        sortedOffers
       }));
 
-      onSortTypeClick(evt);
+      onSortTypeClick({type: evt, newOffers: sortedOffers});
     }
 
     render() {
@@ -78,8 +79,8 @@ const withActiveItem = (Component) => {
   });
 
   const mapDispatchToProps = (dispatch) => ({
-    onSortTypeClick(type) {
-      dispatch(ActionCreator.changeSortType(type));
+    onSortTypeClick({type, newOffers}) {
+      dispatch(ActionCreator.changeSortType({type, newOffers}));
     }
   });
 

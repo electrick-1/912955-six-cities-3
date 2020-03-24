@@ -9,7 +9,12 @@ const sortType = [
   `Top rated first`
 ];
 
-function SortList({currentSortType, sortListIsOpen, onSortListClick, onSortTypeClick}) {
+function SortList({
+  currentSortType,
+  sortListIsOpen,
+  onSortListClick,
+  onSortTypeClick
+}) {
   const isOpenSortClass = sortListIsOpen
     ? `places__options places__options--custom places__options--opened`
     : `places__options places__options--custom`;

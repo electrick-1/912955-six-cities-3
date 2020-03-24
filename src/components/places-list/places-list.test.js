@@ -2,7 +2,7 @@ import React from "react";
 import renderer from "react-test-renderer";
 import PlacesList from "./places-list.jsx";
 
-const offers = [{
+const sortedOffers = [{
   bedrooms: 3,
   city: {
     location: {
@@ -54,7 +54,7 @@ const offers = [{
 it(`Render PlaceList`, () => {
   const tree = renderer
     .create(<PlacesList
-      offers={offers}
+      sortedOffers={sortedOffers}
       onTitleClick={() => {}}
       cardClass={`cities`}
       onMouseEnter={() => {}}

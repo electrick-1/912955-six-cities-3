@@ -10,21 +10,21 @@ import {CardClass} from "../../const.js";
 class App extends PureComponent {
   _renderApp() {
     const {
-      offers,
       step,
       activeOffer,
       currentCity,
       titleClickHandler,
-      onMouseEnter
+      onMouseEnter,
+      sortedOffers
     } = this.props;
 
     if (step === -1) {
       return (
         <Main
-          offers={offers}
           activeOffer={activeOffer}
           cardClass={CardClass.CITIES}
           currentCity={currentCity}
+          sortedOffers={sortedOffers}
           onTitleClick={titleClickHandler}
           onMouseEnter={onMouseEnter}
         />
@@ -34,7 +34,7 @@ class App extends PureComponent {
     return (
       <Property
         activeOffer={activeOffer}
-        offers={offers}
+        sortedOffers={sortedOffers}
         cardClass={CardClass.NEAR_PLACES}
         onTitleClick={titleClickHandler}
       />
@@ -42,7 +42,7 @@ class App extends PureComponent {
   }
 
   render() {
-    const {offers, titleClickHandler} = this.props;
+    const {sortedOffers, titleClickHandler} = this.props;
     return (
       <BrowserRouter>
         <Switch>
@@ -51,8 +51,8 @@ class App extends PureComponent {
           </Route>
           <Route exact path="/dev-offer">
             <Property
-              activeOffer={offers[0] || []}
-              offers={offers}
+              activeOffer={sortedOffers[0]}
+              sortedOffers={sortedOffers}
               cardClass={CardClass.NEAR_PLACES}
               onTitleClick={titleClickHandler}
             />
@@ -64,18 +64,18 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  offers: PropTypes.array,
   step: PropTypes.number.isRequired,
   activeOffer: PropTypes.object,
   currentCity: PropTypes.string.isRequired,
+  sortedOffers: PropTypes.array,
   titleClickHandler: PropTypes.func,
   onMouseEnter: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({
   step: state.step,
-  offers: state.offers,
   currentSortType: state.currentSortType,
+  sortedOffers: state.sortedOffers,
   currentCity: state.currentCity,
   activeOffer: state.activeOffer
 });
