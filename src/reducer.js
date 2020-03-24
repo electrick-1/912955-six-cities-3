@@ -1,7 +1,6 @@
 import {extend} from "./utils.js";
 import {offers} from "./mocks/offers.js";
 import {SORT_TYPES} from "./const.js";
-
 const offersInCity = (city) => {
   return offers.filter((offer) => offer.city.name === city);
 };
