@@ -133,7 +133,7 @@ it(`Reducer should change city a given value`, () => {
     offers: [],
     step: -1,
     activeOffer: {},
-    sortedOffers
+    sortedOffers: []
   });
 });
 

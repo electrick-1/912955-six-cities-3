@@ -69,7 +69,8 @@ App.propTypes = {
   currentCity: PropTypes.string.isRequired,
   sortedOffers: PropTypes.array,
   titleClickHandler: PropTypes.func,
-  onMouseEnter: PropTypes.func
+  onMouseEnter: PropTypes.func,
+  currentSortType: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({

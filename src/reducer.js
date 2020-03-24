@@ -7,9 +7,9 @@ const offersInCity = (city) => {
 };
 
 const initialState = {
+  offers: offersInCity(`Amsterdam`),
   currentCity: `Amsterdam`,
   currentSortType: `Popular`,
-  offers: offersInCity(`Amsterdam`),
   step: -1,
   activeOffer: {},
   sortedOffers: offersInCity(`Amsterdam`),
@@ -49,6 +49,7 @@ const reducer = (state = initialState, action) => {
     case ActionType.CHANGE_CITY:
       return extend(state, {
         currentCity: action.payload,
+        sortedOffers: offersInCity(action.payload),
         offers: offersInCity(action.payload),
         currentSortType: SORT_TYPES.POPULAR
       });

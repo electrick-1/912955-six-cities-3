@@ -1,6 +1,10 @@
 import React from "react";
 import renderer from "react-test-renderer";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
 import PlacesList from "./places-list.jsx";
+
+const mockStore = configureStore([]);
 
 const sortedOffers = [{
   bedrooms: 3,
@@ -52,13 +56,26 @@ const sortedOffers = [{
 }];
 
 it(`Render PlaceList`, () => {
+  const store = mockStore({
+    sortedOffers,
+    activeOffer: {},
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
+    sortListIsOpen: false
+  });
+
   const tree = renderer
-    .create(<PlacesList
-      sortedOffers={sortedOffers}
-      onTitleClick={() => {}}
-      cardClass={`cities`}
-      onMouseEnter={() => {}}
-    />)
+    .create(
+        <Provider store={store}>
+          <PlacesList
+            sortedOffers={sortedOffers}
+            onTitleClick={() => {}}
+            cardClass={`cities`}
+            onMouseEnter={() => {}}
+          />
+        </Provider>, {
+          createNodeMock: () => document.createElement(`div`)
+        })
     .toJSON();
 
   expect(tree).toMatchSnapshot();

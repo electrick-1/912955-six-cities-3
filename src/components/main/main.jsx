@@ -51,7 +51,6 @@ class Main extends PureComponent {
                 <b className="places__found">{sortedOffers.length} places to stay in {currentCity}</b>
                 <SortList />
                 <PlacesList
-                  sortedOffers={sortedOffers}
                   cardClass={cardClass}
                   onTitleClick={onTitleClick}
                   onMouseEnter={onMouseEnter}

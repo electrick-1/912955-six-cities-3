@@ -69,6 +69,7 @@ const withActiveItem = (Component) => {
   }
 
   WithActiveItem.propTypes = {
+    sortedOffers: PropTypes.array,
     offers: PropTypes.array,
     onSortTypeClick: PropTypes.func
   };
