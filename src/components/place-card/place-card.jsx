@@ -10,8 +10,8 @@ class PlaceCard extends PureComponent {
   }
 
   _hoverHandler() {
-    const offer = this.props.offer;
-    this.props.onMouseEnter(offer);
+    const {offer, onMouseEnter} = this.props;
+    onMouseEnter(offer);
   }
 
   _onTitleClick() {
@@ -20,16 +20,16 @@ class PlaceCard extends PureComponent {
   }
 
   render() {
-    const {offer} = this.props;
+    const {offer, cardClass} = this.props;
     const {
       title,
       price,
       isPremium,
       isFavorite,
       type,
+      rating,
       previewImage
     } = offer;
-    const {cardClass} = this.props;
 
     const isPremiumClass = isPremium && cardClass === `cities`
       ? `place-card__mark`
@@ -72,7 +72,7 @@ class PlaceCard extends PureComponent {
           </div>
           <div className="place-card__rating rating">
             <div className="place-card__stars rating__stars">
-              <span style={{width: 80 + `%`}}></span>
+              <span style={{width: rating * 100 / 5 + `%`}}></span>
               <span className="visually-hidden">Rating</span>
             </div>
           </div>
@@ -94,6 +94,7 @@ PlaceCard.propTypes = {
     isPremium: PropTypes.bool.isRequired,
     isFavorite: PropTypes.bool,
     type: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
     previewImage: PropTypes.string.isRequired
   }),
   cardClass: PropTypes.string.isRequired,

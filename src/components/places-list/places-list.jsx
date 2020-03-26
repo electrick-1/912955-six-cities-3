@@ -1,25 +1,26 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
 import PlaceCard from "../place-card/place-card.jsx";
 
 class PlacesList extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const {offers, onTitleClick} = this.props;
-    const {cardClass} = this.props;
+    const {
+      sortedOffers,
+      cardClass,
+      onTitleClick,
+      onMouseEnter
+    } = this.props;
 
     return (
       <div className="cities__places-list places__list tabs__content">
-        {offers.map((offer) =>
+        {sortedOffers.map((offer) =>
           <PlaceCard
             offer={offer}
             key={offer.id}
             cardClass={cardClass}
             onTitleClick={onTitleClick}
-            onMouseEnter={() => {}}
+            onMouseEnter={onMouseEnter}
           />
         )}
       </div>
@@ -27,12 +28,19 @@ class PlacesList extends PureComponent {
   }
 }
 
+
 PlacesList.propTypes = {
-  offers: PropTypes.arrayOf(PropTypes.shape({
+  cardClass: PropTypes.string,
+  sortedOffers: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
   })),
-  cardClass: PropTypes.string,
-  onTitleClick: PropTypes.func.isRequired
+  onTitleClick: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired
 };
 
-export default PlacesList;
+const mapStateToProps = (state) => ({
+  sortedOffers: state.sortedOffers
+});
+
+export {PlacesList};
+export default connect(mapStateToProps)(PlacesList);

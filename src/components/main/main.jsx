@@ -3,14 +3,52 @@ import PropTypes from "prop-types";
 import PlacesList from "../places-list/places-list.jsx";
 import Map from "../map/map.jsx";
 import CitiesList from "../cities-list/cities-list.jsx";
+import SortList from "../sort-list/sort-list.jsx";
+import MainEmpty from "../main-empty/main-empty.jsx";
 
 class Main extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const {offers, onTitleClick, activeOffer, cardClass, currentCity} = this.props;
+    const {
+      onTitleClick,
+      onMouseEnter,
+      activeOffer,
+      cardClass,
+      currentCity,
+      sortedOffers
+    } = this.props;
+
+    const isOffers = () => {
+      if (sortedOffers.length === 0) {
+        return (
+          <MainEmpty />
+        );
+      } else {
+        return (
+          <div className="cities">
+            <div className="cities__places-container container">
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">{sortedOffers.length} places to stay in {currentCity}</b>
+                <SortList />
+                <PlacesList
+                  cardClass={cardClass}
+                  onTitleClick={onTitleClick}
+                  onMouseEnter={onMouseEnter}
+                />
+              </section>
+              <div className="cities__right-section">
+                <section className="cities__map map">
+                  <Map
+                    sortedOffers={sortedOffers}
+                    activeOffer={activeOffer}
+                  />
+                </section>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    };
 
     return (
       <div className="page page--gray page--main">
@@ -37,45 +75,10 @@ class Main extends PureComponent {
           </div>
         </header>
 
-        <main className="page__main page__main--index">
+        <main className={`page__main page__main--index ${sortedOffers.length === 0 ? `page__main--index-empty` : ``}`}>
           <h1 className="visually-hidden">Cities</h1>
           <CitiesList />
-          <div className="cities">
-            <div className="cities__places-container container">
-              <section className="cities__places places">
-                <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{offers.length} places to stay in {currentCity}</b>
-                <form className="places__sorting" action="#" method="get">
-                  <span className="places__sorting-caption">Sort by</span>
-                  <span className="places__sorting-type" tabIndex="0">
-                    Popular
-                    <svg className="places__sorting-arrow" width="7" height="4">
-                      <use xlinkHref="#icon-arrow-select"></use>
-                    </svg>
-                  </span>
-                  <ul className="places__options places__options--custom places__options--opened">
-                    <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                    <li className="places__option" tabIndex="0">Price: low to high</li>
-                    <li className="places__option" tabIndex="0">Price: high to low</li>
-                    <li className="places__option" tabIndex="0">Top rated first</li>
-                  </ul>
-                </form>
-                <PlacesList
-                  offers={offers}
-                  onTitleClick={onTitleClick}
-                  cardClass={cardClass}
-                />
-              </section>
-              <div className="cities__right-section">
-                <section className="cities__map map">
-                  <Map
-                    offers={offers}
-                    activeOffer={activeOffer}
-                  />
-                </section>
-              </div>
-            </div>
-          </div>
+          {isOffers()}
         </main>
       </div>
     );
@@ -83,9 +86,10 @@ class Main extends PureComponent {
 }
 
 Main.propTypes = {
-  offers: PropTypes.array,
   onTitleClick: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired,
   activeOffer: PropTypes.object,
+  sortedOffers: PropTypes.array,
   cardClass: PropTypes.string,
   currentCity: PropTypes.string.isRequired
 };

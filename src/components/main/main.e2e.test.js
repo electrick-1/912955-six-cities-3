@@ -3,7 +3,7 @@ import Enzyme, {shallow} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import Main from "./main.jsx";
 
-const offers = [{
+const sortedOffers = [{
   bedrooms: 3,
   city: {
     location: {
@@ -61,11 +61,12 @@ it(`Should title be pressed`, () => {
 
   const main = shallow(
       <Main
-        offers={offers}
-        activeOffer={offers[0]}
+        sortedOffers={sortedOffers}
+        activeOffer={sortedOffers[0]}
         cardClass={`cities`}
         currentCity={`Amsterdam`}
         onTitleClick={() => {}}
+        onMouseEnter={() => {}}
       />
   );
 

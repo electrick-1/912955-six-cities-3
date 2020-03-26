@@ -2,7 +2,7 @@ import React from "react";
 import renderer from "react-test-renderer";
 import Property from "./property.jsx";
 
-const offers = [{
+const sortedOffers = [{
   bedrooms: 3,
   city: {
     location: {
@@ -55,8 +55,8 @@ it(`Render Property`, () => {
   const tree = renderer
     .create(
         <Property
-          activeOffer={offers[0]}
-          offers={offers}
+          activeOffer={sortedOffers[0]}
+          sortedOffers={sortedOffers}
           cardClass={`cities`}
           onTitleClick={() => {}}
         />, {

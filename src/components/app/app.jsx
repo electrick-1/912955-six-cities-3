@@ -5,32 +5,28 @@ import {connect} from "react-redux";
 import {ActionCreator} from "../../reducer.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
-
-const CardClass = {
-  CITIES: `cities`,
-  NEAR_PLACES: `near-places`
-};
+import {CardClass} from "../../const.js";
 
 class App extends PureComponent {
   _renderApp() {
     const {
-      offers,
       step,
       activeOffer,
       currentCity,
-      titleClickHandler
+      titleClickHandler,
+      onMouseEnter,
+      sortedOffers
     } = this.props;
 
-    const offersInCity = offers.filter((offer) => offer.city.name === currentCity);
-
-    if (step === -1 || step >= offers.length) {
+    if (step === -1) {
       return (
         <Main
-          offers={offersInCity}
           activeOffer={activeOffer}
           cardClass={CardClass.CITIES}
           currentCity={currentCity}
+          sortedOffers={sortedOffers}
           onTitleClick={titleClickHandler}
+          onMouseEnter={onMouseEnter}
         />
       );
     }
@@ -38,7 +34,7 @@ class App extends PureComponent {
     return (
       <Property
         activeOffer={activeOffer}
-        offers={offers}
+        sortedOffers={sortedOffers}
         cardClass={CardClass.NEAR_PLACES}
         onTitleClick={titleClickHandler}
       />
@@ -46,7 +42,7 @@ class App extends PureComponent {
   }
 
   render() {
-    const {offers, titleClickHandler} = this.props;
+    const {sortedOffers, titleClickHandler} = this.props;
     return (
       <BrowserRouter>
         <Switch>
@@ -55,8 +51,8 @@ class App extends PureComponent {
           </Route>
           <Route exact path="/dev-offer">
             <Property
-              activeOffer={offers[0]}
-              offers={offers}
+              activeOffer={sortedOffers[0]}
+              sortedOffers={sortedOffers}
               cardClass={CardClass.NEAR_PLACES}
               onTitleClick={titleClickHandler}
             />
@@ -68,16 +64,19 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  offers: PropTypes.array,
   step: PropTypes.number.isRequired,
   activeOffer: PropTypes.object,
   currentCity: PropTypes.string.isRequired,
-  titleClickHandler: PropTypes.func
+  sortedOffers: PropTypes.array,
+  titleClickHandler: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  currentSortType: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
   step: state.step,
-  offers: state.offers,
+  currentSortType: state.currentSortType,
+  sortedOffers: state.sortedOffers,
   currentCity: state.currentCity,
   activeOffer: state.activeOffer
 });
@@ -85,6 +84,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   titleClickHandler(offer) {
     dispatch(ActionCreator.changeOffer(offer));
+  },
+  onMouseEnter(offer) {
+    dispatch(ActionCreator.hoverOffer(offer));
   },
   cityClickHandler(city) {
     dispatch(ActionCreator.changeCity(city));

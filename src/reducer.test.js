@@ -1,106 +1,201 @@
 import {ActionType, reducer} from "./reducer";
 
 const offers = [{
+  bedrooms: 3,
+  city: {
+    location: {
+      latitude: 52.370216,
+      longitude: 4.895168,
+      zoom: 10
+    },
+    name: `Amsterdam`
+  },
+  description: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.`,
+  goods: [`Heating`, `Kitchen`, `Cable TV`, `Washing machine`, `Coffee machine`, `Dishwasher`],
+  host: {
+    avatarUrl: `img/1.png`,
+    id: 3,
+    isPro: true,
+    name: `Angelina`
+  },
   id: 1,
-  title: `Beautiful & luxurious apartment at great location`,
-  price: 120,
+  images: [`img/1.png`, `img/2.png`],
+  isFavorite: false,
   isPremium: true,
-  bookmark: false,
+  location: {
+    latitude: 52.3909553943508,
+    longitude: 4.85309666406198,
+    zoom: 8
+  },
+  maxAdults: 4,
+  previewImage: `img/apartment-01.jpg`,
+  price: 120,
+  rating: 4.8,
+  title: `Beautiful & luxurious studio at great location`,
   type: `Apartment`,
-  photo: `img/apartment-01.jpg`,
-  raiting: 4.8,
-  quantityBedrooms: 3,
-  quantityAdults: 4,
-  options: [
-    `Wi-Fi`,
-    `Washing machine`,
-    `Towels`,
-    `Heating`,
-    `Coffee machine`,
-    `Baby seat`,
-    `Kitchen`,
-    `Dishwasher`,
-    `Cabel TV`,
-    `Fridge`
-  ],
-  cords: [52.3909553943508, 4.85309666406198],
-  comments: [{
-    avatar: `img/avatar-max.jpg`,
-    name: `Max`,
-    text: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.`,
-    date: `2019-04-24`
-  }]
+  comments: [
+    {
+      comment: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.`,
+      date: `2019-05-08T14:13:56.569Z`,
+      id: 1,
+      rating: 4,
+      user: {
+        avatarUrl: `img/avatar-max.jpg`,
+        id: 4,
+        isPro: false,
+        name: `Max`
+      }
+    }
+  ]
+}];
+
+const sortedOffers = [{
+  bedrooms: 3,
+  city: {
+    location: {
+      latitude: 52.370216,
+      longitude: 4.895168,
+      zoom: 10
+    },
+    name: `Amsterdam`
+  },
+  description: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.`,
+  goods: [`Heating`, `Kitchen`, `Cable TV`, `Washing machine`, `Coffee machine`, `Dishwasher`],
+  host: {
+    avatarUrl: `img/1.png`,
+    id: 3,
+    isPro: true,
+    name: `Angelina`
+  },
+  id: 1,
+  images: [`img/1.png`, `img/2.png`],
+  isFavorite: false,
+  isPremium: true,
+  location: {
+    latitude: 52.3909553943508,
+    longitude: 4.85309666406198,
+    zoom: 8
+  },
+  maxAdults: 4,
+  previewImage: `img/apartment-01.jpg`,
+  price: 120,
+  rating: 4.8,
+  title: `Beautiful & luxurious studio at great location`,
+  type: `Apartment`,
+  comments: [
+    {
+      comment: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.`,
+      date: `2019-05-08T14:13:56.569Z`,
+      id: 1,
+      rating: 4,
+      user: {
+        avatarUrl: `img/avatar-max.jpg`,
+        id: 4,
+        isPro: false,
+        name: `Max`
+      }
+    }
+  ]
 }];
 
 it(`Reducer without additional parameters should return initial state`, () => {
-  expect(reducer(void 0, {})).toEqual({
-    step: -1,
+  expect(reducer({
     currentCity: `Amsterdam`,
-    activeOffer: {},
+    currentSortType: `Popular`,
     offers,
+    step: -1,
+    activeOffer: {},
+    sortedOffers
+  }, {})).toEqual({
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
+    offers,
+    step: -1,
+    activeOffer: {},
+    sortedOffers
   });
 });
 
 it(`Reducer should change city a given value`, () => {
   expect(reducer({
-    step: -1,
     currentCity: `Amsterdam`,
-    activeOffer: {},
+    currentSortType: `Popular`,
     offers,
+    step: -1,
+    activeOffer: {},
+    sortedOffers
   }, {
     type: ActionType.CHANGE_CITY,
     payload: `Roma`,
   })).toEqual({
-    step: -1,
     currentCity: `Roma`,
-    activeOffer: {},
-    offers,
-  });
-
-  expect(reducer({
+    currentSortType: `Popular`,
+    offers: [],
     step: -1,
-    currentCity: `Amsterdam`,
     activeOffer: {},
-    offers,
-  }, {
-    type: ActionType.CHANGE_CITY,
-    payload: `Amsterdam`,
-  })).toEqual({
-    step: -1,
-    currentCity: `Amsterdam`,
-    activeOffer: {},
-    offers,
+    sortedOffers: []
   });
 });
 
 it(`Reducer should change offer a given value`, () => {
   expect(reducer({
-    step: -1,
     currentCity: `Amsterdam`,
-    activeOffer: {},
+    currentSortType: `Popular`,
     offers,
+    step: -1,
+    activeOffer: {},
+    sortedOffers
   }, {
     type: ActionType.CHANGE_OFFER,
     payload: offers[0],
   })).toEqual({
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
+    offers,
     step: 0,
-    currentCity: `Amsterdam`,
     activeOffer: offers[0],
-    offers,
+    sortedOffers
   });
+});
 
+it(`Reducer should hover offer a given value`, () => {
   expect(reducer({
-    step: -1,
     currentCity: `Amsterdam`,
-    activeOffer: {},
+    currentSortType: `Popular`,
     offers,
+    step: -1,
+    activeOffer: {},
+    sortedOffers
   }, {
-    type: ActionType.CHANGE_OFFER,
-    payload: -1,
+    type: ActionType.HOVER_OFFER,
+    payload: offers[0],
   })).toEqual({
-    step: -1,
     currentCity: `Amsterdam`,
-    activeOffer: {},
+    currentSortType: `Popular`,
     offers,
+    step: -1,
+    activeOffer: sortedOffers[0],
+    sortedOffers
+  });
+});
+
+it(`Reducer should change sort a given value`, () => {
+  expect(reducer({
+    currentCity: `Amsterdam`,
+    currentSortType: `Popular`,
+    offers,
+    step: -1,
+    activeOffer: {},
+    sortedOffers
+  }, {
+    type: ActionType.CHANGE_SORT,
+    payload: {type: `Price: low to high`, newOffers: sortedOffers},
+  })).toEqual({
+    currentCity: `Amsterdam`,
+    currentSortType: `Price: low to high`,
+    offers,
+    step: -1,
+    activeOffer: {},
+    sortedOffers
   });
 });

@@ -22,7 +22,7 @@ class Map extends PureComponent {
   }
 
   componentDidMount() {
-    const {offers, activeOffer} = this.props;
+    const {sortedOffers, activeOffer} = this.props;
 
     this.map = leaflet.map(this.mapRef.current, {
       center: city,
@@ -39,7 +39,7 @@ class Map extends PureComponent {
       })
       .addTo(this.map);
 
-    offers.map((offer) => {
+    sortedOffers.map((offer) => {
       if (offer.id === activeOffer.id) {
         leaflet
         .marker([activeOffer.location.latitude, activeOffer.location.longitude], {icon: activeIcon})
@@ -53,11 +53,11 @@ class Map extends PureComponent {
   }
 
   componentDidUpdate() {
-    const {offers, activeOffer} = this.props;
+    const {sortedOffers, activeOffer} = this.props;
 
     this.layer.clearLayers();
 
-    offers.map((offer) => {
+    sortedOffers.map((offer) => {
       if (offer.id === activeOffer.id) {
         leaflet
         .marker([activeOffer.location.latitude, activeOffer.location.longitude], {icon: activeIcon})
@@ -83,7 +83,7 @@ class Map extends PureComponent {
 
 
 Map.propTypes = {
-  offers: PropTypes.array,
+  sortedOffers: PropTypes.array,
   activeOffer: PropTypes.shape({
     id: PropTypes.number,
     location: PropTypes.object

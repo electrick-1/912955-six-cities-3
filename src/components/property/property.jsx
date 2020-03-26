@@ -5,12 +5,8 @@ import PlaceCard from "../place-card/place-card.jsx";
 import Map from "../map/map.jsx";
 
 class Property extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const {offers, onTitleClick, cardClass} = this.props;
+    const {sortedOffers, onTitleClick, cardClass} = this.props;
     const {
       title,
       price,
@@ -97,7 +93,7 @@ class Property extends PureComponent {
                 </div>
                 <div className="property__rating rating">
                   <div className="property__stars rating__stars">
-                    <span style={{width: 80 + `%`}}></span>
+                    <span style={{width: raiting * 100 / 5 + `%`}}></span>
                     <span className="visually-hidden">Rating</span>
                   </div>
                   <span className="property__rating-value rating__value">{raiting}</span>
@@ -200,7 +196,7 @@ class Property extends PureComponent {
             </div>
             <section className="property__map map">
               <Map
-                offers={offers}
+                sortedOffers={sortedOffers}
                 activeOffer={this.props.activeOffer}
               />
             </section>
@@ -209,7 +205,7 @@ class Property extends PureComponent {
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                {offers.map((offer) => {
+                {sortedOffers.map((offer) => {
                   if (offer.id !== this.props.activeOffer.id) {
                     return (
                       <PlaceCard
@@ -233,7 +229,7 @@ class Property extends PureComponent {
 }
 
 Property.propTypes = {
-  offers: PropTypes.array,
+  sortedOffers: PropTypes.array,
   activeOffer: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,

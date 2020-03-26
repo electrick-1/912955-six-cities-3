@@ -1,26 +1,8 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
-
-const months = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`
-];
+import {months} from "../../const.js";
 
 class ReviewsItem extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {user, comment, date} = this.props.comment;
     const {avatarUrl, name} = user;
