@@ -51,7 +51,6 @@ const Operation = {
     return api.get(`/hotels`)
       .then((responce) => {
         dispatch(ActionCreator.loadOffers(responce.data));
-        console.log(responce)
       });
   }
 };
