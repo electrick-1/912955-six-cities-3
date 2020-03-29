@@ -2,8 +2,6 @@ import React, {PureComponent, createRef} from "react";
 import PropTypes from "prop-types";
 import leaflet from "leaflet";
 
-const city = [52.370216, 4.895168];
-const zoom = 12;
 const icon = leaflet.icon({
   iconUrl: `img/pin.svg`,
   iconSize: [27, 39]
@@ -19,14 +17,15 @@ class Map extends PureComponent {
     this.mapRef = createRef();
     this.map = null;
     this.layer = null;
+    this.city = [props.sortedOffers[0].city.location.latitude, props.sortedOffers[0].city.location.longitude];
   }
 
   componentDidMount() {
     const {sortedOffers, activeOffer} = this.props;
 
     this.map = leaflet.map(this.mapRef.current, {
-      center: city,
-      zoom,
+      center: [sortedOffers[0].city.location.latitude, sortedOffers[0].city.location.longitude],
+      zoom: sortedOffers[0].city.location.zoom,
       zoomControl: false,
       marker: true
     });
@@ -38,6 +37,8 @@ class Map extends PureComponent {
         attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
       })
       .addTo(this.map);
+
+    this.map.setView([sortedOffers[0].city.location.latitude, sortedOffers[0].city.location.longitude], sortedOffers[0].city.location.zoom);
 
     sortedOffers.map((offer) => {
       if (offer.id === activeOffer.id) {
@@ -68,6 +69,8 @@ class Map extends PureComponent {
         .addTo(this.layer);
       }
     });
+
+    this.map.setView([this.props.sortedOffers[0].city.location.latitude, this.props.sortedOffers[0].city.location. longitude], this.props.sortedOffers[0].city.location.zoom);
   }
 
   componentWillUnmount() {

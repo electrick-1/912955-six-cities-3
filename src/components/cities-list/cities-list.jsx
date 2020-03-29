@@ -41,12 +41,12 @@ class CitiesList extends PureComponent {
 }
 
 CitiesList.propTypes = {
-  currentCity: PropTypes.string.isRequired,
+  currentCity: PropTypes.string,
   cityClickHandler: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({
-  currentCity: state.currentCity
+  currentCity: state.DATA.currentCity
 });
 
 const mapDispatchToProps = (dispatch) => ({

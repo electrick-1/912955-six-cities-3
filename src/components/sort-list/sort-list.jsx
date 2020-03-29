@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
+import withActiveItem from "../../hocs/with-sorting-item/with-sorting-item.jsx";
 
 const sortType = [
   `Popular`,
@@ -40,7 +40,7 @@ function SortList({
 }
 
 SortList.propTypes = {
-  currentSortType: PropTypes.string.isRequired,
+  currentSortType: PropTypes.string,
   sortListIsOpen: PropTypes.bool.isRequired,
   onSortListClick: PropTypes.func.isRequired,
   onSortTypeClick: PropTypes.func.isRequired

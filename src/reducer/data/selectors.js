@@ -10,7 +10,7 @@ const getActiveOffer = (state) => {
 };
 
 const getOffers = (state) => {
-  return state[NameSpace.DATA].offers;
+  return state[NameSpace.DATA].sortedOffers;
 };
 
 const getCurrentSortType = (state) => {
@@ -24,8 +24,8 @@ const getStep = (state) => {
 const getSortedOffers = createSelector(
     getOffers,
     getCurrentCity,
-    (offers, currentCity) => {
-      return offers.filter((offer) => offer.city.name === currentCity);
+    (sortedOffers, currentCity) => {
+      return sortedOffers.filter((offer) => offer.city.name === currentCity);
     }
 );
 

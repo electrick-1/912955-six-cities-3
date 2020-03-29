@@ -1,4 +1,4 @@
-import {extend} from "../../utils.js";
+import {extend, parseOffer} from "../../utils.js";
 import {SORT_TYPES} from "../../const.js";
 
 const initialState = {
@@ -6,7 +6,8 @@ const initialState = {
   currentSortType: `Popular`,
   step: -1,
   activeOffer: {},
-  sortedOffers: []
+  sortedOffers: [],
+  offers: []
 };
 
 const ActionType = {
@@ -57,10 +58,17 @@ const Operation = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionType.LOAD_OFFERS:
+      let parsedOffers = action.payload.map((offer) => parseOffer(offer));
+      return extend(state, {
+        offers: parsedOffers,
+        currentCity: parsedOffers[0].city.name,
+        sortedOffers: parsedOffers.filter((offer) => offer.city.name === state.currentCity)
+      });
     case ActionType.CHANGE_CITY:
       return extend(state, {
         currentCity: action.payload,
-        sortedOffers: action.payload,
+        sortedOffers: state.offers.filter((offer) => offer.city.name === action.payload),
         currentSortType: SORT_TYPES.POPULAR
       });
     case ActionType.CHANGE_OFFER:
@@ -77,10 +85,7 @@ const reducer = (state = initialState, action) => {
         currentSortType: action.payload.type,
         sortedOffers: action.payload.newOffers
       });
-    case ActionType.LOAD_OFFERS:
-      return extend(state, {
-        sortedOffers: action.payload,
-      });
+
   }
 
   return state;

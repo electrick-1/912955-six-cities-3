@@ -3,6 +3,8 @@ import renderer from "react-test-renderer";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import App from "./app.jsx";
+import NameSpace from "../../reducer/name-space.js";
+import {AuthorizationStatus} from "../../reducer/user/user.js";
 
 const mockStore = configureStore([]);
 
@@ -106,13 +108,18 @@ const sortedOffers = [{
 
 it(`Render App`, () => {
   const store = mockStore({
-    sortedOffers,
-    offers,
-    activeOffer: offers[0],
-    currentCity: `Amsterdam`,
-    step: -1,
-    currentSortType: `Popular`,
-    sortListIsOpen: false
+    [NameSpace.DATA]: {
+      sortedOffers,
+      offers,
+      activeOffer: offers[0],
+      currentCity: `Amsterdam`,
+      step: -1,
+      currentSortType: `Popular`,
+      sortListIsOpen: false
+    },
+    [NameSpace.USER]: {
+      authorizationStatus: AuthorizationStatus.AUTH,
+    }
   });
 
   const tree = renderer

@@ -27,7 +27,7 @@ export const createAPI = (onUnauthorized) => {
     throw err;
   };
 
-  api.interceptors.responce.use(onSuccess, onFail);
+  api.interceptors.response.use(onSuccess, onFail);
 
   return api;
 };

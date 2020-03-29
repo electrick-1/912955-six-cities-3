@@ -1,6 +1,7 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
+import {getSortedOffers} from "../../reducer/data/selectors.js";
 import PlaceCard from "../place-card/place-card.jsx";
 
 class PlacesList extends PureComponent {
@@ -39,7 +40,7 @@ PlacesList.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  sortedOffers: state.sortedOffers
+  sortedOffers: getSortedOffers(state)
 });
 
 export {PlacesList};

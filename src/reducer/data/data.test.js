@@ -134,7 +134,7 @@ it(`Reducer should change city a given value`, () => {
   })).toEqual({
     currentCity: `Roma`,
     currentSortType: `Popular`,
-    offers: [],
+    offers,
     step: -1,
     activeOffer: {},
     sortedOffers: []
