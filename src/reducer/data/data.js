@@ -60,10 +60,11 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.LOAD_OFFERS:
       let parsedOffers = action.payload.map((offer) => parseOffer(offer));
+      let parseCity = parsedOffers[0].city.name;
       return extend(state, {
         offers: parsedOffers,
-        currentCity: parsedOffers[0].city.name,
-        sortedOffers: parsedOffers.filter((offer) => offer.city.name === state.currentCity)
+        currentCity: parseCity,
+        sortedOffers: parsedOffers.filter((offer) => offer.city.name === parseCity)
       });
     case ActionType.CHANGE_CITY:
       return extend(state, {

@@ -64,6 +64,7 @@ it(`Should title be pressed`, () => {
         sortedOffers={sortedOffers}
         activeOffer={sortedOffers[0]}
         cardClass={`cities`}
+        email={`el@mail.ru`}
         currentCity={`Amsterdam`}
         onTitleClick={() => {}}
         onMouseEnter={() => {}}

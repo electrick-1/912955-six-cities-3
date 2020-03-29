@@ -73,6 +73,7 @@ it(`Render Main`, () => {
           <Main
             sortedOffers={sortedOffers}
             activeOffer={sortedOffers[0]}
+            email={`el@mail.ru`}
             cardClass={`cities`}
             currentCity={`Amsterdam`}
             onTitleClick={() => {}}

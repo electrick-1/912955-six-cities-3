@@ -1,8 +1,11 @@
 import React, {PureComponent, createRef} from "react";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {Operation as UserOperation} from "../../reducer/user/user";
+import {getEmail} from "../../reducer/user/selectors.js";
 
 
-class AuthScreen extends PureComponent {
+class SignIn extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -13,12 +16,12 @@ class AuthScreen extends PureComponent {
   }
 
   handleSubmit(evt) {
-    const {onSubmit} = this.props;
+    const {login} = this.props;
 
     evt.preventDefault();
 
-    onSubmit({
-      login: this.loginRef.current.value,
+    login({
+      email: this.loginRef.current.value,
       password: this.passwordRef.current.value,
     });
   }
@@ -79,9 +82,20 @@ class AuthScreen extends PureComponent {
   }
 }
 
-AuthScreen.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+SignIn.propTypes = {
+  login: PropTypes.func.isRequired
 };
 
+const mapStateToProps = (state) => ({
+  email: getEmail(state)
+});
 
-export default AuthScreen;
+const mapDispatchToProps = (dispatch) => ({
+  login(data) {
+    dispatch(UserOperation.login(data));
+  },
+});
+
+
+export {SignIn};
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
