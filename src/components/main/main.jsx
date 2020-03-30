@@ -1,20 +1,24 @@
-import React, {PureComponent} from "react";
+import React, {PureComponent, Fragment} from "react";
 import PropTypes from "prop-types";
 import PlacesList from "../places-list/places-list.jsx";
 import Map from "../map/map.jsx";
 import CitiesList from "../cities-list/cities-list.jsx";
 import SortList from "../sort-list/sort-list.jsx";
 import MainEmpty from "../main-empty/main-empty.jsx";
+import {AuthorizationStatus} from "../../reducer/user/user.js";
 
 class Main extends PureComponent {
   render() {
     const {
+      email,
+      authorizationStatus,
       onTitleClick,
       onMouseEnter,
       activeOffer,
       cardClass,
       currentCity,
-      sortedOffers
+      sortedOffers,
+      onSignInClick
     } = this.props;
 
     const isOffers = () => {
@@ -64,9 +68,16 @@ class Main extends PureComponent {
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
                     <a className="header__nav-link header__nav-link--profile" href="#">
-                      <div className="header__avatar-wrapper user__avatar-wrapper">
-                      </div>
-                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                      {authorizationStatus === AuthorizationStatus.NO_AUTH ?
+                        <span className="header__login"
+                          onClick={onSignInClick}
+                        >Sign in</span> :
+                        <Fragment>
+                          <div className="header__avatar-wrapper user__avatar-wrapper">
+                          </div>
+                          <span className="header__user-name user__name">{email}</span>
+                        </Fragment>
+                      }
                     </a>
                   </li>
                 </ul>
@@ -86,6 +97,9 @@ class Main extends PureComponent {
 }
 
 Main.propTypes = {
+  email: PropTypes.string,
+  onSignInClick: PropTypes.func,
+  authorizationStatus: PropTypes.string,
   onTitleClick: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
   activeOffer: PropTypes.object,

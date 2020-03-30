@@ -4,6 +4,7 @@ import {reducer, ActionCreator, ActionType, AuthorizationStatus} from "./user.js
 it(`Reducer without additional parameters should return initial state`, () => {
   expect(reducer(void 0, {})).toEqual({
     authorizationStatus: AuthorizationStatus.NO_AUTH,
+    email: `EL`
   });
 });
 

@@ -6,17 +6,16 @@ import {ActionCreator} from "../../reducer/data/data.js";
 import {AuthorizationStatus} from "../../reducer/user/user.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
-import AuthScreen from "../auth-screen/auth-screen.jsx";
+import SignIn from "../sign-in/sign-in.jsx";
 import {CardClass} from "../../const.js";
 import {getCurrentCity, getActiveOffer, getCurrentSortType, getStep, getSortedOffers} from "../../reducer/data/selectors.js";
-import {getAuthorizationStatus} from "../../reducer/user/selectors.js";
-import {Operation as UserOperation} from "../../reducer/user/user.js";
+import {getAuthorizationStatus, getEmail} from "../../reducer/user/selectors.js";
 
 class App extends PureComponent {
   _renderApp() {
     const {
       authorizationStatus,
-      login,
+      email,
       step,
       activeOffer,
       currentCity,
@@ -25,12 +24,14 @@ class App extends PureComponent {
       sortedOffers
     } = this.props;
 
+
     if (step === -1) {
       if (authorizationStatus === AuthorizationStatus.AUTH) {
         return (
           <Main
             activeOffer={activeOffer}
             cardClass={CardClass.CITIES}
+            email={email}
             currentCity={currentCity}
             sortedOffers={sortedOffers}
             onTitleClick={titleClickHandler}
@@ -39,9 +40,7 @@ class App extends PureComponent {
         );
       } else if (authorizationStatus === AuthorizationStatus.NO_AUTH) {
         return (
-          <AuthScreen
-            onSubmit={login}
-          />
+          <SignIn />
         );
       }
 
@@ -75,9 +74,7 @@ class App extends PureComponent {
             />
           </Route>
           <Route exact path="/dev-auth">
-            <AuthScreen
-              onSubmit={() => {}}
-            />
+            <SignIn />
           </Route>
         </Switch>
       </BrowserRouter>
@@ -87,17 +84,18 @@ class App extends PureComponent {
 
 App.propTypes = {
   authorizationStatus: PropTypes.string.isRequired,
-  login: PropTypes.func.isRequired,
+  email: PropTypes.string,
   step: PropTypes.number.isRequired,
   activeOffer: PropTypes.object,
   currentCity: PropTypes.string.isRequired,
   sortedOffers: PropTypes.array,
   titleClickHandler: PropTypes.func,
   onMouseEnter: PropTypes.func,
-  currentSortType: PropTypes.string.isRequired
+  currentSortType: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  email: getEmail(state),
   authorizationStatus: getAuthorizationStatus(state),
   step: getStep(state),
   currentSortType: getCurrentSortType(state),
@@ -107,9 +105,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  login(authData) {
-    dispatch(UserOperation.login(authData));
-  },
   titleClickHandler(offer) {
     dispatch(ActionCreator.changeOffer(offer));
   },

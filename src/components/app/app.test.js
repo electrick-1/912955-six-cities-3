@@ -119,15 +119,14 @@ it(`Render App`, () => {
     },
     [NameSpace.USER]: {
       authorizationStatus: AuthorizationStatus.AUTH,
+      email: `el@mail.ru`
     }
   });
 
   const tree = renderer
     .create(
         <Provider store={store}>
-          <App
-            sortedOffers={sortedOffers}
-          />
+          <App />
         </Provider>, {
           createNodeMock: () => document.createElement(`div`)
         })
