@@ -1,7 +1,7 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getSortedOffers, getCurrentSortType, getCurrentCity} from "../../reducer/data/selectors.js";
+import {getSortedOffers, getCurrentSortType} from "../../reducer/data/selectors.js";
 import {ActionCreator} from "../../reducer/data/data.js";
 import {SORT_TYPES} from "../../const.js";
 
@@ -29,14 +29,13 @@ const withSortingItem = (Component) => {
     }
 
     sortTypeClickHandler(evt) {
-      const {sortedOffers, onSortTypeClick, offers, currentCity} = this.props;
-      const defaultOffers = offers.filter((offer) => offer.city.name === currentCity);
+      const {sortedOffers, onSortTypeClick} = this.props;
 
       let newOffers = [];
 
       switch (evt) {
         case SORT_TYPES.POPULAR:
-          newOffers = defaultOffers;
+          newOffers = sortedOffers.sort((a, b) => a.id - b.id);
           break;
         case SORT_TYPES.LOW_TO_HIGH:
           newOffers = sortedOffers.sort((a, b) => a.price - b.price);
@@ -79,8 +78,6 @@ const withSortingItem = (Component) => {
   };
 
   const mapStateToProps = (state) => ({
-    currentCity: getCurrentCity(state),
-    offers: state.DATA.offers,
     sortedOffers: getSortedOffers(state),
     currentSortType: getCurrentSortType(state)
   });
