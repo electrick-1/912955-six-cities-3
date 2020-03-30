@@ -1,24 +1,21 @@
-import {extend} from "./utils.js";
-import {offers} from "./mocks/offers.js";
-import {SORT_TYPES} from "./const.js";
-const offersInCity = (city) => {
-  return offers.filter((offer) => offer.city.name === city);
-};
+import {extend, parseOffer} from "../../utils.js";
+import {SORT_TYPES} from "../../const.js";
 
 const initialState = {
-  offers: offersInCity(`Amsterdam`),
   currentCity: `Amsterdam`,
   currentSortType: `Popular`,
   step: -1,
   activeOffer: {},
-  sortedOffers: offersInCity(`Amsterdam`),
+  sortedOffers: [],
+  offers: []
 };
 
 const ActionType = {
   CHANGE_CITY: `CHANGE_CITY`,
   CHANGE_OFFER: `CHANGE_OFFER`,
   HOVER_OFFER: `HOVER_OFFER`,
-  CHANGE_SORT: `CHANGE_SORT`
+  CHANGE_SORT: `CHANGE_SORT`,
+  LOAD_OFFERS: `LOAD_OFFERS`
 };
 
 const ActionCreator = {
@@ -41,15 +38,37 @@ const ActionCreator = {
     type: ActionType.CHANGE_SORT,
     payload: {type, newOffers}
   }),
+
+  loadOffers: (offers) => {
+    return {
+      type: ActionType.LOAD_OFFERS,
+      payload: offers
+    };
+  },
+};
+
+const Operation = {
+  loadOffers: () => (dispatch, getState, api) => {
+    return api.get(`/hotels`)
+      .then((responce) => {
+        dispatch(ActionCreator.loadOffers(responce.data));
+      });
+  }
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionType.LOAD_OFFERS:
+      let parsedOffers = action.payload.map((offer) => parseOffer(offer));
+      return extend(state, {
+        offers: parsedOffers,
+        currentCity: parsedOffers[0].city.name,
+        sortedOffers: parsedOffers.filter((offer) => offer.city.name === state.currentCity)
+      });
     case ActionType.CHANGE_CITY:
       return extend(state, {
         currentCity: action.payload,
-        sortedOffers: offersInCity(action.payload),
-        offers: offersInCity(action.payload),
+        sortedOffers: state.offers.filter((offer) => offer.city.name === action.payload),
         currentSortType: SORT_TYPES.POPULAR
       });
     case ActionType.CHANGE_OFFER:
@@ -66,8 +85,10 @@ const reducer = (state = initialState, action) => {
         currentSortType: action.payload.type,
         sortedOffers: action.payload.newOffers
       });
+
   }
+
   return state;
 };
 
-export {reducer, ActionType, ActionCreator};
+export {reducer, Operation, ActionType, ActionCreator};

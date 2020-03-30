@@ -234,7 +234,7 @@ Property.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    isPremium: PropTypes.bool.isRequired,
+    isPremium: PropTypes.bool,
     isFavorite: PropTypes.bool,
     type: PropTypes.string.isRequired,
     raiting: PropTypes.number,

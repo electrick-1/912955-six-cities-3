@@ -1,18 +1,21 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {ActionCreator} from "../../reducer.js";
+import {getSortedOffers, getCurrentSortType, getCurrentCity} from "../../reducer/data/selectors.js";
+import {ActionCreator} from "../../reducer/data/data.js";
 import {SORT_TYPES} from "../../const.js";
 
-const withActiveItem = (Component) => {
-  class WithActiveItem extends PureComponent {
+const withSortingItem = (Component) => {
+  class WithSortingItem extends PureComponent {
     constructor(props) {
       super(props);
 
       this.state = {
+        currentCity: `Amsterdam`,
         sortListIsOpen: false,
         currentSortType: `Popular`,
-        sortedOffers: []
+        sortedOffers: [],
+        offers: []
       };
 
       this.sortClickHandler = this.sortClickHandler.bind(this);
@@ -26,30 +29,30 @@ const withActiveItem = (Component) => {
     }
 
     sortTypeClickHandler(evt) {
-      const {offers, onSortTypeClick} = this.props;
+      const {sortedOffers, onSortTypeClick, offers, currentCity} = this.props;
+      const defaultOffers = offers.filter((offer) => offer.city.name === currentCity);
 
-      let sortedOffers = [];
+      let newOffers = [];
 
       switch (evt) {
+        case SORT_TYPES.POPULAR:
+          newOffers = defaultOffers;
+          break;
         case SORT_TYPES.LOW_TO_HIGH:
-          sortedOffers = offers.sort((a, b) => a.price - b.price);
+          newOffers = sortedOffers.sort((a, b) => a.price - b.price);
           break;
         case SORT_TYPES.HIGH_TO_LOW:
-          sortedOffers = offers.sort((a, b) => b.price - a.price);
+          newOffers = sortedOffers.sort((a, b) => b.price - a.price);
           break;
         case SORT_TYPES.RATED:
-          sortedOffers = offers.sort((a, b) => b.rating - a.rating);
-          break;
-        case SORT_TYPES.POPULAR:
-        default:
-          sortedOffers = offers;
+          newOffers = sortedOffers.sort((a, b) => b.rating - a.rating);
           break;
       }
 
       this.setState((prevState) => ({
         currentSortType: evt,
         sortListIsOpen: !prevState.sortListIsOpen,
-        sortedOffers
+        sortedOffers: newOffers
       }));
 
       onSortTypeClick({type: evt, newOffers: sortedOffers});
@@ -68,15 +71,18 @@ const withActiveItem = (Component) => {
     }
   }
 
-  WithActiveItem.propTypes = {
-    sortedOffers: PropTypes.array,
+  WithSortingItem.propTypes = {
+    currentCity: PropTypes.string,
     offers: PropTypes.array,
+    sortedOffers: PropTypes.array,
     onSortTypeClick: PropTypes.func
   };
 
   const mapStateToProps = (state) => ({
-    offers: state.offers,
-    currentSortType: state.currentSortType
+    currentCity: getCurrentCity(state),
+    offers: state.DATA.offers,
+    sortedOffers: getSortedOffers(state),
+    currentSortType: getCurrentSortType(state)
   });
 
   const mapDispatchToProps = (dispatch) => ({
@@ -85,7 +91,7 @@ const withActiveItem = (Component) => {
     }
   });
 
-  return connect(mapStateToProps, mapDispatchToProps)(WithActiveItem);
+  return connect(mapStateToProps, mapDispatchToProps)(WithSortingItem);
 };
 
-export default withActiveItem;
+export default withSortingItem;

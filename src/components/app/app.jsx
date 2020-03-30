@@ -2,14 +2,21 @@ import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {ActionCreator} from "../../reducer.js";
+import {ActionCreator} from "../../reducer/data/data.js";
+import {AuthorizationStatus} from "../../reducer/user/user.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
+import AuthScreen from "../auth-screen/auth-screen.jsx";
 import {CardClass} from "../../const.js";
+import {getCurrentCity, getActiveOffer, getCurrentSortType, getStep, getSortedOffers} from "../../reducer/data/selectors.js";
+import {getAuthorizationStatus} from "../../reducer/user/selectors.js";
+import {Operation as UserOperation} from "../../reducer/user/user.js";
 
 class App extends PureComponent {
   _renderApp() {
     const {
+      authorizationStatus,
+      login,
       step,
       activeOffer,
       currentCity,
@@ -19,16 +26,26 @@ class App extends PureComponent {
     } = this.props;
 
     if (step === -1) {
-      return (
-        <Main
-          activeOffer={activeOffer}
-          cardClass={CardClass.CITIES}
-          currentCity={currentCity}
-          sortedOffers={sortedOffers}
-          onTitleClick={titleClickHandler}
-          onMouseEnter={onMouseEnter}
-        />
-      );
+      if (authorizationStatus === AuthorizationStatus.AUTH) {
+        return (
+          <Main
+            activeOffer={activeOffer}
+            cardClass={CardClass.CITIES}
+            currentCity={currentCity}
+            sortedOffers={sortedOffers}
+            onTitleClick={titleClickHandler}
+            onMouseEnter={onMouseEnter}
+          />
+        );
+      } else if (authorizationStatus === AuthorizationStatus.NO_AUTH) {
+        return (
+          <AuthScreen
+            onSubmit={login}
+          />
+        );
+      }
+
+      return null;
     }
 
     return (
@@ -57,6 +74,11 @@ class App extends PureComponent {
               onTitleClick={titleClickHandler}
             />
           </Route>
+          <Route exact path="/dev-auth">
+            <AuthScreen
+              onSubmit={() => {}}
+            />
+          </Route>
         </Switch>
       </BrowserRouter>
     );
@@ -64,6 +86,8 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
+  authorizationStatus: PropTypes.string.isRequired,
+  login: PropTypes.func.isRequired,
   step: PropTypes.number.isRequired,
   activeOffer: PropTypes.object,
   currentCity: PropTypes.string.isRequired,
@@ -74,14 +98,18 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  step: state.step,
-  currentSortType: state.currentSortType,
-  sortedOffers: state.sortedOffers,
-  currentCity: state.currentCity,
-  activeOffer: state.activeOffer
+  authorizationStatus: getAuthorizationStatus(state),
+  step: getStep(state),
+  currentSortType: getCurrentSortType(state),
+  sortedOffers: getSortedOffers(state),
+  currentCity: getCurrentCity(state),
+  activeOffer: getActiveOffer(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  login(authData) {
+    dispatch(UserOperation.login(authData));
+  },
   titleClickHandler(offer) {
     dispatch(ActionCreator.changeOffer(offer));
   },

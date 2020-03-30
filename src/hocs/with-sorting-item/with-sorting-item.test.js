@@ -1,4 +1,11 @@
-import {ActionType, reducer} from "./reducer";
+import React from "react";
+import renderer from "react-test-renderer";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
+import withSortingItem from './with-sorting-item.jsx';
+import NameSpace from "../../reducer/name-space.js";
+
+const mockStore = configureStore([]);
 
 const offers = [{
   bedrooms: 3,
@@ -98,104 +105,27 @@ const sortedOffers = [{
   ]
 }];
 
-it(`Reducer without additional parameters should return initial state`, () => {
-  expect(reducer({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: -1,
-    activeOffer: {},
-    sortedOffers
-  }, {})).toEqual({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: -1,
-    activeOffer: {},
-    sortedOffers
-  });
-});
+const MockComponent = () => <div />;
+const MockComponentWrapped = withSortingItem(MockComponent);
 
-it(`Reducer should change city a given value`, () => {
-  expect(reducer({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: -1,
-    activeOffer: {},
-    sortedOffers
-  }, {
-    type: ActionType.CHANGE_CITY,
-    payload: `Roma`,
-  })).toEqual({
-    currentCity: `Roma`,
-    currentSortType: `Popular`,
-    offers: [],
-    step: -1,
-    activeOffer: {},
-    sortedOffers: []
+it(`Render withSortingComponent`, () => {
+  const store = mockStore({
+    [NameSpace.DATA]: {
+      offers,
+      sortedOffers,
+      currentCity: `Amsterdam`
+    }
   });
-});
 
-it(`Reducer should change offer a given value`, () => {
-  expect(reducer({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: -1,
-    activeOffer: {},
-    sortedOffers
-  }, {
-    type: ActionType.CHANGE_OFFER,
-    payload: offers[0],
-  })).toEqual({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: 0,
-    activeOffer: offers[0],
-    sortedOffers
-  });
-});
+  const tree = renderer.create(
+      <Provider store={store}>
+        <MockComponentWrapped
+          offers={offers}
+        />
+      </Provider>, {
+        createNodeMock: () => document.createElement(`div`)
+      })
+      .toJSON();
 
-it(`Reducer should hover offer a given value`, () => {
-  expect(reducer({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: -1,
-    activeOffer: {},
-    sortedOffers
-  }, {
-    type: ActionType.HOVER_OFFER,
-    payload: offers[0],
-  })).toEqual({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: -1,
-    activeOffer: sortedOffers[0],
-    sortedOffers
-  });
-});
-
-it(`Reducer should change sort a given value`, () => {
-  expect(reducer({
-    currentCity: `Amsterdam`,
-    currentSortType: `Popular`,
-    offers,
-    step: -1,
-    activeOffer: {},
-    sortedOffers
-  }, {
-    type: ActionType.CHANGE_SORT,
-    payload: {type: `Price: low to high`, newOffers: sortedOffers},
-  })).toEqual({
-    currentCity: `Amsterdam`,
-    currentSortType: `Price: low to high`,
-    offers,
-    step: -1,
-    activeOffer: {},
-    sortedOffers
-  });
+  expect(tree).toMatchSnapshot();
 });
