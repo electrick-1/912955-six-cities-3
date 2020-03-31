@@ -2,8 +2,9 @@ import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {ActionCreator} from "../../reducer/data/data.js";
-import {AuthorizationStatus} from "../../reducer/user/user.js";
+import {ActionCreator as DataActionCreater} from "../../reducer/data/data.js";
+import {ActionCreator as UserActionCreator} from "../../reducer/user/user.js";
+import NameSpace from "../../reducer/name-space.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
 import SignIn from "../sign-in/sign-in.jsx";
@@ -21,12 +22,14 @@ class App extends PureComponent {
       currentCity,
       titleClickHandler,
       onMouseEnter,
-      sortedOffers
+      sortedOffers,
+      onSignInClick,
+      isSignIn
     } = this.props;
 
 
     if (step === -1) {
-      if (authorizationStatus === AuthorizationStatus.AUTH) {
+      if (isSignIn) {
         return (
           <Main
             activeOffer={activeOffer}
@@ -36,45 +39,36 @@ class App extends PureComponent {
             sortedOffers={sortedOffers}
             onTitleClick={titleClickHandler}
             onMouseEnter={onMouseEnter}
+            onSignInClick={onSignInClick}
+            isSignIn={isSignIn}
           />
         );
-      } else if (authorizationStatus === AuthorizationStatus.NO_AUTH) {
+      } else {
         return (
           <SignIn />
         );
       }
-
-      return null;
     }
-
     return (
       <Property
+        authorizationStatus={authorizationStatus}
+        email={email}
         activeOffer={activeOffer}
         sortedOffers={sortedOffers}
         cardClass={CardClass.NEAR_PLACES}
         onTitleClick={titleClickHandler}
+        onSignInClick={onSignInClick}
+        isSignIn={isSignIn}
       />
     );
   }
 
   render() {
-    const {sortedOffers, titleClickHandler} = this.props;
     return (
       <BrowserRouter>
         <Switch>
           <Route exact path="/">
             {this._renderApp()}
-          </Route>
-          <Route exact path="/dev-offer">
-            <Property
-              activeOffer={sortedOffers[0]}
-              sortedOffers={sortedOffers}
-              cardClass={CardClass.NEAR_PLACES}
-              onTitleClick={titleClickHandler}
-            />
-          </Route>
-          <Route exact path="/dev-auth">
-            <SignIn />
           </Route>
         </Switch>
       </BrowserRouter>
@@ -83,6 +77,8 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
+  isSignIn: PropTypes.bool,
+  onSignInClick: PropTypes.func,
   authorizationStatus: PropTypes.string.isRequired,
   email: PropTypes.string,
   step: PropTypes.number.isRequired,
@@ -95,6 +91,7 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  isSignIn: state[NameSpace.USER].isSignIn,
   email: getEmail(state),
   authorizationStatus: getAuthorizationStatus(state),
   step: getStep(state),
@@ -105,14 +102,17 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  onSignInClick() {
+    dispatch(UserActionCreator.signIn());
+  },
   titleClickHandler(offer) {
-    dispatch(ActionCreator.changeOffer(offer));
+    dispatch(DataActionCreater.changeOffer(offer));
   },
   onMouseEnter(offer) {
-    dispatch(ActionCreator.hoverOffer(offer));
+    dispatch(DataActionCreater.hoverOffer(offer));
   },
   cityClickHandler(city) {
-    dispatch(ActionCreator.changeCity(city));
+    dispatch(DataActionCreater.changeCity(city));
   }
 });
 

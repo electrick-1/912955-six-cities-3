@@ -9,10 +9,19 @@ const sortedOffers = [{
       longitude: 4.85309666,
       zoom: 8
     }
-  }}
-];
+  },
+  latitude: 52.3909553943508,
+  longitude: 4.85309666406198,
+}];
 
 const activeOffer = {
+  city: {
+    location: {
+      latitude: 52.3909553,
+      longitude: 4.85309666,
+      zoom: 8
+    }
+  },
   location: {
     latitude: 52.3909553943508,
     longitude: 4.85309666406198,

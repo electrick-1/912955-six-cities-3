@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const Error = {
-  UNAUTHORIZATION: 401
+  UNAUTHORIZATION: 401,
+  BAD_REQUEST: 400
 };
 
 export const createAPI = (onUnauthorized) => {

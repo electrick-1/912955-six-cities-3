@@ -41,16 +41,17 @@ class Map extends PureComponent {
     this.map.setView([sortedOffers[0].city.location.latitude, sortedOffers[0].city.location.longitude], sortedOffers[0].city.location.zoom);
 
     sortedOffers.map((offer) => {
-      if (offer.id === activeOffer.id) {
-        leaflet
-        .marker([activeOffer.location.latitude, activeOffer.location.longitude], {icon: activeIcon})
-        .addTo(this.layer);
-      } else {
+      if (offer !== activeOffer) {
         leaflet
         .marker([offer.location.latitude, offer.location.longitude], {icon})
         .addTo(this.layer);
       }
     });
+    if (activeOffer.id) {
+      leaflet
+      .marker([activeOffer.location.latitude, activeOffer.location.longitude], {icon: activeIcon})
+      .addTo(this.layer);
+    }
   }
 
   componentDidUpdate() {

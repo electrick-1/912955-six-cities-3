@@ -1,13 +1,21 @@
 import {extend, parseOffer} from "../../utils.js";
 import {SORT_TYPES} from "../../const.js";
 
+const ReviewPostingStatus = {
+  POSTED: `POSTED`,
+  ERROR: `ERROR`,
+};
+
 const initialState = {
   currentCity: `Amsterdam`,
   currentSortType: `Popular`,
   step: -1,
   activeOffer: {},
   sortedOffers: [],
-  offers: []
+  offers: [],
+  reviews: [],
+  isBlockedForm: false,
+  postReview: null
 };
 
 const ActionType = {
@@ -15,7 +23,9 @@ const ActionType = {
   CHANGE_OFFER: `CHANGE_OFFER`,
   HOVER_OFFER: `HOVER_OFFER`,
   CHANGE_SORT: `CHANGE_SORT`,
-  LOAD_OFFERS: `LOAD_OFFERS`
+  LOAD_OFFERS: `LOAD_OFFERS`,
+  BLOCK_FORM: `BLOCK_FORM`,
+  POST_REVIEW: `POST_REVIEW`
 };
 
 const ActionCreator = {
@@ -45,6 +55,18 @@ const ActionCreator = {
       payload: offers
     };
   },
+
+  blockForm: (block) => {
+    return {
+      type: ActionType.BLOCK_FORM,
+      payload: block
+    };
+  },
+
+  postReview: (success) => ({
+    type: ActionType.POST_REVIEW,
+    payload: success,
+  })
 };
 
 const Operation = {
@@ -53,7 +75,23 @@ const Operation = {
       .then((responce) => {
         dispatch(ActionCreator.loadOffers(responce.data));
       });
-  }
+  },
+
+  postReview: (id, data) => (dispatch, getState, api) => {
+    return api.post(`/comments/${id}`, {
+      comment: data.comment,
+      rating: data.rating,
+    })
+          .then(() => {
+            dispatch(ActionCreator.postReview(ReviewPostingStatus.POSTED));
+            dispatch(ActionCreator.blockForm(false));
+          })
+        .catch((err) => {
+          dispatch(ActionCreator.postReview(ReviewPostingStatus.ERROR));
+          dispatch(ActionCreator.blockForm(false));
+          throw err;
+        });
+  },
 };
 
 const reducer = (state = initialState, action) => {
@@ -86,7 +124,14 @@ const reducer = (state = initialState, action) => {
         currentSortType: action.payload.type,
         sortedOffers: action.payload.newOffers
       });
-
+    case ActionType.BLOCK_FORM:
+      return extend(state, {
+        isBlockedForm: action.payload,
+      });
+    case ActionType.POST_REVIEW:
+      return extend(state, {
+        postReview: action.payload,
+      });
   }
 
   return state;
