@@ -17,12 +17,10 @@ class Map extends PureComponent {
     this.mapRef = createRef();
     this.map = null;
     this.layer = null;
-    this.city = [props.sortedOffers[0].city.location.latitude, props.sortedOffers[0].city.location.longitude];
   }
 
   componentDidMount() {
     const {sortedOffers, activeOffer} = this.props;
-
     this.map = leaflet.map(this.mapRef.current, {
       center: [sortedOffers[0].city.location.latitude, sortedOffers[0].city.location.longitude],
       zoom: sortedOffers[0].city.location.zoom,

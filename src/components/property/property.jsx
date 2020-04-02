@@ -2,12 +2,29 @@ import React, {PureComponent, Fragment} from "react";
 import PropTypes from "prop-types";
 import PlaceCard from "../place-card/place-card.jsx";
 import ReviewsForm from "../reviews-form/reviews-form.jsx";
+import ReviewsList from "../reviews-list/reviews-list.jsx";
 import Map from "../map/map.jsx";
+import {connect} from "react-redux";
+import {Operation as DataOperation} from "../../reducer/data/data.js";
 import {AuthorizationStatus} from "../../reducer/user/user.js";
+import NameSpace from "../../reducer/name-space.js";
+import {getNearbyOffers, getReviews} from "../../reducer/data/selectors.js";
 
 class Property extends PureComponent {
+  componentDidMount() {
+    const {loadPropertyData} = this.props;
+    loadPropertyData(this.props.activeOffer.id);
+  }
+
   render() {
-    const {sortedOffers, activeOffer, onTitleClick, cardClass, email, authorizationStatus, onSignInClick} = this.props;
+    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, authorizationStatus, onSignInClick, nearbyOffers, reviews} = this.props;
+    if (isReviewsLoading) {
+      return false;
+    }
+    if (isNearbyOffersLoading) {
+      return false;
+    }
+
     const {
       title,
       price,
@@ -22,8 +39,6 @@ class Property extends PureComponent {
       host,
       description
     } = activeOffer;
-
-    const nearbyOffers = sortedOffers.filter((offer) => offer !== activeOffer).slice(0, 3);
 
     const isPremiumClass = isPremium ? `property__mark` : `property__mark visually-hidden`;
 
@@ -142,11 +157,10 @@ class Property extends PureComponent {
                   </div>
                 </div>
                 <section className="property__reviews reviews">
-                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
+                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
+                  <ReviewsList reviews={reviews}/>
                   {
-                    authorizationStatus === AuthorizationStatus.AUTH
-                      ? <ReviewsForm />
-                      : ``
+                    authorizationStatus === AuthorizationStatus.AUTH ? <ReviewsForm /> : ``
                   }
                 </section>
               </div>
@@ -190,7 +204,8 @@ Property.propTypes = {
   onSignInClick: PropTypes.func,
   authorizationStatus: PropTypes.string,
   email: PropTypes.string,
-  sortedOffers: PropTypes.array,
+  nearbyOffers: PropTypes.array,
+  reviews: PropTypes.array,
   activeOffer: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -207,7 +222,26 @@ Property.propTypes = {
     images: PropTypes.array
   }),
   cardClass: PropTypes.string,
-  onTitleClick: PropTypes.func
+  onTitleClick: PropTypes.func,
+  loadPropertyData: PropTypes.func,
+  isReviewsLoading: PropTypes.bool,
+  isNearbyOffersLoading: PropTypes.bool,
 };
 
-export default Property;
+const mapStateToProps = (state) => ({
+  authorizationStatus: state[NameSpace.USER].authorizationStatus,
+  nearbyOffers: getNearbyOffers(state),
+  reviews: getReviews(state),
+  isReviewsLoading: state[NameSpace.DATA].isReviewsLoading,
+  isNearbyOffersLoading: state[NameSpace.DATA].isNearbyOffersLoading
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadPropertyData(id) {
+    dispatch(DataOperation.loadNearbyOffers(id));
+    dispatch(DataOperation.loadReviews(id));
+  }
+});
+
+export {Property};
+export default connect(mapStateToProps, mapDispatchToProps)(Property);

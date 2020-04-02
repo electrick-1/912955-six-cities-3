@@ -4,14 +4,14 @@ import {months} from "../../const.js";
 
 class ReviewsItem extends PureComponent {
   render() {
-    const {user, comment, date} = this.props.comment;
-    const {avatarUrl, name} = user;
+    const {user, comment, date} = this.props.review;
+    const {avatar, name, rating} = user;
 
     return (
       <li className="reviews__item">
         <div className="reviews__user user">
           <div className="reviews__avatar-wrapper user__avatar-wrapper">
-            <img className="reviews__avatar user__avatar" src={avatarUrl} width="54" height="54" alt="Reviews avatar" />
+            <img className="reviews__avatar user__avatar" src={avatar} width="54" height="54" alt="Reviews avatar" />
           </div>
           <span className="reviews__user-name">
             {name}
@@ -20,7 +20,7 @@ class ReviewsItem extends PureComponent {
         <div className="reviews__info">
           <div className="reviews__rating rating">
             <div className="reviews__stars rating__stars">
-              <span style={{width: 80 + `%`}}></span>
+              <span style={{width: `${rating * 100 / 5 + `%`}`}}></span>
               <span className="visually-hidden">Rating</span>
             </div>
           </div>
@@ -35,7 +35,7 @@ class ReviewsItem extends PureComponent {
 }
 
 ReviewsItem.propTypes = {
-  comment: PropTypes.object
+  review: PropTypes.object
 };
 
 export default ReviewsItem;

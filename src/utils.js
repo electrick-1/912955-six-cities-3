@@ -1,8 +1,8 @@
-export const extend = (a, b) => {
+const extend = (a, b) => {
   return Object.assign({}, a, b);
 };
 
-export const parseOffer = (data) => {
+const parseOffer = (data) => {
   let offer = {};
   offer.city = data[`city`];
   offer.previewImage = data[`preview_image`];
@@ -27,3 +27,20 @@ export const parseOffer = (data) => {
 
   return offer;
 };
+
+const parseReview = (data) => {
+  let review = {};
+  review.comment = data[`comment`];
+  review.date = data[`date`];
+  review.id = data[`id`];
+  review.rating = data[`rating`];
+  review.user = {};
+  review.user.avatar = data[`user`][`avatar_url`];
+  review.user.id = data[`user`][`id`];
+  review.user.isPro = data[`user`][`is_pro`];
+  review.user.name = data[`user`][`name`];
+
+  return review;
+};
+
+export {extend, parseOffer, parseReview};

@@ -2,7 +2,7 @@ import React from "react";
 import renderer from "react-test-renderer";
 import ReviewsItem from "./reviews-item.jsx";
 
-const offers = {
+const review = {
   comment: `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.`,
   date: `2019-05-08T14:13:56.569Z`,
   id: 1,
@@ -18,7 +18,7 @@ const offers = {
 it(`Render ReviewsItem`, () => {
   const tree = renderer
     .create(<ReviewsItem
-      comment={offers}
+      review={review}
     />)
     .toJSON();
 

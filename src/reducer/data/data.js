@@ -1,4 +1,4 @@
-import {extend, parseOffer} from "../../utils.js";
+import {extend, parseOffer, parseReview} from "../../utils.js";
 import {SORT_TYPES} from "../../const.js";
 
 const ReviewPostingStatus = {
@@ -14,8 +14,11 @@ const initialState = {
   sortedOffers: [],
   offers: [],
   reviews: [],
+  nearbyOffers: [],
   isBlockedForm: false,
-  postReview: null
+  postReview: null,
+  isReviewsLoading: true,
+  isNearbyOffersLoading: true
 };
 
 const ActionType = {
@@ -24,6 +27,8 @@ const ActionType = {
   HOVER_OFFER: `HOVER_OFFER`,
   CHANGE_SORT: `CHANGE_SORT`,
   LOAD_OFFERS: `LOAD_OFFERS`,
+  LOAD_NEARBY_OFFERS: `LOAD_NEARBY_OFFERS`,
+  LOAD_REVIEWS: `LOAD_REVIEWS`,
   BLOCK_FORM: `BLOCK_FORM`,
   POST_REVIEW: `POST_REVIEW`
 };
@@ -56,6 +61,20 @@ const ActionCreator = {
     };
   },
 
+  loadNearbyOffers: (nearbyOffers) => {
+    return {
+      type: ActionType.LOAD_NEARBY_OFFERS,
+      payload: nearbyOffers
+    };
+  },
+
+  loadReviews: (reviews) => {
+    return {
+      type: ActionType.LOAD_REVIEWS,
+      payload: reviews
+    };
+  },
+
   blockForm: (block) => {
     return {
       type: ActionType.BLOCK_FORM,
@@ -77,6 +96,20 @@ const Operation = {
       });
   },
 
+  loadNearbyOffers: (id) => (dispatch, getState, api) => {
+    return api.get(`/hotels/${id}/nearby`)
+            .then((response) => {
+              dispatch(ActionCreator.loadNearbyOffers(response.data));
+            });
+  },
+
+  loadReviews: (id) => (dispatch, getState, api) => {
+    return api.get(`/comments/${id}`)
+            .then((response) => {
+              dispatch(ActionCreator.loadReviews(response.data));
+            });
+  },
+
   postReview: (id, data) => (dispatch, getState, api) => {
     return api.post(`/comments/${id}`, {
       comment: data.comment,
@@ -96,6 +129,18 @@ const Operation = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionType.LOAD_NEARBY_OFFERS:
+      let parsedNearbyOffers = action.payload.map((offer) => parseOffer(offer));
+      return extend(state, {
+        nearbyOffers: parsedNearbyOffers,
+        isNearbyOffersLoading: false
+      });
+    case ActionType.LOAD_REVIEWS:
+      let parsedReviews = action.payload.map((review) => parseReview(review));
+      return extend(state, {
+        reviews: parsedReviews,
+        isReviewsLoading: false
+      });
     case ActionType.LOAD_OFFERS:
       let parsedOffers = action.payload.map((offer) => parseOffer(offer));
       let parseCity = parsedOffers[0].city.name;

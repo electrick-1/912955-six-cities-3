@@ -4,13 +4,13 @@ import ReviewsItem from "../reviews-item/reviews-item.jsx";
 
 class ReviewsList extends PureComponent {
   render() {
-    const {comments} = this.props.activeOffer;
+    const {reviews} = this.props;
     return (
       <ul className="reviews__list">
-        {comments.map((comment, i) =>
+        {reviews.map((review, i) =>
           <ReviewsItem
-            key={`comment-${i}`}
-            comment={comment}
+            key={`review-${i}`}
+            review={review}
           />
         )}
       </ul>
@@ -20,9 +20,9 @@ class ReviewsList extends PureComponent {
 
 ReviewsList.propTypes = {
   activeOffer: PropTypes.shape({
-    comments: PropTypes.array,
     id: PropTypes.number.isRequired
-  })
+  }),
+  reviews: PropTypes.array
 };
 
 export default ReviewsList;
