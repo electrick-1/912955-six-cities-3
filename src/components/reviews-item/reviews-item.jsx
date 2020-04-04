@@ -4,8 +4,10 @@ import {months} from "../../const.js";
 
 class ReviewsItem extends PureComponent {
   render() {
-    const {user, comment, date} = this.props.review;
-    const {avatar, name, rating} = user;
+    const {user, comment, date, rating} = this.props.review;
+    const {avatar, name} = user;
+
+    console.log(this.props.review)
 
     return (
       <li className="reviews__item">

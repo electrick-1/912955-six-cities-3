@@ -115,8 +115,9 @@ const Operation = {
       comment: data.comment,
       rating: data.rating,
     })
-          .then(() => {
+          .then((response) => {
             dispatch(ActionCreator.postReview(ReviewPostingStatus.POSTED));
+            dispatch(ActionCreator.loadReviews(response.data));
             dispatch(ActionCreator.blockForm(false));
           })
         .catch((err) => {
