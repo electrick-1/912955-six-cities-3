@@ -146,7 +146,6 @@ it(`Reducer should change offer a given value`, () => {
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
     offers,
-    step: -1,
     activeOffer: {},
     sortedOffers
   }, {
@@ -156,7 +155,6 @@ it(`Reducer should change offer a given value`, () => {
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
     offers,
-    step: 0,
     activeOffer: offers[0],
     sortedOffers
   });
@@ -167,7 +165,6 @@ it(`Reducer should hover offer a given value`, () => {
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
     offers,
-    step: -1,
     activeOffer: {},
     sortedOffers
   }, {
@@ -177,7 +174,6 @@ it(`Reducer should hover offer a given value`, () => {
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
     offers,
-    step: -1,
     activeOffer: sortedOffers[0],
     sortedOffers
   });
@@ -188,7 +184,6 @@ it(`Reducer should change sort a given value`, () => {
     currentCity: `Amsterdam`,
     currentSortType: `Popular`,
     offers,
-    step: -1,
     activeOffer: {},
     sortedOffers
   }, {
@@ -198,7 +193,6 @@ it(`Reducer should change sort a given value`, () => {
     currentCity: `Amsterdam`,
     currentSortType: `Price: low to high`,
     offers,
-    step: -1,
     activeOffer: {},
     sortedOffers
   });

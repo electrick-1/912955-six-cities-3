@@ -9,7 +9,6 @@ const ReviewPostingStatus = {
 const initialState = {
   currentCity: `Amsterdam`,
   currentSortType: `Popular`,
-  step: -1,
   activeOffer: {},
   sortedOffers: [],
   offers: [],

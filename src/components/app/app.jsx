@@ -105,7 +105,6 @@ App.propTypes = {
   isSignIn: PropTypes.bool,
   onSignInClick: PropTypes.func,
   email: PropTypes.string,
-  step: PropTypes.number.isRequired,
   activeOffer: PropTypes.object,
   currentCity: PropTypes.string.isRequired,
   sortedOffers: PropTypes.array,

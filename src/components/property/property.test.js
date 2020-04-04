@@ -233,6 +233,7 @@ it(`Render Property`, () => {
         <Provider store={store}>
           <BrowserRouter>
             <Property
+              id={`23`}
               activeOffer={sortedOffers[0]}
               sortedOffers={sortedOffers}
               cardClass={`cities`}
