@@ -17,7 +17,6 @@ exports[`Render RewiewList 1`] = `
           alt="Reviews avatar"
           className="reviews__avatar user__avatar"
           height="54"
-          src="img/avatar-max.jpg"
           width="54"
         />
       </div>
@@ -39,7 +38,7 @@ exports[`Render RewiewList 1`] = `
           <span
             style={
               Object {
-                "width": "80%",
+                "width": "NaN%",
               }
             }
           />

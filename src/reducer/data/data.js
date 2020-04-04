@@ -1,5 +1,10 @@
-import {extend, parseOffer} from "../../utils.js";
+import {extend, parseOffer, parseReview} from "../../utils.js";
 import {SORT_TYPES} from "../../const.js";
+
+const ReviewPostingStatus = {
+  POSTED: `POSTED`,
+  ERROR: `ERROR`,
+};
 
 const initialState = {
   currentCity: `Amsterdam`,
@@ -7,7 +12,13 @@ const initialState = {
   step: -1,
   activeOffer: {},
   sortedOffers: [],
-  offers: []
+  offers: [],
+  reviews: [],
+  nearbyOffers: [],
+  isBlockedForm: false,
+  postReview: null,
+  isReviewsLoading: true,
+  isNearbyOffersLoading: true
 };
 
 const ActionType = {
@@ -15,7 +26,11 @@ const ActionType = {
   CHANGE_OFFER: `CHANGE_OFFER`,
   HOVER_OFFER: `HOVER_OFFER`,
   CHANGE_SORT: `CHANGE_SORT`,
-  LOAD_OFFERS: `LOAD_OFFERS`
+  LOAD_OFFERS: `LOAD_OFFERS`,
+  LOAD_NEARBY_OFFERS: `LOAD_NEARBY_OFFERS`,
+  LOAD_REVIEWS: `LOAD_REVIEWS`,
+  BLOCK_FORM: `BLOCK_FORM`,
+  POST_REVIEW: `POST_REVIEW`
 };
 
 const ActionCreator = {
@@ -45,6 +60,32 @@ const ActionCreator = {
       payload: offers
     };
   },
+
+  loadNearbyOffers: (nearbyOffers) => {
+    return {
+      type: ActionType.LOAD_NEARBY_OFFERS,
+      payload: nearbyOffers
+    };
+  },
+
+  loadReviews: (reviews) => {
+    return {
+      type: ActionType.LOAD_REVIEWS,
+      payload: reviews
+    };
+  },
+
+  blockForm: (block) => {
+    return {
+      type: ActionType.BLOCK_FORM,
+      payload: block
+    };
+  },
+
+  postReview: (success) => ({
+    type: ActionType.POST_REVIEW,
+    payload: success,
+  })
 };
 
 const Operation = {
@@ -53,11 +94,54 @@ const Operation = {
       .then((responce) => {
         dispatch(ActionCreator.loadOffers(responce.data));
       });
-  }
+  },
+
+  loadNearbyOffers: (id) => (dispatch, getState, api) => {
+    return api.get(`/hotels/${id}/nearby`)
+            .then((response) => {
+              dispatch(ActionCreator.loadNearbyOffers(response.data));
+            });
+  },
+
+  loadReviews: (id) => (dispatch, getState, api) => {
+    return api.get(`/comments/${id}`)
+            .then((response) => {
+              dispatch(ActionCreator.loadReviews(response.data));
+            });
+  },
+
+  postReview: (id, data) => (dispatch, getState, api) => {
+    return api.post(`/comments/${id}`, {
+      comment: data.comment,
+      rating: data.rating,
+    })
+          .then((response) => {
+            dispatch(ActionCreator.postReview(ReviewPostingStatus.POSTED));
+            dispatch(ActionCreator.loadReviews(response.data));
+            dispatch(ActionCreator.blockForm(false));
+          })
+        .catch((err) => {
+          dispatch(ActionCreator.postReview(ReviewPostingStatus.ERROR));
+          dispatch(ActionCreator.blockForm(false));
+          throw err;
+        });
+  },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionType.LOAD_NEARBY_OFFERS:
+      let parsedNearbyOffers = action.payload.map((offer) => parseOffer(offer));
+      return extend(state, {
+        nearbyOffers: parsedNearbyOffers,
+        isNearbyOffersLoading: false
+      });
+    case ActionType.LOAD_REVIEWS:
+      let parsedReviews = action.payload.map((review) => parseReview(review));
+      return extend(state, {
+        reviews: parsedReviews,
+        isReviewsLoading: false
+      });
     case ActionType.LOAD_OFFERS:
       let parsedOffers = action.payload.map((offer) => parseOffer(offer));
       let parseCity = parsedOffers[0].city.name;
@@ -86,7 +170,14 @@ const reducer = (state = initialState, action) => {
         currentSortType: action.payload.type,
         sortedOffers: action.payload.newOffers
       });
-
+    case ActionType.BLOCK_FORM:
+      return extend(state, {
+        isBlockedForm: action.payload,
+      });
+    case ActionType.POST_REVIEW:
+      return extend(state, {
+        postReview: action.payload,
+      });
   }
 
   return state;

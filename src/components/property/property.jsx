@@ -1,24 +1,44 @@
-import React, {PureComponent} from "react";
+import React, {PureComponent, Fragment} from "react";
 import PropTypes from "prop-types";
-import ReviewsList from "../reviews-list/reviews-list.jsx";
 import PlaceCard from "../place-card/place-card.jsx";
+import ReviewsForm from "../reviews-form/reviews-form.jsx";
+import ReviewsList from "../reviews-list/reviews-list.jsx";
 import Map from "../map/map.jsx";
+import {connect} from "react-redux";
+import {Operation as DataOperation} from "../../reducer/data/data.js";
+import {AuthorizationStatus} from "../../reducer/user/user.js";
+import NameSpace from "../../reducer/name-space.js";
+import {getNearbyOffers, getReviews} from "../../reducer/data/selectors.js";
 
 class Property extends PureComponent {
+  componentDidMount() {
+    const {loadPropertyData} = this.props;
+    loadPropertyData(this.props.activeOffer.id);
+  }
+
   render() {
-    const {sortedOffers, onTitleClick, cardClass} = this.props;
+    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, authorizationStatus, onSignInClick, nearbyOffers, reviews} = this.props;
+    if (isReviewsLoading) {
+      return false;
+    }
+    if (isNearbyOffersLoading) {
+      return false;
+    }
+
     const {
       title,
       price,
       isPremium,
       isFavorite,
       type,
-      raiting,
+      rating,
       bedrooms,
+      images,
       maxAdults,
       goods,
-      comments
-    } = this.props.activeOffer;
+      host,
+      description
+    } = activeOffer;
 
     const isPremiumClass = isPremium ? `property__mark` : `property__mark visually-hidden`;
 
@@ -40,9 +60,16 @@ class Property extends PureComponent {
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
                     <a className="header__nav-link header__nav-link--profile" href="#">
-                      <div className="header__avatar-wrapper user__avatar-wrapper">
-                      </div>
-                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                      {authorizationStatus === AuthorizationStatus.NO_AUTH ?
+                        <span className="header__login"
+                          onClick={onSignInClick}
+                        >Sign in</span> :
+                        <Fragment>
+                          <div className="header__avatar-wrapper user__avatar-wrapper">
+                          </div>
+                          <span className="header__user-name user__name">{email}</span>
+                        </Fragment>
+                      }
                     </a>
                   </li>
                 </ul>
@@ -55,24 +82,14 @@ class Property extends PureComponent {
           <section className="property">
             <div className="property__gallery-container container">
               <div className="property__gallery">
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/room.jpg" alt="Photo studio" />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-01.jpg" alt="Photo studio" />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-02.jpg" alt="Photo studio" />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-03.jpg" alt="Photo studio" />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/studio-01.jpg" alt="Photo studio" />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-01.jpg" alt="Photo studio" />
-                </div>
+                {images.map((image) => {
+                  return (
+                    <div className="property__image-wrapper" key={image}>
+                      <img className="property__image" src={image} alt="Photo studio" />
+                    </div>
+                  );
+                }).slice(0, 6)
+                }
               </div>
             </div>
             <div className="property__container container">
@@ -93,10 +110,10 @@ class Property extends PureComponent {
                 </div>
                 <div className="property__rating rating">
                   <div className="property__stars rating__stars">
-                    <span style={{width: raiting * 100 / 5 + `%`}}></span>
+                    <span style={{width: rating * 100 / 5 + `%`}}></span>
                     <span className="visually-hidden">Rating</span>
                   </div>
-                  <span className="property__rating-value rating__value">{raiting}</span>
+                  <span className="property__rating-value rating__value">{rating}</span>
                 </div>
                 <ul className="property__features">
                   <li className="property__feature property__feature--entire">
@@ -126,78 +143,32 @@ class Property extends PureComponent {
                 <div className="property__host">
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
-                    <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                      <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar" />
+                    <div className={`property__avatar-wrapper ${host.isPro ? `property__avatar-wrapper--pro` : ``} user__avatar-wrapper`}>
+                      <img className="property__avatar user__avatar" src={host.avatarUrl} width="74" height="74" alt="Host avatar" />
                     </div>
                     <span className="property__user-name">
-                      Angelina
+                      {host.name}
                     </span>
                   </div>
                   <div className="property__description">
                     <p className="property__text">
-                      A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
-                    </p>
-                    <p className="property__text">
-                      An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
+                      {description}
                     </p>
                   </div>
                 </div>
                 <section className="property__reviews reviews">
-                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
-                  <ReviewsList activeOffer={this.props.activeOffer} />
-                  <form className="reviews__form form" action="#" method="post">
-                    <label className="reviews__label form__label" htmlFor="review">Your review</label>
-                    <div className="reviews__rating-form form__rating">
-                      <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" />
-                      <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
-                        <svg className="form__star-image" width="37" height="33">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                      </label>
-
-                      <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" />
-                      <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
-                        <svg className="form__star-image" width="37" height="33">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                      </label>
-
-                      <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" />
-                      <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
-                        <svg className="form__star-image" width="37" height="33">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                      </label>
-
-                      <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" />
-                      <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
-                        <svg className="form__star-image" width="37" height="33">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                      </label>
-
-                      <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" />
-                      <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
-                        <svg className="form__star-image" width="37" height="33">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                      </label>
-                    </div>
-                    <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"></textarea>
-                    <div className="reviews__button-wrapper">
-                      <p className="reviews__help">
-                        To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
-                      </p>
-                      <button className="reviews__submit form__submit button" type="submit" disabled="">Submit</button>
-                    </div>
-                  </form>
+                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
+                  <ReviewsList reviews={reviews}/>
+                  {
+                    authorizationStatus === AuthorizationStatus.AUTH ? <ReviewsForm /> : ``
+                  }
                 </section>
               </div>
             </div>
             <section className="property__map map">
               <Map
-                sortedOffers={sortedOffers}
-                activeOffer={this.props.activeOffer}
+                sortedOffers={nearbyOffers}
+                activeOffer={activeOffer}
               />
             </section>
           </section>
@@ -205,8 +176,8 @@ class Property extends PureComponent {
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                {sortedOffers.map((offer) => {
-                  if (offer.id !== this.props.activeOffer.id) {
+                {nearbyOffers.map((offer) => {
+                  if (offer.id !== activeOffer.id) {
                     return (
                       <PlaceCard
                         offer={offer}
@@ -229,7 +200,12 @@ class Property extends PureComponent {
 }
 
 Property.propTypes = {
-  sortedOffers: PropTypes.array,
+  isSignIn: PropTypes.bool,
+  onSignInClick: PropTypes.func,
+  authorizationStatus: PropTypes.string,
+  email: PropTypes.string,
+  nearbyOffers: PropTypes.array,
+  reviews: PropTypes.array,
   activeOffer: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -237,14 +213,35 @@ Property.propTypes = {
     isPremium: PropTypes.bool,
     isFavorite: PropTypes.bool,
     type: PropTypes.string.isRequired,
-    raiting: PropTypes.number,
+    rating: PropTypes.number,
     bedrooms: PropTypes.number,
     maxAdults: PropTypes.number,
     goods: PropTypes.array,
-    comments: PropTypes.array
+    host: PropTypes.object,
+    description: PropTypes.string,
+    images: PropTypes.array
   }),
   cardClass: PropTypes.string,
-  onTitleClick: PropTypes.func
+  onTitleClick: PropTypes.func,
+  loadPropertyData: PropTypes.func,
+  isReviewsLoading: PropTypes.bool,
+  isNearbyOffersLoading: PropTypes.bool,
 };
 
-export default Property;
+const mapStateToProps = (state) => ({
+  authorizationStatus: state[NameSpace.USER].authorizationStatus,
+  nearbyOffers: getNearbyOffers(state),
+  reviews: getReviews(state),
+  isReviewsLoading: state[NameSpace.DATA].isReviewsLoading,
+  isNearbyOffersLoading: state[NameSpace.DATA].isNearbyOffersLoading
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadPropertyData(id) {
+    dispatch(DataOperation.loadNearbyOffers(id));
+    dispatch(DataOperation.loadReviews(id));
+  }
+});
+
+export {Property};
+export default connect(mapStateToProps, mapDispatchToProps)(Property);

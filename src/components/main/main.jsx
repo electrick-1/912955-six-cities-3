@@ -11,14 +11,14 @@ class Main extends PureComponent {
   render() {
     const {
       email,
-      authorizationStatus,
       onTitleClick,
       onMouseEnter,
       activeOffer,
       cardClass,
       currentCity,
       sortedOffers,
-      onSignInClick
+      onSignInClick,
+      authorizationStatus
     } = this.props;
 
     const isOffers = () => {
@@ -97,6 +97,7 @@ class Main extends PureComponent {
 }
 
 Main.propTypes = {
+  isSignIn: PropTypes.bool,
   email: PropTypes.string,
   onSignInClick: PropTypes.func,
   authorizationStatus: PropTypes.string,
