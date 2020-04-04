@@ -1,12 +1,8 @@
 import React from "react";
 import Enzyme, {mount} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
+import {BrowserRouter} from "react-router-dom";
 import PlaceCard from "./place-card.jsx";
-import NameSpace from "../../reducer/name-space.js";
-
-const mockStore = configureStore([]);
 
 const offer = {
   bedrooms: 3,
@@ -65,16 +61,8 @@ it(`Should title be pressed`, () => {
   const onTitleClick = jest.fn();
   const onMouseEnter = jest.fn();
 
-  const store = mockStore({
-    [NameSpace.USER]: {
-      isSignIn: true
-    },
-    offer,
-    currentCity: `Amsterdam`
-  });
-
   const placeCard = mount(
-      <Provider store={store}>
+      <BrowserRouter>
         <PlaceCard
           offer={offer}
           key={offer.id}
@@ -82,7 +70,7 @@ it(`Should title be pressed`, () => {
           onTitleClick={() => {}}
           onMouseEnter={() => {}}
         />
-      </Provider>
+      </BrowserRouter>
   );
 
   const title = placeCard.find(`h2.place-card__name`);

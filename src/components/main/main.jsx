@@ -18,7 +18,8 @@ class Main extends PureComponent {
       cardClass,
       currentCity,
       sortedOffers,
-      isSignIn
+      isSignIn,
+      addToFavorite
     } = this.props;
 
     const isOffers = () => {
@@ -35,6 +36,9 @@ class Main extends PureComponent {
                 <b className="places__found">{sortedOffers.length} places to stay in {currentCity}</b>
                 <SortList />
                 <PlacesList
+                  isSignIn={isSignIn}
+                  sortedOffers={sortedOffers}
+                  addToFavorite={addToFavorite}
                   cardClass={cardClass}
                   onTitleClick={onTitleClick}
                   onMouseEnter={onMouseEnter}
@@ -104,6 +108,7 @@ Main.propTypes = {
   authorizationStatus: PropTypes.string,
   onTitleClick: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
+  addToFavorite: PropTypes.func.isRequired,
   activeOffer: PropTypes.object,
   sortedOffers: PropTypes.array,
   cardClass: PropTypes.string,

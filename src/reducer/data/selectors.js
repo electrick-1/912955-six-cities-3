@@ -25,6 +25,10 @@ const getNearbyOffers = (state) => {
   return state[NameSpace.DATA].nearbyOffers;
 };
 
+const getFavoriteOffers = (state) => {
+  return state[NameSpace.DATA].favoriteOffers;
+};
+
 const getReviews = (state) => {
   return state[NameSpace.DATA].reviews;
 };
@@ -37,4 +41,4 @@ const getSortedOffers = createSelector(
     }
 );
 
-export {getCurrentCity, getActiveOffer, getOffers, getCurrentSortType, getStep, getSortedOffers, getNearbyOffers, getReviews};
+export {getCurrentCity, getActiveOffer, getOffers, getCurrentSortType, getStep, getSortedOffers, getNearbyOffers, getReviews, getFavoriteOffers};

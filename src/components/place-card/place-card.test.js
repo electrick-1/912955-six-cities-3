@@ -1,11 +1,7 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
+import {BrowserRouter} from "react-router-dom";
 import PlaceCard from "./place-card.jsx";
-import NameSpace from "../../reducer/name-space.js";
-
-const mockStore = configureStore([]);
 
 const offer = {
   bedrooms: 3,
@@ -57,17 +53,9 @@ const offer = {
 };
 
 it(`Render PlaceCard`, () => {
-  const store = mockStore({
-    [NameSpace.USER]: {
-      isSignIn: true
-    },
-    offer,
-    currentCity: `Amsterdam`,
-  });
-
   const tree = renderer
     .create(
-        <Provider store={store}>
+        <BrowserRouter>
           <PlaceCard
             offer={offer}
             key={offer.id}
@@ -75,7 +63,7 @@ it(`Render PlaceCard`, () => {
             onTitleClick={() => {}}
             onMouseEnter={() => {}}
           />
-        </Provider>
+        </BrowserRouter>
     ).toJSON();
 
   expect(tree).toMatchSnapshot();

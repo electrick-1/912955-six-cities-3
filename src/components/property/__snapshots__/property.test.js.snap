@@ -24,7 +24,7 @@ exports[`Render Property 1`] = `
               alt="6 cities logo"
               className="header__logo"
               height="41"
-              src="img/logo.svg"
+              src="/img/logo.svg"
               width="81"
             />
           </a>
@@ -252,7 +252,7 @@ exports[`Render Property 1`] = `
                   alt="Host avatar"
                   className="property__avatar user__avatar"
                   height="74"
-                  src="img/1.png"
+                  src="/img/1.png"
                   width="74"
                 />
               </div>

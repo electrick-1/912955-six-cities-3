@@ -1,11 +1,7 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
+import {BrowserRouter} from "react-router-dom";
 import PlacesList from "./places-list.jsx";
-import NameSpace from "../../reducer/name-space.js";
-
-const mockStore = configureStore([]);
 
 const sortedOffers = [{
   bedrooms: 3,
@@ -57,29 +53,17 @@ const sortedOffers = [{
 }];
 
 it(`Render PlaceList`, () => {
-  const store = mockStore({
-    [NameSpace.DATA]: {
-      sortedOffers,
-      activeOffer: {},
-      currentCity: `Amsterdam`,
-      currentSortType: `Popular`,
-      sortListIsOpen: false
-    },
-    [NameSpace.USER]: {
-      isSignIn: true
-    }
-  });
-
   const tree = renderer
     .create(
-        <Provider store={store}>
+        <BrowserRouter>
           <PlacesList
+            addToFavorite={() => {}}
             sortedOffers={sortedOffers}
             onTitleClick={() => {}}
             cardClass={`cities`}
             onMouseEnter={() => {}}
           />
-        </Provider>, {
+        </BrowserRouter>, {
           createNodeMock: () => document.createElement(`div`)
         })
     .toJSON();

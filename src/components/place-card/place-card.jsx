@@ -1,9 +1,7 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {Operation} from "../../reducer/data/data.js";
-import NameSpace from "../../reducer/name-space.js";
-import {AppRoute} from "../../const.js";
+import {Link} from "react-router-dom";
+import {AppRoute, CardClass} from "../../const.js";
 import history from "../../history.js";
 
 class PlaceCard extends PureComponent {
@@ -53,19 +51,29 @@ class PlaceCard extends PureComponent {
       isFavorite,
       type,
       rating,
-      previewImage
+      previewImage,
+      id
     } = offer;
 
     const isPremiumClass = isPremium && cardClass === `cities`
       ? `place-card__mark`
       : `place-card__mark visually-hidden`;
-    const isCardClass = cardClass === `cities`
-      ? `cities__place-card place-card`
-      : `near-places__card place-card`;
+
+    const isCardClass = (currentClass) => {
+      switch (currentClass) {
+        case CardClass.CITIES:
+          return (`cities__place-card place-card`);
+        case CardClass.NEAR_PLACES:
+          return (`near-places__card place-card`);
+        case CardClass.FAVORITES:
+          return (`favorites__card place-card`);
+      }
+      return false;
+    };
 
     return (
       <article
-        className={isCardClass}
+        className={isCardClass(cardClass)}
         key={offer.id}
         onMouseEnter={this._hoverHandler}
       >
@@ -74,10 +82,10 @@ class PlaceCard extends PureComponent {
         </div>
         <div className={cardClass + `__image-wrapper place-card__image-wrapper`}>
           <a href="#">
-            <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
+            <img className="place-card__image" src={previewImage} width={`${cardClass === CardClass.FAVORITES ? `150` : `260`}`} height={`${cardClass === CardClass.FAVORITES ? `110` : `200`}`} alt="Place image" />
           </a>
         </div>
-        <div className="place-card__info">
+        <div className={`${cardClass === CardClass.FAVORITES ? `favorites__card-info` : ``} place-card__info`}>
           <div className="place-card__price-wrapper">
             <div className="place-card__price">
               <b className="place-card__price-value">€{price}</b>
@@ -97,7 +105,7 @@ class PlaceCard extends PureComponent {
             </div>
           </div>
           <h2 className="place-card__name" onClick={this._onTitleClick}>
-            <a href="#">{title}</a>
+            <Link to={`/offer/${id}`}>{title}</Link>
           </h2>
           <p className="place-card__type">{type}</p>
         </div>
@@ -124,15 +132,4 @@ PlaceCard.propTypes = {
   isSignIn: PropTypes.bool
 };
 
-const mapStateToProps = (state) => ({
-  isSignIn: state[NameSpace.USER].isSignIn,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  addToFavorite(offer) {
-    dispatch(Operation.addToFavorite(offer));
-  },
-});
-
-export {PlaceCard};
-export default connect(mapStateToProps, mapDispatchToProps)(PlaceCard);
+export default PlaceCard;
