@@ -1,5 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
+import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import Main from "./main.jsx";
@@ -58,6 +59,9 @@ const sortedOffers = [{
 
 it(`Render Main`, () => {
   const store = mockStore({
+    [NameSpace.USER]: {
+      isSignIn: true
+    },
     [NameSpace.DATA]: {
       sortedOffers,
       activeOffer: {},
@@ -70,15 +74,17 @@ it(`Render Main`, () => {
   const tree = renderer
     .create(
         <Provider store={store}>
-          <Main
-            sortedOffers={sortedOffers}
-            activeOffer={sortedOffers[0]}
-            email={`el@mail.ru`}
-            cardClass={`cities`}
-            currentCity={`Amsterdam`}
-            onTitleClick={() => {}}
-            onMouseEnter={() => {}}
-          />
+          <BrowserRouter>
+            <Main
+              sortedOffers={sortedOffers}
+              activeOffer={sortedOffers[0]}
+              email={`el@mail.ru`}
+              cardClass={`cities`}
+              currentCity={`Amsterdam`}
+              onTitleClick={() => {}}
+              onMouseEnter={() => {}}
+            />
+          </BrowserRouter>
         </Provider>, {
           createNodeMock: () => document.createElement(`div`)
         }

@@ -38,7 +38,7 @@ exports[`Render RewiewList 1`] = `
           <span
             style={
               Object {
-                "width": "NaN%",
+                "width": "80%",
               }
             }
           />

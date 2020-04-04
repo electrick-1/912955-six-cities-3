@@ -7,8 +7,6 @@ class ReviewsItem extends PureComponent {
     const {user, comment, date, rating} = this.props.review;
     const {avatar, name} = user;
 
-    console.log(this.props.review)
-
     return (
       <li className="reviews__item">
         <div className="reviews__user user">

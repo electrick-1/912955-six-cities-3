@@ -175,7 +175,7 @@ exports[`Render ReviewsForm 1`] = `
     </p>
     <button
       className="reviews__submit form__submit button"
-      disabled=""
+      disabled={true}
       type="submit"
     >
       Submit

@@ -44,6 +44,7 @@ const Operation = {
       .then((data) => {
         dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
         dispatch(ActionCreator.authorizationData(data));
+        dispatch(ActionCreator.signingIn());
       })
       .catch((err) => {
         throw err;
@@ -75,7 +76,7 @@ const reducer = (state = initialState, action) => {
       });
     case ActionType.SIGN_IN:
       return extend(state, {
-        isSignIn: !state.isSignIn,
+        isSignIn: true,
       });
   }
 

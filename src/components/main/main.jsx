@@ -1,11 +1,12 @@
 import React, {PureComponent, Fragment} from "react";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 import PlacesList from "../places-list/places-list.jsx";
 import Map from "../map/map.jsx";
 import CitiesList from "../cities-list/cities-list.jsx";
 import SortList from "../sort-list/sort-list.jsx";
 import MainEmpty from "../main-empty/main-empty.jsx";
-import {AuthorizationStatus} from "../../reducer/user/user.js";
+import {AppRoute} from "../../const.js";
 
 class Main extends PureComponent {
   render() {
@@ -17,8 +18,7 @@ class Main extends PureComponent {
       cardClass,
       currentCity,
       sortedOffers,
-      onSignInClick,
-      authorizationStatus
+      isSignIn
     } = this.props;
 
     const isOffers = () => {
@@ -67,18 +67,19 @@ class Main extends PureComponent {
               <nav className="header__nav">
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href="#">
-                      {authorizationStatus === AuthorizationStatus.NO_AUTH ?
-                        <span className="header__login"
-                          onClick={onSignInClick}
-                        >Sign in</span> :
-                        <Fragment>
+                    <Link
+                      className="header__nav-link header__nav-link--profile"
+                      to={isSignIn ? AppRoute.FAVORITES : AppRoute.LOGIN}
+                    >
+                      {isSignIn
+                        ? <Fragment>
                           <div className="header__avatar-wrapper user__avatar-wrapper">
                           </div>
                           <span className="header__user-name user__name">{email}</span>
                         </Fragment>
+                        : <span className="header__login">Sign in</span>
                       }
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </nav>

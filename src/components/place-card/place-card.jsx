@@ -1,5 +1,10 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {Operation} from "../../reducer/data/data.js";
+import NameSpace from "../../reducer/name-space.js";
+import {AppRoute} from "../../const.js";
+import history from "../../history.js";
 
 class PlaceCard extends PureComponent {
   constructor(props) {
@@ -7,6 +12,11 @@ class PlaceCard extends PureComponent {
 
     this._hoverHandler = this._hoverHandler.bind(this);
     this._onTitleClick = this._onTitleClick.bind(this);
+    this._onFavoriteClick = this._onFavoriteClick.bind(this);
+
+    this.state = {
+      isFavorite: this.props.offer.isFavorite,
+    };
   }
 
   _hoverHandler() {
@@ -17,6 +27,21 @@ class PlaceCard extends PureComponent {
   _onTitleClick() {
     const {offer, onTitleClick} = this.props;
     onTitleClick(offer);
+  }
+
+  _onFavoriteClick() {
+    const {isSignIn, offer, addToFavorite} = this.props;
+    if (!isSignIn) {
+      return history.push(AppRoute.LOGIN);
+    }
+
+    addToFavorite(offer);
+
+    this.setState((prevState) => ({
+      isFavorite: !prevState.isFavorite,
+    }));
+
+    return false;
   }
 
   render() {
@@ -34,11 +59,6 @@ class PlaceCard extends PureComponent {
     const isPremiumClass = isPremium && cardClass === `cities`
       ? `place-card__mark`
       : `place-card__mark visually-hidden`;
-
-    const isFavoriteClass = isFavorite
-      ? `place-card__bookmark-button place-card__bookmark-button--active button`
-      : `place-card__bookmark-button button`;
-
     const isCardClass = cardClass === `cities`
       ? `cities__place-card place-card`
       : `near-places__card place-card`;
@@ -63,7 +83,7 @@ class PlaceCard extends PureComponent {
               <b className="place-card__price-value">€{price}</b>
               <span className="place-card__price-text">/&nbsp;night</span>
             </div>
-            <button className={isFavoriteClass} type="button">
+            <button className={`place-card__bookmark-button button ${isFavorite ? `place-card__bookmark-button--active` : ``}`} type="button" onClick={this._onFavoriteClick}>
               <svg className="place-card__bookmark-icon" width="18" height="19">
                 <use xlinkHref="#icon-bookmark"></use>
               </svg>
@@ -99,7 +119,20 @@ PlaceCard.propTypes = {
   }),
   cardClass: PropTypes.string.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
-  onTitleClick: PropTypes.func
+  onTitleClick: PropTypes.func,
+  addToFavorite: PropTypes.func,
+  isSignIn: PropTypes.bool
 };
 
-export default PlaceCard;
+const mapStateToProps = (state) => ({
+  isSignIn: state[NameSpace.USER].isSignIn,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addToFavorite(offer) {
+    dispatch(Operation.addToFavorite(offer));
+  },
+});
+
+export {PlaceCard};
+export default connect(mapStateToProps, mapDispatchToProps)(PlaceCard);

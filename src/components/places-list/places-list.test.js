@@ -64,6 +64,9 @@ it(`Render PlaceList`, () => {
       currentCity: `Amsterdam`,
       currentSortType: `Popular`,
       sortListIsOpen: false
+    },
+    [NameSpace.USER]: {
+      isSignIn: true
     }
   });
 
