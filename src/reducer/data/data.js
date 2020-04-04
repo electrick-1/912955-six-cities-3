@@ -202,8 +202,7 @@ const reducer = (state = initialState, action) => {
       });
     case ActionType.CHANGE_OFFER:
       return extend(state, {
-        activeOffer: action.payload,
-        step: 0
+        activeOffer: action.payload
       });
     case ActionType.HOVER_OFFER:
       return extend(state, {

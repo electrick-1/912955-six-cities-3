@@ -23,8 +23,8 @@ class Property extends PureComponent {
     };
   }
   componentDidMount() {
-    const {loadPropertyData} = this.props;
-    loadPropertyData(this.props.activeOffer.id);
+    const {loadPropertyData, id} = this.props;
+    loadPropertyData(id);
   }
 
   _onFavoriteClick() {
@@ -43,7 +43,7 @@ class Property extends PureComponent {
   }
 
   render() {
-    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn} = this.props;
+    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn, addToFavorite} = this.props;
     if (isReviewsLoading) {
       return false;
     }
@@ -72,9 +72,9 @@ class Property extends PureComponent {
           <div className="container">
             <div className="header__wrapper">
               <div className="header__left">
-                <a className="header__logo-link" href="main.html">
+                <Link className="header__logo-link" to={AppRoute.ROOT}>
                   <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41" />
-                </a>
+                </Link>
               </div>
               <nav className="header__nav">
                 <ul className="header__nav-list">
@@ -203,6 +203,8 @@ class Property extends PureComponent {
                         cardClass={cardClass}
                         onTitleClick={onTitleClick}
                         onMouseEnter={() => {}}
+                        isSignIn={isSignIn}
+                        addToFavorite={addToFavorite}
                       />);
                   } else {
                     return ``;
@@ -218,6 +220,7 @@ class Property extends PureComponent {
 }
 
 Property.propTypes = {
+  id: PropTypes.string.isRequired,
   isSignIn: PropTypes.bool,
   onSignInClick: PropTypes.func,
   authorizationStatus: PropTypes.string,
@@ -261,6 +264,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(DataOperation.addToFavorite(offer));
   },
   loadPropertyData(id) {
+    dispatch(DataOperation.loadOffers());
     dispatch(DataOperation.loadNearbyOffers(id));
     dispatch(DataOperation.loadReviews(id));
   }

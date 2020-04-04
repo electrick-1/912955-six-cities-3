@@ -66,8 +66,9 @@ class App extends PureComponent {
           <Route exact path={AppRoute.LOGIN}>
             {this.props.isSignIn ? <Redirect to={AppRoute.ROOT} /> : <SignIn />}
           </Route>
-          <Route exact path={AppRoute.PROPERTY}>
+          <Route path={AppRoute.PROPERTY} render={(routeProps) =>
             <Property
+              id={routeProps.match.params.id}
               email={email}
               activeOffer={activeOffer}
               sortedOffers={sortedOffers}
@@ -77,6 +78,8 @@ class App extends PureComponent {
               isSignIn={isSignIn}
               addToFavorite={addToFavoriteClick}
             />
+          }
+          >
           </Route>
           <PrivateRoute
             exact
