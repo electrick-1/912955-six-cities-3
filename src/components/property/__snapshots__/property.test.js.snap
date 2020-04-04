@@ -40,14 +40,14 @@ exports[`Render Property 1`] = `
             >
               <a
                 className="header__nav-link header__nav-link--profile"
-                href="#"
+                href="/login"
+                onClick={[Function]}
               >
-                <div
-                  className="header__avatar-wrapper user__avatar-wrapper"
-                />
                 <span
-                  className="header__user-name user__name"
-                />
+                  className="header__login"
+                >
+                  Sign in
+                </span>
               </a>
             </li>
           </ul>
@@ -94,7 +94,7 @@ exports[`Render Property 1`] = `
           className="property__wrapper"
         >
           <div
-            className="property__mark"
+            className="property__mark "
           >
             <span>
               Premium
@@ -109,7 +109,8 @@ exports[`Render Property 1`] = `
               Beautiful & luxurious studio at great location
             </h1>
             <button
-              className="property__bookmark-button button"
+              className="property__bookmark-button button "
+              onClick={[Function]}
               type="button"
             >
               <svg
@@ -284,7 +285,251 @@ exports[`Render Property 1`] = `
                 1
               </span>
             </h2>
-            
+            <ul
+              className="reviews__list"
+            >
+              <li
+                className="reviews__item"
+              >
+                <div
+                  className="reviews__user user"
+                >
+                  <div
+                    className="reviews__avatar-wrapper user__avatar-wrapper"
+                  >
+                    <img
+                      alt="Reviews avatar"
+                      className="reviews__avatar user__avatar"
+                      height="54"
+                      width="54"
+                    />
+                  </div>
+                  <span
+                    className="reviews__user-name"
+                  >
+                    Max
+                  </span>
+                </div>
+                <div
+                  className="reviews__info"
+                >
+                  <div
+                    className="reviews__rating rating"
+                  >
+                    <div
+                      className="reviews__stars rating__stars"
+                    >
+                      <span
+                        style={
+                          Object {
+                            "width": "80%",
+                          }
+                        }
+                      />
+                      <span
+                        className="visually-hidden"
+                      >
+                        Rating
+                      </span>
+                    </div>
+                  </div>
+                  <p
+                    className="reviews__text"
+                  >
+                    A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+                  </p>
+                  <time
+                    className="reviews__time"
+                    dateTime="2019-05-08T14:13:56.569Z"
+                  >
+                    May
+                     
+                    2019
+                  </time>
+                </div>
+              </li>
+            </ul>
+            <form
+              action="#"
+              className="reviews__form form"
+              method="post"
+              onSubmit={[Function]}
+            >
+              <label
+                className="reviews__label form__label"
+                htmlFor="review"
+              >
+                Your review
+              </label>
+              <div
+                className="reviews__rating-form form__rating"
+              >
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="5-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  required={true}
+                  type="radio"
+                  value="5"
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="5-stars"
+                  title="perfect"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="4-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  required={true}
+                  type="radio"
+                  value="4"
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="4-stars"
+                  title="good"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="3-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  required={true}
+                  type="radio"
+                  value="3"
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="3-stars"
+                  title="not bad"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="2-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  required={true}
+                  type="radio"
+                  value="2"
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="2-stars"
+                  title="badly"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="1-star"
+                  name="rating"
+                  onChange={[Function]}
+                  required={true}
+                  type="radio"
+                  value="1"
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="1-star"
+                  title="terribly"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+              </div>
+              <textarea
+                className="reviews__textarea form__textarea"
+                id="review"
+                maxLength="300"
+                minLength="50"
+                name="review"
+                onChange={[Function]}
+                placeholder="Tell how was your stay, what you like and what can be improved"
+                required={true}
+                value=""
+              />
+              <div
+                className="reviews__button-wrapper"
+              >
+                <p
+                  className="reviews__help"
+                >
+                  To submit review please make sure to set 
+                  <span
+                    className="reviews__star"
+                  >
+                    rating
+                  </span>
+                   and describe your stay with at least 
+                  <b
+                    className="reviews__text-amount"
+                  >
+                    50 characters
+                  </b>
+                  .
+                </p>
+                <button
+                  className="reviews__submit form__submit button"
+                  disabled={true}
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
           </section>
         </div>
       </div>
@@ -315,6 +560,7 @@ exports[`Render Property 1`] = `
         <div
           className="near-places__list places__list"
         >
+          
           
           
           

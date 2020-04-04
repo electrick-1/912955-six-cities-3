@@ -1,6 +1,7 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
-import {Switch, Route, BrowserRouter} from "react-router-dom";
+import {Switch, Route, Router, Redirect} from "react-router-dom";
+import history from "../../history.js";
 import {connect} from "react-redux";
 import {ActionCreator as DataActionCreater} from "../../reducer/data/data.js";
 import {ActionCreator as UserActionCreator} from "../../reducer/user/user.js";
@@ -8,7 +9,7 @@ import NameSpace from "../../reducer/name-space.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
 import SignIn from "../sign-in/sign-in.jsx";
-import {CardClass} from "../../const.js";
+import {CardClass, AppRoute} from "../../const.js";
 import {getCurrentCity, getActiveOffer, getCurrentSortType, getStep, getSortedOffers} from "../../reducer/data/selectors.js";
 import {getAuthorizationStatus, getEmail} from "../../reducer/user/selectors.js";
 
@@ -29,25 +30,19 @@ class App extends PureComponent {
 
 
     if (step === -1) {
-      if (isSignIn) {
-        return (
-          <Main
-            activeOffer={activeOffer}
-            cardClass={CardClass.CITIES}
-            email={email}
-            currentCity={currentCity}
-            sortedOffers={sortedOffers}
-            onTitleClick={titleClickHandler}
-            onMouseEnter={onMouseEnter}
-            onSignInClick={onSignInClick}
-            isSignIn={isSignIn}
-          />
-        );
-      } else {
-        return (
-          <SignIn />
-        );
-      }
+      return (
+        <Main
+          activeOffer={activeOffer}
+          cardClass={CardClass.CITIES}
+          email={email}
+          currentCity={currentCity}
+          sortedOffers={sortedOffers}
+          onTitleClick={titleClickHandler}
+          onMouseEnter={onMouseEnter}
+          onSignInClick={onSignInClick}
+          isSignIn={isSignIn}
+        />
+      );
     }
     return (
       <Property
@@ -65,13 +60,16 @@ class App extends PureComponent {
 
   render() {
     return (
-      <BrowserRouter>
+      <Router history={history}>
         <Switch>
-          <Route exact path="/">
+          <Route exact path={AppRoute.ROOT}>
             {this._renderApp()}
           </Route>
+          <Route exact path={AppRoute.LOGIN}>
+            {this.props.isSignIn ? <Redirect to={AppRoute.ROOT} /> : <SignIn />}
+          </Route>
         </Switch>
-      </BrowserRouter>
+      </Router>
     );
   }
 }

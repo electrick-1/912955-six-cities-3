@@ -1,23 +1,49 @@
 import React, {PureComponent, Fragment} from "react";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
+import history from "../../history.js";
 import PlaceCard from "../place-card/place-card.jsx";
 import ReviewsForm from "../reviews-form/reviews-form.jsx";
 import ReviewsList from "../reviews-list/reviews-list.jsx";
 import Map from "../map/map.jsx";
 import {connect} from "react-redux";
 import {Operation as DataOperation} from "../../reducer/data/data.js";
-import {AuthorizationStatus} from "../../reducer/user/user.js";
 import NameSpace from "../../reducer/name-space.js";
 import {getNearbyOffers, getReviews} from "../../reducer/data/selectors.js";
+import {AppRoute} from "../../const.js";
 
 class Property extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this._onFavoriteClick = this._onFavoriteClick.bind(this);
+
+    this.state = {
+      isFavorite: props.activeOffer.isFavorite,
+    };
+  }
   componentDidMount() {
     const {loadPropertyData} = this.props;
     loadPropertyData(this.props.activeOffer.id);
   }
 
+  _onFavoriteClick() {
+    const {isSignIn, activeOffer, addToFavorite} = this.props;
+    if (!isSignIn) {
+      return history.push(AppRoute.LOGIN);
+    }
+
+    addToFavorite(activeOffer);
+
+    this.setState((prevState) => ({
+      isFavorite: !prevState.isFavorite,
+    }));
+
+    return false;
+  }
+
   render() {
-    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, authorizationStatus, onSignInClick, nearbyOffers, reviews} = this.props;
+    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn} = this.props;
     if (isReviewsLoading) {
       return false;
     }
@@ -40,12 +66,6 @@ class Property extends PureComponent {
       description
     } = activeOffer;
 
-    const isPremiumClass = isPremium ? `property__mark` : `property__mark visually-hidden`;
-
-    const isFavoriteClass = isFavorite
-      ? `property__bookmark-button property__bookmark-button--active button`
-      : `property__bookmark-button button`;
-
     return (
       <div className="page">
         <header className="header">
@@ -59,18 +79,16 @@ class Property extends PureComponent {
               <nav className="header__nav">
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href="#">
-                      {authorizationStatus === AuthorizationStatus.NO_AUTH ?
-                        <span className="header__login"
-                          onClick={onSignInClick}
-                        >Sign in</span> :
-                        <Fragment>
+                    <Link className="header__nav-link header__nav-link--profile" to={isSignIn ? AppRoute.FAVORITES : AppRoute.LOGIN}>
+                      {isSignIn
+                        ? <Fragment>
                           <div className="header__avatar-wrapper user__avatar-wrapper">
                           </div>
                           <span className="header__user-name user__name">{email}</span>
                         </Fragment>
+                        : <span className="header__login">Sign in</span>
                       }
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </nav>
@@ -94,14 +112,14 @@ class Property extends PureComponent {
             </div>
             <div className="property__container container">
               <div className="property__wrapper">
-                <div className={isPremiumClass}>
+                <div className={`property__mark ${isPremium ? `` : `visually-hidden`}`}>
                   <span>Premium</span>
                 </div>
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
                     {title}
                   </h1>
-                  <button className={isFavoriteClass} type="button">
+                  <button className={`property__bookmark-button button ${isFavorite ? `property__bookmark-button--active` : ``}`} type="button" onClick={this._onFavoriteClick}>
                     <svg className="property__bookmark-icon" width="31" height="33">
                       <use xlinkHref="#icon-bookmark"></use>
                     </svg>
@@ -160,7 +178,7 @@ class Property extends PureComponent {
                   <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                   <ReviewsList reviews={reviews}/>
                   {
-                    authorizationStatus === AuthorizationStatus.AUTH ? <ReviewsForm /> : ``
+                    !isSignIn ? <ReviewsForm /> : ``
                   }
                 </section>
               </div>
@@ -224,11 +242,13 @@ Property.propTypes = {
   cardClass: PropTypes.string,
   onTitleClick: PropTypes.func,
   loadPropertyData: PropTypes.func,
+  addToFavorite: PropTypes.func,
   isReviewsLoading: PropTypes.bool,
   isNearbyOffersLoading: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
+  isSignIn: state[NameSpace.USER].isSignIn,
   authorizationStatus: state[NameSpace.USER].authorizationStatus,
   nearbyOffers: getNearbyOffers(state),
   reviews: getReviews(state),
@@ -237,6 +257,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  addToFavorite(offer) {
+    dispatch(DataOperation.addToFavorite(offer));
+  },
   loadPropertyData(id) {
     dispatch(DataOperation.loadNearbyOffers(id));
     dispatch(DataOperation.loadReviews(id));

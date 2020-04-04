@@ -1,9 +1,10 @@
 import React from "react";
 import renderer from "react-test-renderer";
 import {Provider} from "react-redux";
+import {BrowserRouter} from "react-router-dom";
 import configureStore from "redux-mock-store";
 import NameSpace from "../../reducer/name-space.js";
-import Property from "./property.jsx";
+import {Property} from "./property.jsx";
 import {AuthorizationStatus} from "../../reducer/user/user.js";
 
 const mockStore = configureStore([]);
@@ -230,12 +231,17 @@ it(`Render Property`, () => {
   const tree = renderer
     .create(
         <Provider store={store}>
-          <Property
-            activeOffer={sortedOffers[0]}
-            sortedOffers={sortedOffers}
-            cardClass={`cities`}
-            onTitleClick={() => {}}
-          />
+          <BrowserRouter>
+            <Property
+              activeOffer={sortedOffers[0]}
+              sortedOffers={sortedOffers}
+              cardClass={`cities`}
+              onTitleClick={() => {}}
+              reviews={reviews}
+              nearbyOffers={sortedOffers}
+              loadPropertyData={() => {}}
+            />
+          </BrowserRouter>
         </Provider>, {
           createNodeMock: () => document.createElement(`div`)
         }

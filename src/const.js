@@ -3,6 +3,12 @@ const CardClass = {
   NEAR_PLACES: `near-places`
 };
 
+const AppRoute = {
+  ROOT: `/`,
+  LOGIN: `/login`,
+  FAVORITES: `/favorites`
+};
+
 const SORT_TYPES = {
   POPULAR: `Popular`,
   LOW_TO_HIGH: `Price: low to high`,
@@ -17,4 +23,4 @@ const months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, 
 const MIN_REVIEW_LENGTH = 50;
 const MAX_REVIEW_LENGTH = 300;
 
-export {CardClass, SORT_TYPES, cities, months, MIN_REVIEW_LENGTH, MAX_REVIEW_LENGTH};
+export {CardClass, AppRoute, SORT_TYPES, cities, months, MIN_REVIEW_LENGTH, MAX_REVIEW_LENGTH};
