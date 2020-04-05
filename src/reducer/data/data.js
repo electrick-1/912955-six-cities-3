@@ -163,9 +163,19 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.ADD_TO_FAVORITE:
       const parsedOffer = parseOffer(action.payload);
-      state.offers[parsedOffer.id].isFavorite = parsedOffer.isFavorite;
+      const $offers = [...state.offers];
+      const index = $offers.findIndex((ind) => ind.id === parsedOffer.id);
+      $offers.splice(index, 1, parsedOffer);
+      const si = state.sortedOffers.findIndex((ind) => ind.id === parsedOffer.id);
+      const $sortedOffers = [...state.sortedOffers];
+      $sortedOffers.splice(si, 1, parsedOffer);
+      const $activeOffer = $offers[index];
+      const $favoriteOffers = $offers.filter((offer) => offer.isFavorite === true);
       return extend(state, {
-        offers: state.offers,
+        offers: $offers,
+        sortedOffers: $sortedOffers,
+        activeOffer: $activeOffer,
+        favoriteOffers: $favoriteOffers
       });
     case ActionType.LOAD_NEARBY_OFFERS:
       let parsedNearbyOffers = action.payload.map((offer) => parseOffer(offer));

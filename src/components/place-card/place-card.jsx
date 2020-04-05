@@ -1,8 +1,7 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {AppRoute, CardClass} from "../../const.js";
-import history from "../../history.js";
+import {CardClass} from "../../const.js";
 
 class PlaceCard extends PureComponent {
   constructor(props) {
@@ -11,10 +10,6 @@ class PlaceCard extends PureComponent {
     this._hoverHandler = this._hoverHandler.bind(this);
     this._onTitleClick = this._onTitleClick.bind(this);
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
-
-    this.state = {
-      isFavorite: this.props.offer.isFavorite,
-    };
   }
 
   _hoverHandler() {
@@ -28,16 +23,9 @@ class PlaceCard extends PureComponent {
   }
 
   _onFavoriteClick() {
-    const {isSignIn, offer, addToFavorite} = this.props;
-    if (!isSignIn) {
-      return history.push(AppRoute.LOGIN);
-    }
+    const {offer, addToFavorite} = this.props;
 
     addToFavorite(offer);
-
-    this.setState((prevState) => ({
-      isFavorite: !prevState.isFavorite,
-    }));
 
     return false;
   }
@@ -129,7 +117,6 @@ PlaceCard.propTypes = {
   onMouseEnter: PropTypes.func.isRequired,
   onTitleClick: PropTypes.func,
   addToFavorite: PropTypes.func,
-  isSignIn: PropTypes.bool
 };
 
 export default PlaceCard;

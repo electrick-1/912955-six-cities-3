@@ -51,6 +51,7 @@ class App extends PureComponent {
       email,
       activeOffer,
       titleClickHandler,
+      offers,
       sortedOffers,
       onSignInClick,
       isSignIn,
@@ -71,6 +72,7 @@ class App extends PureComponent {
               id={routeProps.match.params.id}
               email={email}
               activeOffer={activeOffer}
+              offers={offers}
               sortedOffers={sortedOffers}
               cardClass={CardClass.NEAR_PLACES}
               onTitleClick={titleClickHandler}
@@ -102,6 +104,7 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
+  offers: PropTypes.array,
   isSignIn: PropTypes.bool,
   onSignInClick: PropTypes.func,
   email: PropTypes.string,
@@ -119,6 +122,7 @@ const mapStateToProps = (state) => ({
   email: getEmail(state),
   step: getStep(state),
   currentSortType: getCurrentSortType(state),
+  offers: state[NameSpace.DATA].offers,
   sortedOffers: getSortedOffers(state),
   currentCity: getCurrentCity(state),
   activeOffer: getActiveOffer(state)

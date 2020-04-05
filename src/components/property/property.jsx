@@ -1,7 +1,6 @@
 import React, {PureComponent, Fragment} from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import history from "../../history.js";
 import PlaceCard from "../place-card/place-card.jsx";
 import ReviewsForm from "../reviews-form/reviews-form.jsx";
 import ReviewsList from "../reviews-list/reviews-list.jsx";
@@ -17,10 +16,6 @@ class Property extends PureComponent {
     super(props);
 
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
-
-    this.state = {
-      isFavorite: props.activeOffer.isFavorite,
-    };
   }
   componentDidMount() {
     const {loadPropertyData, id} = this.props;
@@ -28,22 +23,16 @@ class Property extends PureComponent {
   }
 
   _onFavoriteClick() {
-    const {isSignIn, activeOffer, addToFavorite} = this.props;
-    if (!isSignIn) {
-      return history.push(AppRoute.LOGIN);
-    }
+    const {activeOffer, addToFavorite} = this.props;
 
     addToFavorite(activeOffer);
-
-    this.setState((prevState) => ({
-      isFavorite: !prevState.isFavorite,
-    }));
 
     return false;
   }
 
   render() {
     const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn, addToFavorite} = this.props;
+
     if (isReviewsLoading) {
       return false;
     }
@@ -220,6 +209,7 @@ class Property extends PureComponent {
 }
 
 Property.propTypes = {
+  offers: PropTypes.array,
   id: PropTypes.string.isRequired,
   isSignIn: PropTypes.bool,
   onSignInClick: PropTypes.func,
