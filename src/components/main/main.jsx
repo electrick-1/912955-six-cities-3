@@ -48,7 +48,8 @@ class Main extends PureComponent {
                 <section className="cities__map map">
                   <Map
                     sortedOffers={sortedOffers}
-                    activeOffer={activeOffer}
+                    id={activeOffer.id}
+                    offers={sortedOffers}
                   />
                 </section>
               </div>
@@ -110,6 +111,7 @@ Main.propTypes = {
   onMouseEnter: PropTypes.func.isRequired,
   addToFavorite: PropTypes.func.isRequired,
   activeOffer: PropTypes.object,
+  offers: PropTypes.array,
   sortedOffers: PropTypes.array,
   cardClass: PropTypes.string,
   currentCity: PropTypes.string.isRequired

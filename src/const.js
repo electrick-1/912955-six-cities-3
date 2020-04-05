@@ -8,7 +8,7 @@ const AppRoute = {
   ROOT: `/`,
   LOGIN: `/login`,
   FAVORITES: `/favorites`,
-  PROPERTY: `/offer/:id`,
+  PROPERTY: `/offer`,
 };
 
 const SORT_TYPES = {

@@ -18,7 +18,8 @@ exports[`AuthScreen component render correctly 1`] = `
         >
           <a
             className="header__logo-link"
-            href="main.html"
+            href="/"
+            onClick={[Function]}
           >
             <img
               alt="6 cities logo"

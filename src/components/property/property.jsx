@@ -17,21 +17,23 @@ class Property extends PureComponent {
 
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
   }
+
   componentDidMount() {
     const {loadPropertyData, id} = this.props;
     loadPropertyData(id);
   }
 
   _onFavoriteClick() {
-    const {activeOffer, addToFavorite} = this.props;
-
-    addToFavorite(activeOffer);
-
+    const {addToFavorite, isSignIn} = this.props;
+    if (!isSignIn) {
+      return history.push(AppRoute.LOGIN);
+    }
+    addToFavorite(this.offer);
     return false;
   }
 
   render() {
-    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn, addToFavorite} = this.props;
+    const {id, offers, isReviewsLoading, isNearbyOffersLoading, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn, addToFavorite} = this.props;
 
     if (isReviewsLoading) {
       return false;
@@ -39,6 +41,8 @@ class Property extends PureComponent {
     if (isNearbyOffersLoading) {
       return false;
     }
+
+    this.offer = offers.find((offer) => offer.id === Number(id));
 
     const {
       title,
@@ -53,7 +57,7 @@ class Property extends PureComponent {
       goods,
       host,
       description
-    } = activeOffer;
+    } = this.offer;
 
     return (
       <div className="page">
@@ -167,7 +171,7 @@ class Property extends PureComponent {
                   <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                   <ReviewsList reviews={reviews}/>
                   {
-                    !isSignIn ? <ReviewsForm /> : ``
+                    isSignIn ? <ReviewsForm id={Number(id)} /> : ``
                   }
                 </section>
               </div>
@@ -175,7 +179,8 @@ class Property extends PureComponent {
             <section className="property__map map">
               <Map
                 sortedOffers={nearbyOffers}
-                activeOffer={activeOffer}
+                offers={offers}
+                id={Number(id)}
               />
             </section>
           </section>
@@ -184,20 +189,16 @@ class Property extends PureComponent {
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
                 {nearbyOffers.map((offer) => {
-                  if (offer.id !== activeOffer.id) {
-                    return (
-                      <PlaceCard
-                        offer={offer}
-                        key={offer.id}
-                        cardClass={cardClass}
-                        onTitleClick={onTitleClick}
-                        onMouseEnter={() => {}}
-                        isSignIn={isSignIn}
-                        addToFavorite={addToFavorite}
-                      />);
-                  } else {
-                    return ``;
-                  }
+                  return (
+                    <PlaceCard
+                      offer={offer}
+                      key={`nearby-${offer.id}`}
+                      cardClass={cardClass}
+                      onTitleClick={onTitleClick}
+                      onMouseEnter={() => {}}
+                      isSignIn={isSignIn}
+                      addToFavorite={addToFavorite}
+                    />);
                 })}
               </div>
             </section>
@@ -217,21 +218,6 @@ Property.propTypes = {
   email: PropTypes.string,
   nearbyOffers: PropTypes.array,
   reviews: PropTypes.array,
-  activeOffer: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    isPremium: PropTypes.bool,
-    isFavorite: PropTypes.bool,
-    type: PropTypes.string.isRequired,
-    rating: PropTypes.number,
-    bedrooms: PropTypes.number,
-    maxAdults: PropTypes.number,
-    goods: PropTypes.array,
-    host: PropTypes.object,
-    description: PropTypes.string,
-    images: PropTypes.array
-  }),
   cardClass: PropTypes.string,
   onTitleClick: PropTypes.func,
   loadPropertyData: PropTypes.func,
@@ -246,7 +232,8 @@ const mapStateToProps = (state) => ({
   nearbyOffers: getNearbyOffers(state),
   reviews: getReviews(state),
   isReviewsLoading: state[NameSpace.DATA].isReviewsLoading,
-  isNearbyOffersLoading: state[NameSpace.DATA].isNearbyOffersLoading
+  isNearbyOffersLoading: state[NameSpace.DATA].isNearbyOffersLoading,
+  offers: state[NameSpace.DATA].offers,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -254,7 +241,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(DataOperation.addToFavorite(offer));
   },
   loadPropertyData(id) {
-    dispatch(DataOperation.loadOffers());
     dispatch(DataOperation.loadNearbyOffers(id));
     dispatch(DataOperation.loadReviews(id));
   }

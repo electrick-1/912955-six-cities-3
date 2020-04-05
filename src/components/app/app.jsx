@@ -67,7 +67,7 @@ class App extends PureComponent {
           <Route exact path={AppRoute.LOGIN}>
             {this.props.isSignIn ? <Redirect to={AppRoute.ROOT} /> : <SignIn />}
           </Route>
-          <Route path={AppRoute.PROPERTY} render={(routeProps) =>
+          <Route path={`${AppRoute.PROPERTY}/:id`} render={(routeProps) =>
             <Property
               id={routeProps.match.params.id}
               email={email}
@@ -137,6 +137,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
   titleClickHandler(offer) {
     dispatch(DataActionCreater.changeOffer(offer));
+    dispatch(DataOperation.loadNearbyOffers(offer.id));
+    dispatch(DataOperation.loadReviews(offer.id));
   },
   onMouseEnter(offer) {
     dispatch(DataActionCreater.hoverOffer(offer));

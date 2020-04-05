@@ -25,8 +25,8 @@ class ReviewsForm extends PureComponent {
 
   handleSubmit(evt) {
     evt.preventDefault();
-    const {activeOffer, blockForm, postReview} = this.props;
-    const {id} = activeOffer;
+    const {id, blockForm, postReview} = this.props;
+
     const data = new FormData(evt.target);
 
     blockForm(true);
@@ -120,17 +120,15 @@ class ReviewsForm extends PureComponent {
 }
 
 ReviewsForm.propTypes = {
-  activeOffer: PropTypes.shape({
-    id: PropTypes.number,
-  }),
+  id: PropTypes.number,
   blockForm: PropTypes.func,
   postReview: PropTypes.func,
-  isBlockedForm: PropTypes.bool
+  isBlockedForm: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   activeOffer: state[NameSpace.DATA].activeOffer,
-  isBlockedForm: state[NameSpace.DATA].isBlockedForm
+  isBlockedForm: state[NameSpace.DATA].isBlockedForm,
 });
 
 const mapDispatchToProps = (dispatch) => ({
