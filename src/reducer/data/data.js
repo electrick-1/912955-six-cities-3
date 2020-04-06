@@ -9,7 +9,6 @@ const ReviewPostingStatus = {
 const initialState = {
   currentCity: `Amsterdam`,
   currentSortType: `Popular`,
-  step: -1,
   activeOffer: {},
   sortedOffers: [],
   offers: [],
@@ -18,6 +17,7 @@ const initialState = {
   favoriteOffers: [],
   isBlockedForm: false,
   postReview: null,
+  isOffersLoading: true,
   isReviewsLoading: true,
   isNearbyOffersLoading: true,
   isFavoriteOffersLoading: true
@@ -93,7 +93,7 @@ const ActionCreator = {
     };
   },
 
-  postReview: (success) => ({
+  postReviewSuccessfull: (success) => ({
     type: ActionType.POST_REVIEW,
     payload: success,
   }),
@@ -141,12 +141,12 @@ const Operation = {
       rating: data.rating,
     })
           .then((response) => {
-            dispatch(ActionCreator.postReview(ReviewPostingStatus.POSTED));
+            dispatch(ActionCreator.postReviewSuccessfull(ReviewPostingStatus.POSTED));
             dispatch(ActionCreator.loadReviews(response.data));
             dispatch(ActionCreator.blockForm(false));
           })
         .catch((err) => {
-          dispatch(ActionCreator.postReview(ReviewPostingStatus.ERROR));
+          dispatch(ActionCreator.postReviewSuccessfull(ReviewPostingStatus.ERROR));
           dispatch(ActionCreator.blockForm(false));
           throw err;
         });
@@ -164,9 +164,19 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.ADD_TO_FAVORITE:
       const parsedOffer = parseOffer(action.payload);
-      state.offers[parsedOffer.id].isFavorite = parsedOffer.isFavorite;
+      const $offers = [...state.offers];
+      const index = $offers.findIndex((ind) => ind.id === parsedOffer.id);
+      $offers.splice(index, 1, parsedOffer);
+      const si = state.sortedOffers.findIndex((ind) => ind.id === parsedOffer.id);
+      const $sortedOffers = [...state.sortedOffers];
+      $sortedOffers.splice(si, 1, parsedOffer);
+      const $activeOffer = $offers[index];
+      const $favoriteOffers = $offers.filter((offer) => offer.isFavorite === true);
       return extend(state, {
-        offers: state.offers,
+        offers: $offers,
+        sortedOffers: $sortedOffers,
+        activeOffer: $activeOffer,
+        favoriteOffers: $favoriteOffers
       });
     case ActionType.LOAD_NEARBY_OFFERS:
       let parsedNearbyOffers = action.payload.map((offer) => parseOffer(offer));
@@ -181,7 +191,7 @@ const reducer = (state = initialState, action) => {
         isFavoriteOffersLoading: false
       });
     case ActionType.LOAD_REVIEWS:
-      let parsedReviews = action.payload.map((review) => parseReview(review));
+      let parsedReviews = action.payload.map((review) => parseReview(review)).reverse().slice(0, 10);
       return extend(state, {
         reviews: parsedReviews,
         isReviewsLoading: false
@@ -192,7 +202,8 @@ const reducer = (state = initialState, action) => {
       return extend(state, {
         offers: parsedOffers,
         currentCity: parseCity,
-        sortedOffers: parsedOffers.filter((offer) => offer.city.name === parseCity)
+        sortedOffers: parsedOffers.filter((offer) => offer.city.name === parseCity),
+        isOffersLoading: false
       });
     case ActionType.CHANGE_CITY:
       return extend(state, {
@@ -202,8 +213,7 @@ const reducer = (state = initialState, action) => {
       });
     case ActionType.CHANGE_OFFER:
       return extend(state, {
-        activeOffer: action.payload,
-        step: 0
+        activeOffer: action.payload
       });
     case ActionType.HOVER_OFFER:
       return extend(state, {

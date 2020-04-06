@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 import leaflet from "leaflet";
 
 const icon = leaflet.icon({
-  iconUrl: `img/pin.svg`,
+  iconUrl: `/img/pin.svg`,
   iconSize: [27, 39]
 });
 const activeIcon = leaflet.icon({
-  iconUrl: `img/pin-active.svg`,
+  iconUrl: `/img/pin-active.svg`,
   iconSize: [27, 39]
 });
 
@@ -20,9 +20,10 @@ class Map extends PureComponent {
   }
 
   componentDidMount() {
-    const {sortedOffers, activeOffer} = this.props;
+    const {sortedOffers, offers, id} = this.props;
+    const activeCity = sortedOffers[0].city;
     this.map = leaflet.map(this.mapRef.current, {
-      center: [sortedOffers[0].city.location.latitude, sortedOffers[0].city.location.longitude],
+      center: [activeCity.location.latitude, activeCity.location.longitude],
       zoom: sortedOffers[0].city.location.zoom,
       zoomControl: false,
       marker: true
@@ -38,31 +39,40 @@ class Map extends PureComponent {
 
     this.map.setView([sortedOffers[0].city.location.latitude, sortedOffers[0].city.location.longitude], sortedOffers[0].city.location.zoom);
 
+    if (id) {
+      this.offer = offers.find((offer) => offer.id === id);
+      if (this.offer) {
+        leaflet
+        .marker([this.offer.location.latitude, this.offer.location.longitude], {icon: activeIcon})
+        .addTo(this.layer);
+      }
+    }
+
     sortedOffers.map((offer) => {
-      if (offer !== activeOffer) {
+      if (offer !== this.offer) {
         leaflet
         .marker([offer.location.latitude, offer.location.longitude], {icon})
         .addTo(this.layer);
       }
     });
-    if (activeOffer.id) {
-      leaflet
-      .marker([activeOffer.location.latitude, activeOffer.location.longitude], {icon: activeIcon})
-      .addTo(this.layer);
-    }
   }
 
   componentDidUpdate() {
-    const {sortedOffers, activeOffer} = this.props;
+    const {sortedOffers, offers, id} = this.props;
 
     this.layer.clearLayers();
 
-    sortedOffers.map((offer) => {
-      if (offer.id === activeOffer.id) {
+    if (id) {
+      this.offer = offers.find((offer) => offer.id === id);
+      if (this.offer) {
         leaflet
-        .marker([activeOffer.location.latitude, activeOffer.location.longitude], {icon: activeIcon})
+        .marker([this.offer.location.latitude, this.offer.location.longitude], {icon: activeIcon})
         .addTo(this.layer);
-      } else {
+      }
+    }
+
+    sortedOffers.map((offer) => {
+      if (offer !== this.offer) {
         leaflet
         .marker([offer.location.latitude, offer.location.longitude], {icon})
         .addTo(this.layer);
@@ -85,11 +95,9 @@ class Map extends PureComponent {
 
 
 Map.propTypes = {
+  id: PropTypes.number,
+  offers: PropTypes.array,
   sortedOffers: PropTypes.array,
-  activeOffer: PropTypes.shape({
-    id: PropTypes.number,
-    location: PropTypes.object
-  })
 };
 
 export default Map;

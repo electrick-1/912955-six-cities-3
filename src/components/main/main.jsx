@@ -18,7 +18,8 @@ class Main extends PureComponent {
       cardClass,
       currentCity,
       sortedOffers,
-      isSignIn
+      isSignIn,
+      addToFavorite
     } = this.props;
 
     const isOffers = () => {
@@ -35,6 +36,9 @@ class Main extends PureComponent {
                 <b className="places__found">{sortedOffers.length} places to stay in {currentCity}</b>
                 <SortList />
                 <PlacesList
+                  isSignIn={isSignIn}
+                  sortedOffers={sortedOffers}
+                  addToFavorite={addToFavorite}
                   cardClass={cardClass}
                   onTitleClick={onTitleClick}
                   onMouseEnter={onMouseEnter}
@@ -44,7 +48,8 @@ class Main extends PureComponent {
                 <section className="cities__map map">
                   <Map
                     sortedOffers={sortedOffers}
-                    activeOffer={activeOffer}
+                    id={activeOffer.id}
+                    offers={sortedOffers}
                   />
                 </section>
               </div>
@@ -104,7 +109,9 @@ Main.propTypes = {
   authorizationStatus: PropTypes.string,
   onTitleClick: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
+  addToFavorite: PropTypes.func.isRequired,
   activeOffer: PropTypes.object,
+  offers: PropTypes.array,
   sortedOffers: PropTypes.array,
   cardClass: PropTypes.string,
   currentCity: PropTypes.string.isRequired

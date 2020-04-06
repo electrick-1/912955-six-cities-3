@@ -1,7 +1,6 @@
 import React, {PureComponent, Fragment} from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import history from "../../history.js";
 import PlaceCard from "../place-card/place-card.jsx";
 import ReviewsForm from "../reviews-form/reviews-form.jsx";
 import ReviewsList from "../reviews-list/reviews-list.jsx";
@@ -17,39 +16,33 @@ class Property extends PureComponent {
     super(props);
 
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
-
-    this.state = {
-      isFavorite: props.activeOffer.isFavorite,
-    };
   }
+
   componentDidMount() {
-    const {loadPropertyData} = this.props;
-    loadPropertyData(this.props.activeOffer.id);
+    const {loadPropertyData, id} = this.props;
+    loadPropertyData(id);
   }
 
   _onFavoriteClick() {
-    const {isSignIn, activeOffer, addToFavorite} = this.props;
+    const {addToFavorite, isSignIn} = this.props;
     if (!isSignIn) {
       return history.push(AppRoute.LOGIN);
     }
-
-    addToFavorite(activeOffer);
-
-    this.setState((prevState) => ({
-      isFavorite: !prevState.isFavorite,
-    }));
-
+    addToFavorite(this.offer);
     return false;
   }
 
   render() {
-    const {isReviewsLoading, isNearbyOffersLoading, activeOffer, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn} = this.props;
+    const {id, offers, isReviewsLoading, isNearbyOffersLoading, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn, addToFavorite} = this.props;
+
     if (isReviewsLoading) {
       return false;
     }
     if (isNearbyOffersLoading) {
       return false;
     }
+
+    this.offer = offers.find((offer) => offer.id === Number(id));
 
     const {
       title,
@@ -64,7 +57,7 @@ class Property extends PureComponent {
       goods,
       host,
       description
-    } = activeOffer;
+    } = this.offer;
 
     return (
       <div className="page">
@@ -72,9 +65,9 @@ class Property extends PureComponent {
           <div className="container">
             <div className="header__wrapper">
               <div className="header__left">
-                <a className="header__logo-link" href="main.html">
-                  <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-                </a>
+                <Link className="header__logo-link" to={AppRoute.ROOT}>
+                  <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41" />
+                </Link>
               </div>
               <nav className="header__nav">
                 <ul className="header__nav-list">
@@ -162,7 +155,7 @@ class Property extends PureComponent {
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
                     <div className={`property__avatar-wrapper ${host.isPro ? `property__avatar-wrapper--pro` : ``} user__avatar-wrapper`}>
-                      <img className="property__avatar user__avatar" src={host.avatarUrl} width="74" height="74" alt="Host avatar" />
+                      <img className="property__avatar user__avatar" src={`/` + host.avatarUrl} width="74" height="74" alt="Host avatar" />
                     </div>
                     <span className="property__user-name">
                       {host.name}
@@ -178,7 +171,7 @@ class Property extends PureComponent {
                   <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                   <ReviewsList reviews={reviews}/>
                   {
-                    !isSignIn ? <ReviewsForm /> : ``
+                    isSignIn ? <ReviewsForm id={Number(id)} /> : ``
                   }
                 </section>
               </div>
@@ -186,7 +179,8 @@ class Property extends PureComponent {
             <section className="property__map map">
               <Map
                 sortedOffers={nearbyOffers}
-                activeOffer={activeOffer}
+                offers={offers}
+                id={Number(id)}
               />
             </section>
           </section>
@@ -195,18 +189,16 @@ class Property extends PureComponent {
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
                 {nearbyOffers.map((offer) => {
-                  if (offer.id !== activeOffer.id) {
-                    return (
-                      <PlaceCard
-                        offer={offer}
-                        key={offer.id}
-                        cardClass={cardClass}
-                        onTitleClick={onTitleClick}
-                        onMouseEnter={() => {}}
-                      />);
-                  } else {
-                    return ``;
-                  }
+                  return (
+                    <PlaceCard
+                      offer={offer}
+                      key={`nearby-${offer.id}`}
+                      cardClass={cardClass}
+                      onTitleClick={onTitleClick}
+                      onMouseEnter={() => {}}
+                      isSignIn={isSignIn}
+                      addToFavorite={addToFavorite}
+                    />);
                 })}
               </div>
             </section>
@@ -218,27 +210,14 @@ class Property extends PureComponent {
 }
 
 Property.propTypes = {
+  offers: PropTypes.array,
+  id: PropTypes.string.isRequired,
   isSignIn: PropTypes.bool,
   onSignInClick: PropTypes.func,
   authorizationStatus: PropTypes.string,
   email: PropTypes.string,
   nearbyOffers: PropTypes.array,
   reviews: PropTypes.array,
-  activeOffer: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    isPremium: PropTypes.bool,
-    isFavorite: PropTypes.bool,
-    type: PropTypes.string.isRequired,
-    rating: PropTypes.number,
-    bedrooms: PropTypes.number,
-    maxAdults: PropTypes.number,
-    goods: PropTypes.array,
-    host: PropTypes.object,
-    description: PropTypes.string,
-    images: PropTypes.array
-  }),
   cardClass: PropTypes.string,
   onTitleClick: PropTypes.func,
   loadPropertyData: PropTypes.func,
@@ -253,7 +232,8 @@ const mapStateToProps = (state) => ({
   nearbyOffers: getNearbyOffers(state),
   reviews: getReviews(state),
   isReviewsLoading: state[NameSpace.DATA].isReviewsLoading,
-  isNearbyOffersLoading: state[NameSpace.DATA].isNearbyOffersLoading
+  isNearbyOffersLoading: state[NameSpace.DATA].isNearbyOffersLoading,
+  offers: state[NameSpace.DATA].offers,
 });
 
 const mapDispatchToProps = (dispatch) => ({

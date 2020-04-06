@@ -1,12 +1,14 @@
 const CardClass = {
   CITIES: `cities`,
-  NEAR_PLACES: `near-places`
+  NEAR_PLACES: `near-places`,
+  FAVORITES: `favorites`
 };
 
 const AppRoute = {
   ROOT: `/`,
   LOGIN: `/login`,
-  FAVORITES: `/favorites`
+  FAVORITES: `/favorites`,
+  PROPERTY: `/offer`,
 };
 
 const SORT_TYPES = {

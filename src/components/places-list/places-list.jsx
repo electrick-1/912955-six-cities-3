@@ -1,7 +1,5 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {getSortedOffers} from "../../reducer/data/selectors.js";
 import PlaceCard from "../place-card/place-card.jsx";
 
 class PlacesList extends PureComponent {
@@ -10,7 +8,9 @@ class PlacesList extends PureComponent {
       sortedOffers,
       cardClass,
       onTitleClick,
-      onMouseEnter
+      onMouseEnter,
+      isSignIn,
+      addToFavorite
     } = this.props;
 
     return (
@@ -22,6 +22,8 @@ class PlacesList extends PureComponent {
             cardClass={cardClass}
             onTitleClick={onTitleClick}
             onMouseEnter={onMouseEnter}
+            isSignIn={isSignIn}
+            addToFavorite={addToFavorite}
           />
         )}
       </div>
@@ -36,12 +38,9 @@ PlacesList.propTypes = {
     id: PropTypes.number.isRequired,
   })),
   onTitleClick: PropTypes.func.isRequired,
-  onMouseEnter: PropTypes.func.isRequired
+  onMouseEnter: PropTypes.func.isRequired,
+  addToFavorite: PropTypes.func.isRequired,
+  isSignIn: PropTypes.bool
 };
 
-const mapStateToProps = (state) => ({
-  sortedOffers: getSortedOffers(state)
-});
-
-export {PlacesList};
-export default connect(mapStateToProps)(PlacesList);
+export default PlacesList;
