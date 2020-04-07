@@ -3,7 +3,7 @@ import renderer from "react-test-renderer";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
-import SignIn from "./sign-in.jsx";
+import LoginScreen from "./login-screen.jsx";
 import NameSpace from "../../reducer/name-space.js";
 import {AuthorizationStatus} from "../../reducer/user/user.js";
 
@@ -20,7 +20,7 @@ it(`AuthScreen component render correctly`, () => {
   const tree = renderer.create(
       <Provider store={store}>
         <BrowserRouter>
-          <SignIn />
+          <LoginScreen />
         </BrowserRouter>
       </Provider>, {
         createNodeMock: () => document.createElement(`div`)

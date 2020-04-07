@@ -2,19 +2,27 @@ import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 import {CardClass} from "../../const.js";
+import {AppRoute} from "../../const.js";
+import history from "../../history.js";
 
 class PlaceCard extends PureComponent {
   constructor(props) {
     super(props);
 
-    this._hoverHandler = this._hoverHandler.bind(this);
+    this._onMouseEnter = this._onMouseEnter.bind(this);
+    this._onMouseLeave = this._onMouseLeave.bind(this);
     this._onTitleClick = this._onTitleClick.bind(this);
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
   }
 
-  _hoverHandler() {
+  _onMouseEnter() {
     const {offer, onMouseEnter} = this.props;
     onMouseEnter(offer);
+  }
+
+  _onMouseLeave() {
+    const {offer, onMouseLeave} = this.props;
+    onMouseLeave(offer);
   }
 
   _onTitleClick() {
@@ -23,9 +31,12 @@ class PlaceCard extends PureComponent {
   }
 
   _onFavoriteClick() {
-    const {offer, addToFavorite} = this.props;
+    const {offer, onFavoriteButtonClick, isSignIn} = this.props;
+    if (!isSignIn) {
+      return history.push(AppRoute.LOGIN);
+    }
 
-    addToFavorite(offer);
+    onFavoriteButtonClick(offer);
 
     return false;
   }
@@ -43,11 +54,11 @@ class PlaceCard extends PureComponent {
       id
     } = offer;
 
-    const isPremiumClass = isPremium && cardClass === `cities`
+    const getPremiumClass = isPremium && cardClass === `cities`
       ? `place-card__mark`
       : `place-card__mark visually-hidden`;
 
-    const isCardClass = (currentClass) => {
+    const getCardClass = (currentClass) => {
       switch (currentClass) {
         case CardClass.CITIES:
           return (`cities__place-card place-card`);
@@ -61,11 +72,12 @@ class PlaceCard extends PureComponent {
 
     return (
       <article
-        className={isCardClass(cardClass)}
+        className={getCardClass(cardClass)}
         key={offer.id}
-        onMouseEnter={this._hoverHandler}
+        onMouseEnter={this._onMouseEnter}
+        onMouseLeave={this._onMouseLeave}
       >
-        <div className={isPremiumClass}>
+        <div className={getPremiumClass}>
           <span>Premium</span>
         </div>
         <div className={cardClass + `__image-wrapper place-card__image-wrapper`}>
@@ -113,10 +125,12 @@ PlaceCard.propTypes = {
     rating: PropTypes.number.isRequired,
     previewImage: PropTypes.string.isRequired
   }),
+  isSignIn: PropTypes.bool,
   cardClass: PropTypes.string.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
+  onMouseLeave: PropTypes.func,
   onTitleClick: PropTypes.func,
-  addToFavorite: PropTypes.func,
+  onFavoriteButtonClick: PropTypes.func,
 };
 
 export default PlaceCard;

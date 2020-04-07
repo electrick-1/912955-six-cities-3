@@ -9,7 +9,7 @@ import NameSpace from "../../reducer/name-space.js";
 import Main from "../main/main.jsx";
 import Property from "../property/property.jsx";
 import Favorites from "../favorites/favorites.jsx";
-import SignIn from "../sign-in/sign-in.jsx";
+import LoginScreen from "../login-screen/login-screen.jsx";
 import {CardClass, AppRoute} from "../../const.js";
 import {getCurrentCity, getActiveOffer, getCurrentSortType, getStep, getSortedOffers} from "../../reducer/data/selectors.js";
 import {getEmail} from "../../reducer/user/selectors.js";
@@ -21,14 +21,15 @@ class App extends PureComponent {
       email,
       activeOffer,
       currentCity,
-      titleClickHandler,
+      onTitleClick,
       onMouseEnter,
+      onMouseLeave,
+      onCityClick,
       sortedOffers,
       onSignInClick,
       isSignIn,
-      addToFavoriteClick
+      onFavoriteButtonClick
     } = this.props;
-
 
     return (
       <Main
@@ -37,11 +38,13 @@ class App extends PureComponent {
         email={email}
         currentCity={currentCity}
         sortedOffers={sortedOffers}
-        onTitleClick={titleClickHandler}
+        onTitleClick={onTitleClick}
         onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         onSignInClick={onSignInClick}
         isSignIn={isSignIn}
-        addToFavorite={addToFavoriteClick}
+        onFavoriteButtonClick={onFavoriteButtonClick}
+        onCityClick={onCityClick}
       />
     );
   }
@@ -50,13 +53,13 @@ class App extends PureComponent {
     const {
       email,
       activeOffer,
-      titleClickHandler,
+      onTitleClick,
       offers,
       sortedOffers,
       onSignInClick,
       isSignIn,
       onMouseEnter,
-      addToFavoriteClick
+      onFavoriteButtonClick
     } = this.props;
     return (
       <Router history={history}>
@@ -65,7 +68,7 @@ class App extends PureComponent {
             {this._renderApp()}
           </Route>
           <Route exact path={AppRoute.LOGIN}>
-            {this.props.isSignIn ? <Redirect to={AppRoute.ROOT} /> : <SignIn />}
+            {this.props.isSignIn ? <Redirect to={AppRoute.ROOT} /> : <LoginScreen />}
           </Route>
           <Route path={`${AppRoute.PROPERTY}/:id`} render={(routeProps) =>
             <Property
@@ -75,10 +78,10 @@ class App extends PureComponent {
               offers={offers}
               sortedOffers={sortedOffers}
               cardClass={CardClass.NEAR_PLACES}
-              onTitleClick={titleClickHandler}
+              onTitleClick={onTitleClick}
               onSignInClick={onSignInClick}
               isSignIn={isSignIn}
-              addToFavorite={addToFavoriteClick}
+              onFavoriteButtonClick={onFavoriteButtonClick}
             />
           }
           >
@@ -90,9 +93,9 @@ class App extends PureComponent {
               return (
                 <Favorites
                   isSignIn={isSignIn}
-                  addToFavorite={addToFavoriteClick}
+                  onFavoriteButtonClick={onFavoriteButtonClick}
                   onMouseEnter={onMouseEnter}
-                  onTitleClick={titleClickHandler}
+                  onTitleClick={onTitleClick}
                 />
               );
             }}
@@ -111,10 +114,12 @@ App.propTypes = {
   activeOffer: PropTypes.object,
   currentCity: PropTypes.string.isRequired,
   sortedOffers: PropTypes.array,
-  titleClickHandler: PropTypes.func,
+  onTitleClick: PropTypes.func,
   onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+  onCityClick: PropTypes.func,
   currentSortType: PropTypes.string.isRequired,
-  addToFavoriteClick: PropTypes.func.isRequired,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -129,13 +134,13 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addToFavoriteClick(offer) {
+  onFavoriteButtonClick(offer) {
     dispatch(DataOperation.addToFavorite(offer));
   },
   onSignInClick() {
     dispatch(UserActionCreator.signIn());
   },
-  titleClickHandler(offer) {
+  onTitleClick(offer) {
     dispatch(DataActionCreater.changeOffer(offer));
     dispatch(DataOperation.loadNearbyOffers(offer.id));
     dispatch(DataOperation.loadReviews(offer.id));
@@ -143,7 +148,10 @@ const mapDispatchToProps = (dispatch) => ({
   onMouseEnter(offer) {
     dispatch(DataActionCreater.hoverOffer(offer));
   },
-  cityClickHandler(city) {
+  onMouseLeave(offer) {
+    dispatch(DataActionCreater.leaveOffer(offer));
+  },
+  onCityClick(city) {
     dispatch(DataActionCreater.changeCity(city));
   }
 });

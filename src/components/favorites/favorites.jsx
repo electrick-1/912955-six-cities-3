@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Operation} from "../../reducer/data/data.js";
 import NameSpace from "../../reducer/name-space.js";
 import {getFavoriteOffers} from "../../reducer/data/selectors.js";
-import {AppRoute, CardClass, cities} from "../../const.js";
+import {AppRoute, CardClass, Cities} from "../../const.js";
 import {Link} from "react-router-dom";
 import PlaceCard from "../place-card/place-card.jsx";
 import FavoritesEmpty from "./favorites-empty.jsx";
@@ -16,7 +16,7 @@ class Favorites extends PureComponent {
   }
 
   render() {
-    const {isSignIn, addToFavorite, email, isFavoriteOffersLoading, favoriteOffers, onMouseEnter, onTitleClick} = this.props;
+    const {isSignIn, onFavoriteButtonClick, email, isFavoriteOffersLoading, favoriteOffers, onMouseEnter, onTitleClick} = this.props;
 
 
     if (isFavoriteOffersLoading) {
@@ -60,7 +60,7 @@ class Favorites extends PureComponent {
             <section className="favorites">
               <h1 className="favorites__title">Saved listing</h1>
               <ul className="favorites__list">
-                {cities.map((city) => {
+                {Cities.map((city) => {
                   return (
                     favoriteOffers.filter((offer) => offer.city.name === city).length !== 0 ?
                       <li className="favorites__locations-items" key={city}>
@@ -76,12 +76,13 @@ class Favorites extends PureComponent {
                             return (
                               <PlaceCard
                                 isSignIn={isSignIn}
-                                addToFavorite={addToFavorite}
+                                onFavoriteButtonClick={onFavoriteButtonClick}
                                 onMouseEnter={onMouseEnter}
                                 onTitleClick={onTitleClick}
                                 offer={card}
                                 key={card.id}
                                 cardClass={CardClass.FAVORITES}
+                                onMouseLeave={() => {}}
                               />);
                           })}
                         </div>
@@ -99,7 +100,7 @@ class Favorites extends PureComponent {
 
 Favorites.propTypes = {
   isSignIn: PropTypes.bool,
-  addToFavorite: PropTypes.func,
+  onFavoriteButtonClick: PropTypes.func,
   email: PropTypes.string,
   isFavoriteOffersLoading: PropTypes.bool,
   favoriteOffers: PropTypes.array,

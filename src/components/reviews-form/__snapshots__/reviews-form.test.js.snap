@@ -151,7 +151,6 @@ exports[`Render ReviewsForm 1`] = `
     onChange={[Function]}
     placeholder="Tell how was your stay, what you like and what can be improved"
     required={true}
-    value=""
   />
   <div
     className="reviews__button-wrapper"

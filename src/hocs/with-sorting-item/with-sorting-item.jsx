@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getSortedOffers, getCurrentSortType} from "../../reducer/data/selectors.js";
 import {ActionCreator} from "../../reducer/data/data.js";
-import {SORT_TYPES} from "../../const.js";
+import {SortTypes} from "../../const.js";
 
 const withSortingItem = (Component) => {
   class WithSortingItem extends PureComponent {
@@ -34,16 +34,16 @@ const withSortingItem = (Component) => {
       let newOffers = [];
 
       switch (evt) {
-        case SORT_TYPES.POPULAR:
+        case SortTypes.POPULAR:
           newOffers = sortedOffers.sort((a, b) => a.id - b.id);
           break;
-        case SORT_TYPES.LOW_TO_HIGH:
+        case SortTypes.LOW_TO_HIGH:
           newOffers = sortedOffers.sort((a, b) => a.price - b.price);
           break;
-        case SORT_TYPES.HIGH_TO_LOW:
+        case SortTypes.HIGH_TO_LOW:
           newOffers = sortedOffers.sort((a, b) => b.price - a.price);
           break;
-        case SORT_TYPES.RATED:
+        case SortTypes.RATED:
           newOffers = sortedOffers.sort((a, b) => b.rating - a.rating);
           break;
       }

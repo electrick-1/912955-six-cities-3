@@ -83,7 +83,7 @@ it(`Render Main`, () => {
               currentCity={`Amsterdam`}
               onTitleClick={() => {}}
               onMouseEnter={() => {}}
-              addToFavorite={() => {}}
+              onFavoriteButtonClick={() => {}}
             />
           </BrowserRouter>
         </Provider>, {

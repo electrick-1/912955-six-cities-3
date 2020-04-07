@@ -3,29 +3,24 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {ActionCreator, Operation as DataOperation} from "../../reducer/data/data.js";
 import NameSpace from "../../reducer/name-space.js";
-import {MIN_REVIEW_LENGTH, MAX_REVIEW_LENGTH} from "../../const.js";
+import {ReviewLength} from "../../const.js";
 
 const requiredRewiewValues = (value) => {
-  return (value.trim().length > MIN_REVIEW_LENGTH && value.trim().length < MAX_REVIEW_LENGTH);
+  return (value.trim().length > ReviewLength.MIN && value.trim().length < ReviewLength.MAX);
 };
 
 class ReviewsForm extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      ratingValue: ``,
-      reviewValue: ``,
-    };
-
     this.inputChangeHandler = this.inputChangeHandler.bind(this);
     this.textAreaChangeHandler = this.textAreaChangeHandler.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleReviewsFormSubmit = this.handleReviewsFormSubmit.bind(this);
   }
 
-  handleSubmit(evt) {
+  handleReviewsFormSubmit(evt) {
     evt.preventDefault();
-    const {id, blockForm, postReview} = this.props;
+    const {id, blockForm, postReview, changeInputText, changeInputRating} = this.props;
 
     const data = new FormData(evt.target);
 
@@ -39,37 +34,32 @@ class ReviewsForm extends PureComponent {
       rating,
     });
 
-    this.setState(() => ({
-      ratingValue: ``,
-      reviewValue: ``
-    }));
+    changeInputText(``);
+    changeInputRating(``);
   }
 
   inputChangeHandler(evt) {
+    const {changeInputRating} = this.props;
     const ratingValue = evt.target.value;
 
-    this.setState(() => ({
-      ratingValue
-    }));
+    changeInputRating(ratingValue);
 
     return false;
   }
 
   textAreaChangeHandler(evt) {
+    const {changeInputText} = this.props;
     const reviewValue = evt.target.value;
 
-    this.setState(() => ({
-      reviewValue
-    }));
+    changeInputText(reviewValue);
 
     return false;
   }
 
   render() {
-    const {isBlockedForm} = this.props;
-    const {reviewValue, ratingValue} = this.state;
+    const {isBlockedForm, reviewValue, ratingValue} = this.props;
     return (
-      <form className="reviews__form form" action="#" method="post" onSubmit={this.handleSubmit}>
+      <form className="reviews__form form" action="#" method="post" onSubmit={this.handleReviewsFormSubmit}>
         <label className="reviews__label form__label" htmlFor="review">Your review</label>
         <div className="reviews__rating-form form__rating">
           <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" onChange={this.inputChangeHandler} checked={ratingValue === `5`} required />
@@ -124,14 +114,26 @@ ReviewsForm.propTypes = {
   blockForm: PropTypes.func,
   postReview: PropTypes.func,
   isBlockedForm: PropTypes.bool,
+  reviewValue: PropTypes.string,
+  ratingValue: PropTypes.string,
+  changeInputRating: PropTypes.func,
+  changeInputText: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({
   activeOffer: state[NameSpace.DATA].activeOffer,
   isBlockedForm: state[NameSpace.DATA].isBlockedForm,
+  reviewValue: state[NameSpace.DATA].reviewValue,
+  ratingValue: state[NameSpace.DATA].ratingValue
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  changeInputText(comment) {
+    dispatch(ActionCreator.changeComment(comment));
+  },
+  changeInputRating(rating) {
+    dispatch(ActionCreator.changeRating(rating));
+  },
   blockForm(block) {
     dispatch(ActionCreator.blockForm(block));
   },

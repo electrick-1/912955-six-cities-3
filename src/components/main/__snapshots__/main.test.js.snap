@@ -77,8 +77,8 @@ exports[`Render Main 1`] = `
           >
             <a
               className="locations__item-link
-                    tabs__item
-                    "
+                  tabs__item
+                  "
               href="#"
             >
               <span>
@@ -92,8 +92,8 @@ exports[`Render Main 1`] = `
           >
             <a
               className="locations__item-link
-                    tabs__item
-                    "
+                  tabs__item
+                  "
               href="#"
             >
               <span>
@@ -107,8 +107,8 @@ exports[`Render Main 1`] = `
           >
             <a
               className="locations__item-link
-                    tabs__item
-                    "
+                  tabs__item
+                  "
               href="#"
             >
               <span>
@@ -122,8 +122,8 @@ exports[`Render Main 1`] = `
           >
             <a
               className="locations__item-link
-                    tabs__item
-                    tabs__item--active"
+                  tabs__item
+                  tabs__item--active"
               href="#"
             >
               <span>
@@ -137,8 +137,8 @@ exports[`Render Main 1`] = `
           >
             <a
               className="locations__item-link
-                    tabs__item
-                    "
+                  tabs__item
+                  "
               href="#"
             >
               <span>
@@ -152,8 +152,8 @@ exports[`Render Main 1`] = `
           >
             <a
               className="locations__item-link
-                    tabs__item
-                    "
+                  tabs__item
+                  "
               href="#"
             >
               <span>
@@ -250,6 +250,7 @@ exports[`Render Main 1`] = `
             <article
               className="cities__place-card place-card"
               onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
             >
               <div
                 className="place-card__mark"

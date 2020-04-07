@@ -384,6 +384,7 @@ exports[`Render Property 1`] = `
           <article
             className="cities__place-card place-card"
             onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
           >
             <div
               className="place-card__mark"
@@ -490,6 +491,7 @@ exports[`Render Property 1`] = `
           <article
             className="cities__place-card place-card"
             onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
           >
             <div
               className="place-card__mark"
@@ -596,6 +598,7 @@ exports[`Render Property 1`] = `
           <article
             className="cities__place-card place-card"
             onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
           >
             <div
               className="place-card__mark"

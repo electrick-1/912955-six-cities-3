@@ -1,34 +1,32 @@
-import React, {PureComponent} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import PlaceCard from "../place-card/place-card.jsx";
 
-class PlacesList extends PureComponent {
-  render() {
-    const {
-      sortedOffers,
-      cardClass,
-      onTitleClick,
-      onMouseEnter,
-      isSignIn,
-      addToFavorite
-    } = this.props;
-
-    return (
-      <div className="cities__places-list places__list tabs__content">
-        {sortedOffers.map((offer) =>
-          <PlaceCard
-            offer={offer}
-            key={offer.id}
-            cardClass={cardClass}
-            onTitleClick={onTitleClick}
-            onMouseEnter={onMouseEnter}
-            isSignIn={isSignIn}
-            addToFavorite={addToFavorite}
-          />
-        )}
-      </div>
-    );
-  }
+function PlacesList({
+  sortedOffers,
+  cardClass,
+  onTitleClick,
+  onMouseEnter,
+  onMouseLeave,
+  isSignIn,
+  onFavoriteButtonClick
+}) {
+  return (
+    <div className="cities__places-list places__list tabs__content">
+      {sortedOffers.map((offer) =>
+        <PlaceCard
+          offer={offer}
+          key={offer.id}
+          cardClass={cardClass}
+          onTitleClick={onTitleClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          isSignIn={isSignIn}
+          onFavoriteButtonClick={onFavoriteButtonClick}
+        />
+      )}
+    </div>
+  );
 }
 
 
@@ -39,7 +37,8 @@ PlacesList.propTypes = {
   })),
   onTitleClick: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
-  addToFavorite: PropTypes.func.isRequired,
+  onMouseLeave: PropTypes.func,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
   isSignIn: PropTypes.bool
 };
 

@@ -104,6 +104,7 @@ exports[`Should Favorites component render correctly 1`] = `
               <article
                 className="favorites__card place-card"
                 onMouseEnter={[Function]}
+                onMouseLeave={[Function]}
               >
                 <div
                   className="place-card__mark visually-hidden"

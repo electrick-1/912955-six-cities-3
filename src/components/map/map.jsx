@@ -59,6 +59,7 @@ class Map extends PureComponent {
 
   componentDidUpdate() {
     const {sortedOffers, offers, id} = this.props;
+    this.offer = {};
 
     this.layer.clearLayers();
 

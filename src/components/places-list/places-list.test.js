@@ -57,7 +57,7 @@ it(`Render PlaceList`, () => {
     .create(
         <BrowserRouter>
           <PlacesList
-            addToFavorite={() => {}}
+            onFavoriteButtonClick={() => {}}
             sortedOffers={sortedOffers}
             onTitleClick={() => {}}
             cardClass={`cities`}

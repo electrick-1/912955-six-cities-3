@@ -68,7 +68,7 @@ it(`Should title be pressed`, () => {
         currentCity={`Amsterdam`}
         onTitleClick={() => {}}
         onMouseEnter={() => {}}
-        addToFavorite={() => {}}
+        onFavoriteButtonClick={() => {}}
       />
   );
 

@@ -1,22 +1,19 @@
-import React, {PureComponent} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import ReviewsItem from "../reviews-item/reviews-item.jsx";
 
-class ReviewsList extends PureComponent {
-  render() {
-    const {reviews} = this.props;
-    return (
-      <ul className="reviews__list">
-        {reviews.map((review, i) =>
-          <ReviewsItem
-            key={`review-${i}`}
-            review={review}
-          />
-        )}
-      </ul>
-    );
-  }
-}
+const ReviewsList = ({reviews}) => {
+  return (
+    <ul className="reviews__list">
+      {reviews.map((review, i) =>
+        <ReviewsItem
+          key={`review-${i}`}
+          review={review}
+        />
+      )}
+    </ul>
+  );
+};
 
 ReviewsList.propTypes = {
   activeOffer: PropTypes.shape({

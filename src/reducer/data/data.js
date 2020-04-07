@@ -1,5 +1,5 @@
 import {extend, parseOffer, parseReview} from "../../utils.js";
-import {SORT_TYPES} from "../../const.js";
+import {SortTypes} from "../../const.js";
 
 const ReviewPostingStatus = {
   POSTED: `POSTED`,
@@ -7,7 +7,7 @@ const ReviewPostingStatus = {
 };
 
 const initialState = {
-  currentCity: `Amsterdam`,
+  currentCity: ``,
   currentSortType: `Popular`,
   activeOffer: {},
   sortedOffers: [],
@@ -15,6 +15,8 @@ const initialState = {
   reviews: [],
   nearbyOffers: [],
   favoriteOffers: [],
+  reviewValue: ``,
+  ratingValue: ``,
   isBlockedForm: false,
   postReview: null,
   isOffersLoading: true,
@@ -27,6 +29,7 @@ const ActionType = {
   CHANGE_CITY: `CHANGE_CITY`,
   CHANGE_OFFER: `CHANGE_OFFER`,
   HOVER_OFFER: `HOVER_OFFER`,
+  LEAVE_OFFER: `LEAVE_OFFER`,
   CHANGE_SORT: `CHANGE_SORT`,
   LOAD_OFFERS: `LOAD_OFFERS`,
   LOAD_NEARBY_OFFERS: `LOAD_NEARBY_OFFERS`,
@@ -34,7 +37,9 @@ const ActionType = {
   LOAD_REVIEWS: `LOAD_REVIEWS`,
   BLOCK_FORM: `BLOCK_FORM`,
   POST_REVIEW: `POST_REVIEW`,
-  ADD_TO_FAVORITE: `ADD_TO_FAVORITE`
+  ADD_TO_FAVORITE: `ADD_TO_FAVORITE`,
+  CHANGE_RATING: `CHANGE_RATING`,
+  CHANGE_COMMENT: `CHANGE_COMMENT`
 };
 
 const ActionCreator = {
@@ -53,9 +58,24 @@ const ActionCreator = {
     payload: offer
   }),
 
+  leaveOffer: (offer) => ({
+    type: ActionType.LEAVE_OFFER,
+    payload: offer
+  }),
+
   changeSortType: ({type, newOffers}) => ({
     type: ActionType.CHANGE_SORT,
     payload: {type, newOffers}
+  }),
+
+  changeRating: (rating) => ({
+    type: ActionType.CHANGE_RATING,
+    payload: rating
+  }),
+
+  changeComment: (comment) => ({
+    type: ActionType.CHANGE_COMMENT,
+    payload: comment
   }),
 
   loadOffers: (offers) => {
@@ -182,7 +202,8 @@ const reducer = (state = initialState, action) => {
       let parsedNearbyOffers = action.payload.map((offer) => parseOffer(offer));
       return extend(state, {
         nearbyOffers: parsedNearbyOffers,
-        isNearbyOffersLoading: false
+        isNearbyOffersLoading: false,
+        activeOffer: {}
       });
     case ActionType.LOAD_FAVORITE_OFFERS:
       let parsedFavoriteOffers = action.payload.map((offer) => parseOffer(offer));
@@ -196,6 +217,20 @@ const reducer = (state = initialState, action) => {
         reviews: parsedReviews,
         isReviewsLoading: false
       });
+    case ActionType.CHANGE_RATING:
+      let rating = action.payload;
+      return (
+        extend(state, {
+          ratingValue: rating
+        })
+      );
+    case ActionType.CHANGE_COMMENT:
+      let comment = action.payload;
+      return (
+        extend(state, {
+          reviewValue: comment
+        })
+      );
     case ActionType.LOAD_OFFERS:
       let parsedOffers = action.payload.map((offer) => parseOffer(offer));
       let parseCity = parsedOffers[0].city.name;
@@ -209,7 +244,7 @@ const reducer = (state = initialState, action) => {
       return extend(state, {
         currentCity: action.payload,
         sortedOffers: state.offers.filter((offer) => offer.city.name === action.payload),
-        currentSortType: SORT_TYPES.POPULAR
+        currentSortType: SortTypes.POPULAR
       });
     case ActionType.CHANGE_OFFER:
       return extend(state, {
@@ -218,6 +253,10 @@ const reducer = (state = initialState, action) => {
     case ActionType.HOVER_OFFER:
       return extend(state, {
         activeOffer: action.payload
+      });
+    case ActionType.LEAVE_OFFER:
+      return extend(state, {
+        activeOffer: {}
       });
     case ActionType.CHANGE_SORT:
       return extend(state, {

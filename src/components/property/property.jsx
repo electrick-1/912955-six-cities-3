@@ -10,6 +10,7 @@ import {Operation as DataOperation} from "../../reducer/data/data.js";
 import NameSpace from "../../reducer/name-space.js";
 import {getNearbyOffers, getReviews} from "../../reducer/data/selectors.js";
 import {AppRoute} from "../../const.js";
+import history from "../../history.js";
 
 class Property extends PureComponent {
   constructor(props) {
@@ -24,17 +25,20 @@ class Property extends PureComponent {
   }
 
   _onFavoriteClick() {
-    const {addToFavorite, isSignIn} = this.props;
+    const {onFavoriteButtonClick, isSignIn} = this.props;
     if (!isSignIn) {
       return history.push(AppRoute.LOGIN);
     }
-    addToFavorite(this.offer);
+    onFavoriteButtonClick(this.offer);
     return false;
   }
 
   render() {
-    const {id, offers, isReviewsLoading, isNearbyOffersLoading, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn, addToFavorite} = this.props;
+    const {id, offers, isOffersLoading, isReviewsLoading, isNearbyOffersLoading, onTitleClick, cardClass, email, nearbyOffers, reviews, isSignIn, onFavoriteButtonClick} = this.props;
 
+    if (isOffersLoading) {
+      return false;
+    }
     if (isReviewsLoading) {
       return false;
     }
@@ -197,7 +201,8 @@ class Property extends PureComponent {
                       onTitleClick={onTitleClick}
                       onMouseEnter={() => {}}
                       isSignIn={isSignIn}
-                      addToFavorite={addToFavorite}
+                      onFavoriteButtonClick={onFavoriteButtonClick}
+                      onMouseLeave={() => {}}
                     />);
                 })}
               </div>
@@ -221,9 +226,10 @@ Property.propTypes = {
   cardClass: PropTypes.string,
   onTitleClick: PropTypes.func,
   loadPropertyData: PropTypes.func,
-  addToFavorite: PropTypes.func,
+  onFavoriteButtonClick: PropTypes.func,
   isReviewsLoading: PropTypes.bool,
   isNearbyOffersLoading: PropTypes.bool,
+  isOffersLoading: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
@@ -234,10 +240,11 @@ const mapStateToProps = (state) => ({
   isReviewsLoading: state[NameSpace.DATA].isReviewsLoading,
   isNearbyOffersLoading: state[NameSpace.DATA].isNearbyOffersLoading,
   offers: state[NameSpace.DATA].offers,
+  isOffersLoading: state[NameSpace.DATA].isOffersLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addToFavorite(offer) {
+  onFavoriteButtonClick(offer) {
     dispatch(DataOperation.addToFavorite(offer));
   },
   loadPropertyData(id) {
